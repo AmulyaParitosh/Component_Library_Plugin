@@ -1,15 +1,13 @@
 from PySide6.QtWidgets import QGridLayout, QWidget
 
-from .components import ComponentItem
+from ..components import ComponentItem
 
 
-class ComponentItemView(QWidget):
+class ItemWigdet(QWidget):
 
-	def __init__(self, data:list[dict]) -> None:
+	def __init__(self, ) -> None:
 
 		super().__init__()
-
-		self.metadata: list[dict[str, str]] = data
 
 		self.grid = QGridLayout()
 		self.setLayout(self.grid)
@@ -18,12 +16,12 @@ class ComponentItemView(QWidget):
 		self.__cur_row = 0
 		self.__cur_col = 0
 
-		self.show()
-		self.populate()
+		# self.show()
+		# self.populate()
 
 
-	def populate(self):
-		for data in self.metadata:
+	def populate(self, metadata:list[dict]):
+		for data in metadata:
 			component = ComponentItem(self, data)
 			self.addItem(component)
 

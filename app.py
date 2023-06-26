@@ -2,7 +2,7 @@ import sys
 
 from PySide6.QtWidgets import QApplication
 
-from component_library.component_item_view import ComponentItemView
+from component_library.views import ItemsView
 
 temp = [
     {
@@ -60,5 +60,5 @@ temp = [
 ]
 
 app = QApplication(sys.argv)
-window = ComponentItemView(temp)
+window = ItemsView(temp)
 sys.exit(app.exec())
