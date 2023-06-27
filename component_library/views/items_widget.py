@@ -5,7 +5,7 @@ from ..components import ComponentItem
 
 class ItemWigdet(QWidget):
 
-	def __init__(self, ) -> None:
+	def __init__(self) -> None:
 
 		super().__init__()
 
@@ -16,9 +16,17 @@ class ItemWigdet(QWidget):
 		self.__cur_row = 0
 		self.__cur_col = 0
 
-		# self.show()
-		# self.populate()
+	def reset(self):
+		for i in reversed(range(self.grid.count())):
+			self.grid.itemAt(i).widget().deleteLater()
 
+		self.__MAX_COL = 3
+		self.__cur_row = 0
+		self.__cur_col = 0
+
+	def repopulate(self, metadata:list[dict]):
+		self.reset()
+		self.populate(metadata)
 
 	def populate(self, metadata:list[dict]):
 		for data in metadata:

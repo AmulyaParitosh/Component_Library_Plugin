@@ -1,40 +1,62 @@
 from __future__ import annotations
 
-from time import sleep
-from urllib import request
+from functools import cached_property
 
-from PySide6.QtCore import QRunnable, QThreadPool, Slot
+from PySide6.QtCore import QObject, QUrl, Signal
 from PySide6.QtGui import QImage, QPixmap
+from PySide6.QtNetwork import (QNetworkAccessManager, QNetworkReply,
+                               QNetworkRequest)
 from PySide6.QtWidgets import QLabel, QWidget
 
+LOADING_THUMBNAIL_PATH = "component_library/components/thumbnail/loading.jpeg"
+DEFAULT_THUMBNAIL_PATH = "component_library/components/thumbnail/default.png"
 
-class _Worker(QRunnable):
 
-	def __init__(self, fn, *args, **kwargs) -> None:
-		super().__init__()
-		self.fn = fn
-		self.args = args
-		self.kwargs = kwargs
+class ImageDownloader(QObject):
+	finished = Signal(QImage)
 
-	@Slot()
-	def run(self) -> None:
-		self.fn(*self.args, **self.kwargs)
+	def __init__(self, parent=None):
+		super().__init__(parent)
+		self.manager.finished.connect(self.handle_finished)
+
+	@cached_property
+	def manager(self) -> QNetworkAccessManager:
+		return QNetworkAccessManager()
+
+	def start_download(self, url: QUrl):
+		self.manager.get(QNetworkRequest(url))
+
+	def handle_finished(self, reply: QNetworkReply):
+
+		image = QImage()
+
+		if reply.error() == QNetworkReply.NetworkError.ProtocolUnknownError:
+			with open(DEFAULT_THUMBNAIL_PATH, 'rb') as file:
+				content = file.read()
+			image.loadFromData(content)
+			self.finished.emit(image)
+			return
+
+		elif reply.error() == QNetworkReply.NetworkError.NoError:
+			image.loadFromData(reply.readAll())
+			self.finished.emit(image)
+
+		else:
+			print("error: ", reply.errorString())
+			return
 
 
 class Thumbnail(QLabel):
 	def __init__(self, parent: QWidget) -> None:
 		super().__init__(parent)
 		self.setScaledContents(True)
-		self.setPixmap(QPixmap("component_library/components/thumbnail/loading.jpeg"))
-		self.threadpool = QThreadPool()
+		self.setPixmap(QPixmap(LOADING_THUMBNAIL_PATH))
 
-	def setupThumbnail(self, image_url: str):
-		worker = _Worker(self._loadImage, image_url)
-		self.threadpool.start(worker)
+		self.downloader = ImageDownloader()
+		self.downloader.finished.connect(self.loadImage)
 
-	def _loadImage(self, image_url: str):
-		sleep(2)
-		data = request.urlopen(image_url).read()
-		image = QImage()
-		image.loadFromData(data)
+	def setupThumbnail(self, image_url: QUrl):
+		self.downloader.start_download(image_url)
+
+	def loadImage(self, image: QImage):
 		self.setPixmap(QPixmap(image))

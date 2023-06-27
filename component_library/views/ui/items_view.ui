@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>885</width>
-    <height>552</height>
+    <width>1136</width>
+    <height>816</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,60 +58,23 @@
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="searchAreaFrame">
+          <widget class="QLineEdit" name="searchLineEdit">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
-             <width>250</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777210</width>
-             <height>16777215</height>
+             <width>0</width>
+             <height>35</height>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">border: 1px solid #4a4a4a;
-border-radius : 15px;</string>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <property name="leftMargin">
-             <number>6</number>
-            </property>
-            <property name="topMargin">
-             <number>6</number>
-            </property>
-            <property name="rightMargin">
-             <number>6</number>
-            </property>
-            <property name="bottomMargin">
-             <number>6</number>
-            </property>
-            <item>
-             <widget class="QLineEdit" name="searchLineEdit">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">border: 0px ;
+            <string notr="true">border: 0px ;
 </string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           </property>
           </widget>
          </item>
         </layout>
@@ -132,7 +95,7 @@ border-radius : 15px;</string>
       </item>
       <item>
        <widget class="QWidget" name="sortWidget" native="true">
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
           <widget class="QLabel" name="sortLabel">
            <property name="sizePolicy">
@@ -150,12 +113,27 @@ border-radius : 15px;</string>
           <widget class="QComboBox" name="sortComboBox">
            <item>
             <property name="text">
-             <string>Rating</string>
+             <string>Preference</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Preference</string>
+             <string>Created</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Updated</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Name</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Rating</string>
             </property>
            </item>
           </widget>
@@ -164,10 +142,10 @@ border-radius : 15px;</string>
        </widget>
       </item>
       <item>
-       <widget class="QWidget" name="filterWidget" native="true">
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <widget class="QWidget" name="orderWidget" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QLabel" name="filterLabel">
+          <widget class="QLabel" name="orderLabel">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -175,15 +153,149 @@ border-radius : 15px;</string>
             </sizepolicy>
            </property>
            <property name="text">
-            <string>filter</string>
+            <string>order</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="filterComboBox">
+          <widget class="QComboBox" name="orderComboBox">
            <item>
             <property name="text">
-             <string>Category</string>
+             <string>ascending</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>descending</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="titleFrame_2">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>51</height>
+      </size>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_8">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QWidget" name="tagBarWidget" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLabel" name="tagBarLabel">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Tags</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="TagBar" name="tagBar" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QWidget" name="fileTypeWidget" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QLabel" name="fileTypeLabel">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>filetype</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="CheckableComboBox" name="fileTypeComboBox">
+           <property name="minimumSize">
+            <size>
+             <width>106</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="editable">
+            <bool>false</bool>
+           </property>
+           <item>
+            <property name="text">
+             <string>step</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>fcstd</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>fcstd1</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>stl</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>stp</string>
             </property>
            </item>
           </widget>
@@ -204,11 +316,44 @@ border-radius : 15px;</string>
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>869</width>
-        <height>479</height>
+        <width>1120</width>
+        <height>637</height>
        </rect>
       </property>
      </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="bottomBar" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <spacer name="bottomBarSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="prevButton">
+        <property name="text">
+         <string>Prev</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="nextButton">
+        <property name="text">
+         <string>Next</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
@@ -218,6 +363,17 @@ border-radius : 15px;</string>
    <class>ItemWigdet</class>
    <extends>QWidget</extends>
    <header>component_library/views/items_widget</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CheckableComboBox</class>
+   <extends>QComboBox</extends>
+   <header>component_library/components/checkable_comboBox</header>
+  </customwidget>
+  <customwidget>
+   <class>TagBar</class>
+   <extends>QWidget</extends>
+   <header>component_library/components/tag_bar</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

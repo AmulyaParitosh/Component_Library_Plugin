@@ -1,9 +1,7 @@
-from time import sleep
-
+from PySide6.QtCore import QUrl
 from PySide6.QtWidgets import QWidget
 
 from .ui.Ui_item_view import Ui_ComponentItemView
-
 
 
 class ComponentItem(QWidget, Ui_ComponentItemView):
@@ -19,5 +17,6 @@ class ComponentItem(QWidget, Ui_ComponentItemView):
 
 
 	def setupItem(self):
-		self.thumbnail.setupThumbnail(self.data.get("thumbnail", ""))
+		url = QUrl(self.data.get("thumbnail", ""))
+		self.thumbnail.setupThumbnail(url)
 		self.componentLabel.setText(self.data.get("name", "").capitalize())
