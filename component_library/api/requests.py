@@ -1,24 +1,42 @@
-from os import path
-
+from copy import copy
+import queue
+from PySide6.QtCore import QUrl, QUrlQuery
 from PySide6.QtNetwork import QNetworkRequest
 
-from .component_management_system import Api
-
-
-class ComponentQueryState:...
-
-
+from .utils import PageManager
 
 class ComponentRequest(QNetworkRequest):
 
-	def __init__(self, api: Api, *args, **kwargs):
-		self._api = api
-		self._api.setUrl(path.join(self._api.url(), "component"))
+	def __init__(self, url: QUrl, *args, **kwargs):
 		super().__init__(*args, **kwargs)
+		self.setUrl(url)
 
-	def add_search_key(self, search_key: str):
-		self._api.addQueryParameter("search_key", search_key)
 
-	def request(self):
-		self.setUrl(self._api.url())
-		return self
+class ComponentRequestManager:
+	url = QUrl("component")
+	query = QUrlQuery()
+
+	@classmethod
+	def request(cls) -> ComponentRequest:
+		cls.url.setQuery(copy(cls.query))
+		cls.query.clear()
+		return ComponentRequest(cls.url)
+
+	@classmethod
+	def set_search_key(cls, search_key: str):
+		cls.query.addQueryItem("search_key", search_key)
+
+	@classmethod
+	def set_pagination(cls, page_manager: PageManager):
+		cls.query.addQueryItem("page", str(page_manager.page))
+		cls.query.addQueryItem("page_size", str(page_manager.size))
+
+	@classmethod
+	def set_next_page_pagination(cls, page_manager: PageManager):
+		cls.query.addQueryItem("page", str(page_manager.next_page))
+		cls.query.addQueryItem("page_size", str(page_manager.size))
+
+	@classmethod
+	def set_prev_page_pagination(cls, page_manager: PageManager):
+		cls.query.addQueryItem("page", str(page_manager.prev_page))
+		cls.query.addQueryItem("page_size", str(page_manager.size))

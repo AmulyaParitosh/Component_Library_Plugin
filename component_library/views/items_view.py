@@ -1,10 +1,11 @@
 import json
 
 from PySide6.QtCore import Slot
-from PySide6.QtNetwork import QNetworkAccessManager, QNetworkReply
+from PySide6.QtNetwork import QNetworkReply
 from PySide6.QtWidgets import QWidget
 
-from ..api import ComponentRequest, component_management_api
+from ..api import (ComponentRequestManager, PageManager,
+                   component_management_api)
 from .ui import Ui_itemsView
 
 
@@ -12,20 +13,26 @@ class ItemsView(QWidget, Ui_itemsView):
 
 	def __init__(self) -> None:
 		super().__init__()
-		self.setupUi(self)
-		self.setupView()
+		self.setupUi()
 
-		self.network_manager = QNetworkAccessManager()
-		self.network_manager.finished.connect(self.response_handler)
+		self.api_manager = component_management_api
+		self.api_manager.finished.connect(self.response_handler)
 
-		self.api = component_management_api
+		self.pagemanager = PageManager(self)
+		self.pagemanager.enable_next.connect(self.nextButton.setEnabled)
+		self.pagemanager.enable_prev.connect(self.prevButton.setEnabled)
 
-		initial_request = ComponentRequest(self.api)
-		self.network_manager.get(initial_request.request())
-
-		self.current_page_data = []
+		ComponentRequestManager.set_pagination(self.pagemanager)
+		self.api_manager.get(ComponentRequestManager.request())
 
 		self.show()
+
+	def setupUi(self):
+		super().setupUi(self)
+		self.searchLineEdit.returnPressed.connect(self.search_enter_pressed)
+		self.nextButton.clicked.connect(self.nextButton_clicked)
+		self.prevButton.clicked.connect(self.prevButton_clicked)
+
 
 	def response_handler(self, reply: QNetworkReply):
 		if reply.error() != QNetworkReply.NetworkError.NoError:
@@ -38,16 +45,23 @@ class ItemsView(QWidget, Ui_itemsView):
 		except json.decoder.JSONDecodeError:
 			json_data = dict()
 
-		self.current_page_data = json_data.get("items", [])
-		self.scrollAreaContentItemsWidget.repopulate(self.current_page_data)
-
-	def setupView(self):
-		self.searchLineEdit.returnPressed.connect(self.search_enter_pressed)
-		pass
-
+		self.pagemanager.load_page(json_data)
+		self.scrollAreaContentItemsWidget.repopulate(self.pagemanager.data)
 
 	Slot()
 	def search_enter_pressed(self):
-		request = ComponentRequest(self.api)
-		request.add_search_key(self.searchLineEdit.text())
-		self.network_manager.get(request.request())
+		ComponentRequestManager.set_search_key(self.searchLineEdit.text())
+		self.pagemanager.to_begining()
+		ComponentRequestManager.set_pagination(self.pagemanager)
+		self.api_manager.get(ComponentRequestManager.request())
+
+
+	Slot()
+	def nextButton_clicked(self):
+		ComponentRequestManager.set_next_page_pagination(self.pagemanager)
+		self.api_manager.get(ComponentRequestManager.request())
+
+	Slot()
+	def prevButton_clicked(self):
+		ComponentRequestManager.set_prev_page_pagination(self.pagemanager)
+		self.api_manager.get(ComponentRequestManager.request())
