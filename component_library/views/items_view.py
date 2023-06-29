@@ -4,9 +4,10 @@ from PySide6.QtWidgets import QWidget
 
 from ..api import (ApiManager, ApiReply, ComponentRequest,
                    ComponentRequestState, component_management_api)
+from ..components import Overlay
 from .page import PageManager
 from .ui import Ui_itemsView
-from ..components import Overlay
+
 
 class ItemsView(QWidget, Ui_itemsView):
 
@@ -61,6 +62,7 @@ class ItemsView(QWidget, Ui_itemsView):
 		self.query_states.page = self.page_manager.page
 		self.query_states.page_size = self.page_manager.size
 		self.scrollAreaContentItemsWidget.repopulate(self.page_manager.data)
+		self.pageLable.setText(f"{self.page_manager.page} / {self.page_manager.total_pages}")
 		self.overlay.hide()
 
 

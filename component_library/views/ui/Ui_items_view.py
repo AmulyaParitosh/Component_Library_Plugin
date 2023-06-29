@@ -116,6 +116,32 @@ class Ui_itemsView(object):
 
         self.horizontalLayout_7.addWidget(self.orderWidget)
 
+        self.fileTypeWidget = QWidget(self.titleFrame)
+        self.fileTypeWidget.setObjectName(u"fileTypeWidget")
+        self.horizontalLayout_11 = QHBoxLayout(self.fileTypeWidget)
+        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
+        self.fileTypeLabel = QLabel(self.fileTypeWidget)
+        self.fileTypeLabel.setObjectName(u"fileTypeLabel")
+        sizePolicy.setHeightForWidth(self.fileTypeLabel.sizePolicy().hasHeightForWidth())
+        self.fileTypeLabel.setSizePolicy(sizePolicy)
+
+        self.horizontalLayout_11.addWidget(self.fileTypeLabel)
+
+        self.fileTypeComboBox = CheckableComboBox(self.fileTypeWidget)
+        self.fileTypeComboBox.addItem("")
+        self.fileTypeComboBox.addItem("")
+        self.fileTypeComboBox.addItem("")
+        self.fileTypeComboBox.addItem("")
+        self.fileTypeComboBox.addItem("")
+        self.fileTypeComboBox.setObjectName(u"fileTypeComboBox")
+        self.fileTypeComboBox.setMinimumSize(QSize(106, 0))
+        self.fileTypeComboBox.setEditable(False)
+
+        self.horizontalLayout_11.addWidget(self.fileTypeComboBox)
+
+
+        self.horizontalLayout_7.addWidget(self.fileTypeWidget)
+
 
         self.verticalLayout.addWidget(self.titleFrame)
 
@@ -155,32 +181,6 @@ class Ui_itemsView(object):
 
         self.horizontalLayout_8.addItem(self.horizontalSpacer_2)
 
-        self.fileTypeWidget = QWidget(self.titleFrame_2)
-        self.fileTypeWidget.setObjectName(u"fileTypeWidget")
-        self.horizontalLayout_11 = QHBoxLayout(self.fileTypeWidget)
-        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
-        self.fileTypeLabel = QLabel(self.fileTypeWidget)
-        self.fileTypeLabel.setObjectName(u"fileTypeLabel")
-        sizePolicy.setHeightForWidth(self.fileTypeLabel.sizePolicy().hasHeightForWidth())
-        self.fileTypeLabel.setSizePolicy(sizePolicy)
-
-        self.horizontalLayout_11.addWidget(self.fileTypeLabel)
-
-        self.fileTypeComboBox = CheckableComboBox(self.fileTypeWidget)
-        self.fileTypeComboBox.addItem("")
-        self.fileTypeComboBox.addItem("")
-        self.fileTypeComboBox.addItem("")
-        self.fileTypeComboBox.addItem("")
-        self.fileTypeComboBox.addItem("")
-        self.fileTypeComboBox.setObjectName(u"fileTypeComboBox")
-        self.fileTypeComboBox.setMinimumSize(QSize(106, 0))
-        self.fileTypeComboBox.setEditable(False)
-
-        self.horizontalLayout_11.addWidget(self.fileTypeComboBox)
-
-
-        self.horizontalLayout_8.addWidget(self.fileTypeWidget)
-
 
         self.verticalLayout.addWidget(self.titleFrame_2)
 
@@ -189,7 +189,7 @@ class Ui_itemsView(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaContentItemsWidget = ItemWigdet()
         self.scrollAreaContentItemsWidget.setObjectName(u"scrollAreaContentItemsWidget")
-        self.scrollAreaContentItemsWidget.setGeometry(QRect(0, 0, 1120, 637))
+        self.scrollAreaContentItemsWidget.setGeometry(QRect(0, 0, 1120, 651))
         self.scrollArea.setWidget(self.scrollAreaContentItemsWidget)
 
         self.verticalLayout.addWidget(self.scrollArea)
@@ -198,14 +198,23 @@ class Ui_itemsView(object):
         self.bottomBar.setObjectName(u"bottomBar")
         self.horizontalLayout = QHBoxLayout(self.bottomBar)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.bottomBarSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout.addItem(self.bottomBarSpacer)
-
         self.prevButton = QPushButton(self.bottomBar)
         self.prevButton.setObjectName(u"prevButton")
 
         self.horizontalLayout.addWidget(self.prevButton)
+
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer_3)
+
+        self.pageLable = QLabel(self.bottomBar)
+        self.pageLable.setObjectName(u"pageLable")
+
+        self.horizontalLayout.addWidget(self.pageLable)
+
+        self.bottomBarSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout.addItem(self.bottomBarSpacer)
 
         self.nextButton = QPushButton(self.bottomBar)
         self.nextButton.setObjectName(u"nextButton")
@@ -234,7 +243,6 @@ class Ui_itemsView(object):
         self.orderComboBox.setItemText(0, QCoreApplication.translate("itemsView", u"ascending", None))
         self.orderComboBox.setItemText(1, QCoreApplication.translate("itemsView", u"descending", None))
 
-        self.tagBarLabel.setText(QCoreApplication.translate("itemsView", u"Tags", None))
         self.fileTypeLabel.setText(QCoreApplication.translate("itemsView", u"filetype", None))
         self.fileTypeComboBox.setItemText(0, QCoreApplication.translate("itemsView", u"step", None))
         self.fileTypeComboBox.setItemText(1, QCoreApplication.translate("itemsView", u"fcstd", None))
@@ -242,7 +250,9 @@ class Ui_itemsView(object):
         self.fileTypeComboBox.setItemText(3, QCoreApplication.translate("itemsView", u"stl", None))
         self.fileTypeComboBox.setItemText(4, QCoreApplication.translate("itemsView", u"stp", None))
 
+        self.tagBarLabel.setText(QCoreApplication.translate("itemsView", u"Tags", None))
         self.prevButton.setText(QCoreApplication.translate("itemsView", u"Prev", None))
+        self.pageLable.setText(QCoreApplication.translate("itemsView", u"0 / 0", None))
         self.nextButton.setText(QCoreApplication.translate("itemsView", u"Next", None))
     # retranslateUi
 

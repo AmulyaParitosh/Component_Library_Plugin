@@ -169,6 +169,63 @@
         </layout>
        </widget>
       </item>
+      <item>
+       <widget class="QWidget" name="fileTypeWidget" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QLabel" name="fileTypeLabel">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>filetype</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="CheckableComboBox" name="fileTypeComboBox">
+           <property name="minimumSize">
+            <size>
+             <width>106</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="editable">
+            <bool>false</bool>
+           </property>
+           <item>
+            <property name="text">
+             <string>step</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>fcstd</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>fcstd1</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>stl</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>stp</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -241,63 +298,6 @@
         </property>
        </spacer>
       </item>
-      <item>
-       <widget class="QWidget" name="fileTypeWidget" native="true">
-        <layout class="QHBoxLayout" name="horizontalLayout_11">
-         <item>
-          <widget class="QLabel" name="fileTypeLabel">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>filetype</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="CheckableComboBox" name="fileTypeComboBox">
-           <property name="minimumSize">
-            <size>
-             <width>106</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="editable">
-            <bool>false</bool>
-           </property>
-           <item>
-            <property name="text">
-             <string>step</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>fcstd</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>fcstd1</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>stl</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>stp</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -312,7 +312,7 @@
         <x>0</x>
         <y>0</y>
         <width>1120</width>
-        <height>637</height>
+        <height>651</height>
        </rect>
       </property>
      </widget>
@@ -322,7 +322,14 @@
     <widget class="QWidget" name="bottomBar" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <spacer name="bottomBarSpacer">
+       <widget class="QPushButton" name="prevButton">
+        <property name="text">
+         <string>Prev</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_3">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -335,11 +342,24 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="prevButton">
+       <widget class="QLabel" name="pageLable">
         <property name="text">
-         <string>Prev</string>
+         <string>0 / 0</string>
         </property>
        </widget>
+      </item>
+      <item>
+       <spacer name="bottomBarSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
       <item>
        <widget class="QPushButton" name="nextButton">

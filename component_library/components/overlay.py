@@ -4,17 +4,6 @@ from PySide6.QtWidgets import QGraphicsBlurEffect, QWidget
 
 
 class Overlay(QWidget):
-	def __init__(self, parent):
-		super().__init__(parent)
-
-		self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
-		self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-
-		self.fillColor = QColor(30, 30, 30, 120)
-		self.penColor = QColor("#333333")
-
-		self.popup_fillColor = QColor(240, 240, 240, 255)
-		self.popup_penColor = QColor(200, 200, 200, 255)
 
 	def paintEvent(self, event):
 		s = self.size()
