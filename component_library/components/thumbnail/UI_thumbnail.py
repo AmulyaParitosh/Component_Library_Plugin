@@ -7,6 +7,7 @@ from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtNetwork import (QNetworkAccessManager, QNetworkReply,
                                QNetworkRequest)
 from PySide6.QtWidgets import QLabel, QWidget
+from ...api import network_access_manager
 
 LOADING_THUMBNAIL_PATH = "component_library/components/thumbnail/loading.jpeg"
 DEFAULT_THUMBNAIL_PATH = "component_library/components/thumbnail/default.png"
@@ -17,14 +18,13 @@ class ImageDownloader(QObject):
 
 	def __init__(self, parent=None):
 		super().__init__(parent)
-		self.manager.finished.connect(self.handle_finished)
+		self.manager = network_access_manager
+		# self.manager.finished.connect(self.handle_finished)
 
-	@cached_property
-	def manager(self) -> QNetworkAccessManager:
-		return QNetworkAccessManager()
 
 	def start_download(self, url: QUrl):
-		self.manager.get(QNetworkRequest(url))
+		reply = self.manager.get(QNetworkRequest(url))
+		reply.finished.connect(lambda : self.handle_finished(reply))
 
 	def handle_finished(self, reply: QNetworkReply):
 
@@ -35,7 +35,6 @@ class ImageDownloader(QObject):
 				content = file.read()
 			image.loadFromData(content)
 			self.finished.emit(image)
-			return
 
 		elif reply.error() == QNetworkReply.NetworkError.NoError:
 			image.loadFromData(reply.readAll())
@@ -43,7 +42,8 @@ class ImageDownloader(QObject):
 
 		else:
 			print("error: ", reply.errorString())
-			return
+
+		reply.deleteLater()
 
 
 class Thumbnail(QLabel):

@@ -113,7 +113,7 @@
           <widget class="QComboBox" name="sortComboBox">
            <item>
             <property name="text">
-             <string>Preference</string>
+             <string>Name</string>
             </property>
            </item>
            <item>
@@ -124,11 +124,6 @@
            <item>
             <property name="text">
              <string>Updated</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Name</string>
             </property>
            </item>
            <item>

@@ -2,15 +2,20 @@
 from functools import partial
 
 from PySide6.QtWidgets import (QFrame, QHBoxLayout, QLabel, QLineEdit,
-                               QPushButton, QSizePolicy, QWidget)
+                               QPushButton, QSizePolicy, QWidget, QCompleter)
 
+from PySide6.QtCore import Qt, Signal
 
 class TagBar(QWidget):
+
+    tag_added = Signal(list)
+
     def __init__(self, parent):
         super(TagBar, self).__init__()
         self.setParent(parent)
         self.setWindowTitle('Tag Bar')
         self.tags = []
+        self.word_list = []
         self.h_layout = QHBoxLayout()
         self.setLayout(self.h_layout)
         self.line_edit = QLineEdit()
@@ -35,7 +40,7 @@ class TagBar(QWidget):
 
     def refresh(self):
         for i in reversed(range(self.h_layout.count())):
-            self.h_layout.itemAt(i).widget().setParent(None)
+            self.h_layout.itemAt(i).widget().setParent(None) # type: ignore
         for tag in self.tags:
             self.add_tag_to_bar(tag)
         self.h_layout.addWidget(self.line_edit)
@@ -63,6 +68,14 @@ class TagBar(QWidget):
         tag.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)
         self.h_layout.addWidget(tag)
 
+        self.tag_added.emit(self.tags)
+
     def delete_tag(self, tag_name):
         self.tags.remove(tag_name)
         self.refresh()
+
+    def set_suggestions(self, word_list: list[str]):
+        self.word_list = word_list
+        tagsCompleter = QCompleter(self.word_list)
+        tagsCompleter.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+        self.line_edit.setCompleter(tagsCompleter)

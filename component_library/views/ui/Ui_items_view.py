@@ -88,7 +88,6 @@ class Ui_itemsView(object):
         self.sortComboBox.addItem("")
         self.sortComboBox.addItem("")
         self.sortComboBox.addItem("")
-        self.sortComboBox.addItem("")
         self.sortComboBox.setObjectName(u"sortComboBox")
 
         self.horizontalLayout_4.addWidget(self.sortComboBox)
@@ -226,11 +225,10 @@ class Ui_itemsView(object):
         itemsView.setWindowTitle(QCoreApplication.translate("itemsView", u"Form", None))
         self.searchLabel.setText(QCoreApplication.translate("itemsView", u"Search", None))
         self.sortLabel.setText(QCoreApplication.translate("itemsView", u"sort", None))
-        self.sortComboBox.setItemText(0, QCoreApplication.translate("itemsView", u"Preference", None))
+        self.sortComboBox.setItemText(0, QCoreApplication.translate("itemsView", u"Name", None))
         self.sortComboBox.setItemText(1, QCoreApplication.translate("itemsView", u"Created", None))
         self.sortComboBox.setItemText(2, QCoreApplication.translate("itemsView", u"Updated", None))
-        self.sortComboBox.setItemText(3, QCoreApplication.translate("itemsView", u"Name", None))
-        self.sortComboBox.setItemText(4, QCoreApplication.translate("itemsView", u"Rating", None))
+        self.sortComboBox.setItemText(3, QCoreApplication.translate("itemsView", u"Rating", None))
 
         self.orderLabel.setText(QCoreApplication.translate("itemsView", u"order", None))
         self.orderComboBox.setItemText(0, QCoreApplication.translate("itemsView", u"ascending", None))

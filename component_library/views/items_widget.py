@@ -43,3 +43,10 @@ class ItemWigdet(QWidget):
 
 	def addItem(self, item: ComponentItem):
 		self.grid.addWidget(item, self.__next_row(), self.__next_col())
+
+	# def set_overlay(self, overlay):
+	# 	self.overlay = overlay
+
+	# def resizeEvent(self, event):
+	# 	self.overlay.resize(event.size())
+	# 	event.accept()
