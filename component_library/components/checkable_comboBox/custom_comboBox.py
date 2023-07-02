@@ -41,35 +41,10 @@ class CheckableComboBox(QComboBox):
 
 		return checkedItems
 
-	# flush
-	# sys.stdout.flush()
+	def make_pre_checked(self):
 
-
-# class __Window(QMainWindow):
-# 	def __init__(self):
-# 		super(QMainWindow, self).__init__()
-
-# 		# creating a widget object
-# 		myQWidget = QWidget()
-
-# 		# vertical box layout
-# 		myBoxLayout = QVBoxLayout()
-# 		myQWidget.setLayout(myBoxLayout)
-
-# 		# central widget
-# 		self.setCentralWidget(myQWidget)
-
-# 		# creating checkable combo box
-# 		self.ComboBox = CheckableComboBox()
-
-# 		# traversing items
-# 		for i in range(3):
-# 			# adding item
-# 			self.ComboBox.addItem("Combobox Item " + str(i))
-# 			item = self.ComboBox.model().item(i, 0)
-
-# 			# setting item unchecked
-# 			item.setCheckState(Qt.Unchecked)
-
-# 		# adding combo box to the layout
-# 		myBoxLayout.addWidget(self.ComboBox)
+		for i in range(self.count()):
+			item = self.model().item(i, 0) # type: ignore
+			if item.checkState() == Qt.CheckState.Checked:
+				continue
+			item.setCheckState(Qt.CheckState.Checked)

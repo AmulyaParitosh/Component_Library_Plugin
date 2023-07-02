@@ -2,9 +2,9 @@ from PySide6.QtCore import Slot
 from PySide6.QtNetwork import QNetworkRequest
 from PySide6.QtWidgets import QWidget
 
-from ..api import (ApiManager, ApiReply, ComponentRequest,
-                   ComponentRequestState, component_management_api)
 from ..components import Overlay
+from ..network import (ApiManager, ApiReply, ComponentRequest,
+                       ComponentRequestState, component_management_api)
 from .page import PageManager
 from .ui import Ui_itemsView
 
@@ -30,6 +30,7 @@ class ItemsView(QWidget, Ui_itemsView):
 		super().setupUi(self)
 
 		self.overlay = Overlay(self.scrollArea)
+		self.fileTypeComboBox.make_pre_checked()
 
 
 	def setupSignals(self):

@@ -17,6 +17,9 @@ class ComponentItem(QWidget, Ui_ComponentItemView):
 
 
 	def setupItem(self):
-		url = QUrl(self.data.get("thumbnail", ""))
-		self.thumbnail.setupThumbnail(url)
 		self.componentLabel.setText(self.data.get("name", "").capitalize())
+
+		url_str = self.data.get("thumbnail", "")
+		if url_str:
+			url = QUrl.fromUserInput(url_str)
+			self.thumbnail.setupThumbnail(url)
