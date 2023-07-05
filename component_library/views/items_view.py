@@ -1,3 +1,5 @@
+from typing import Any
+
 from PySide6.QtCore import Slot
 from PySide6.QtNetwork import QNetworkRequest
 from PySide6.QtWidgets import QWidget
@@ -22,7 +24,6 @@ class ItemsView(QWidget, Ui_itemsView):
 		self.setupSignals()
 
 		self.show()
-
 		self.initial_loads()
 
 
@@ -58,7 +59,7 @@ class ItemsView(QWidget, Ui_itemsView):
 
 
 	Slot(dict)
-	def component_response_handler(self, json_data: dict):
+	def component_response_handler(self, json_data: dict[str, Any]):
 		self.page_manager.load_page(json_data)
 		self.query_states.page = self.page_manager.page
 		self.query_states.page_size = self.page_manager.size

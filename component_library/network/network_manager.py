@@ -21,8 +21,10 @@ def handleResponse(reply: QNetworkReply):
     er = reply.error()
 
     if er == QNetworkReply.NetworkError.NoError:
-
         print(reply.url().toString(), ":", reply.attribute(QNetworkRequest.Attribute.HttpStatusCodeAttribute))
+
+    elif er == QNetworkReply.NetworkError.ProtocolUnknownError:
+        print("Blank URL passed!")
 
     else:
         print("Error occured: ", er)

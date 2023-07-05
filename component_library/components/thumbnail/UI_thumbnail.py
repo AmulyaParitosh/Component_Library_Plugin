@@ -56,4 +56,5 @@ class Thumbnail(QLabel):
 		self.downloader.start_download(image_url)
 
 	def loadImage(self, image: QImage):
-		self.setPixmap(QPixmap(image))
+		pixmap = QPixmap(image)
+		self.setPixmap(pixmap)

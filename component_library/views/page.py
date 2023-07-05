@@ -1,16 +1,18 @@
 from typing import Any
+
 from PySide6.QtCore import QObject, Signal
 
 
-class PageManager(QObject):
 
+class PageManager(QObject):
 
 	enable_next = Signal(bool)
 	enable_prev = Signal(bool)
 
 	def __init__(self, parent: QObject | None = ...) -> None:
 		super().__init__(parent)
-		self.data: list = []
+		self.data: list[dict[str, Any]] = []
+		self.__items: dict[str, dict[str, Any]] = dict()
 		self.total_items: int = 0
 		self.page: int = 0
 		self.total_pages = 0
@@ -20,6 +22,7 @@ class PageManager(QObject):
 
 	def load_page(self, json_response: dict[str, Any]):
 		self.data = json_response.get("items", [])
+		self.__load_dict_data(self.data)
 		self.total_items = json_response.get("total", 0)
 		self.page = json_response.get("page", 1)
 		self.size = json_response.get("per_page", 18)
@@ -43,3 +46,11 @@ class PageManager(QObject):
 
 	def to_begining(self):
 		self.page = 1
+
+	def __load_dict_data(self, data: list[dict[str, Any]]):
+		self.__items.clear()
+		self.__items = {item.get('id'): item for item in data} # type: ignore
+
+	@property
+	def items(self):
+		return self.__items

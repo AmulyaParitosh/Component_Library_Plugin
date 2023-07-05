@@ -2,8 +2,8 @@ import sys
 
 from PySide6.QtWidgets import QApplication
 
-from component_library.views import ItemsView
+from component_library import Plugin
 
 app = QApplication(sys.argv)
-window = ItemsView()
+window = Plugin()
 sys.exit(app.exec())
