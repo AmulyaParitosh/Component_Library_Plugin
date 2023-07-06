@@ -1,18 +1,17 @@
 from __future__ import annotations
 
 from enum import Enum
-import sys
 
-from PySide6.QtWidgets import QWidget, QLabel, QHBoxLayout, QApplication, QSizePolicy
-from PySide6.QtGui import QPixmap, QFont
 from PySide6.QtCore import QSize
+from PySide6.QtGui import QFont, QPixmap
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QWidget
 
 
 class Star(QLabel):
 
 	class State(Enum):
-		Empty = "component_library/components/star_rating/emptystar.png"
-		Filled = "component_library/components/star_rating/filledstar.png"
+		Empty = "component_library/user_interface/resources/emptystar.png"
+		Filled = "component_library/user_interface/resources/filledstar.png"
 
 
 	def __init__(self, parent):
@@ -70,11 +69,3 @@ class StarRating(QWidget):
 				star.setState(Star.State.Filled)
 			else:
 				star.setState(Star.State.Empty)
-
-
-
-if __name__ == "__main__":
-	app = QApplication(sys.argv)
-	window = StarRating(default_value=3.9)
-	window.show()
-	sys.exit(app.exec())

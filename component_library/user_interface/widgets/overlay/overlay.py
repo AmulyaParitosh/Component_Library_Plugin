@@ -4,6 +4,7 @@ from PySide6.QtWidgets import QGraphicsBlurEffect, QWidget
 
 
 class Overlay(QWidget):
+	overlay_text: str = ""
 
 	def paintEvent(self, event):
 		s = self.size()
@@ -23,7 +24,7 @@ class Overlay(QWidget):
 		qp.setPen(QColor(70, 70, 70))
 		qp.setPen(Qt.GlobalColor.white)
 		tolw, tolh = 80, -5
-		qp.drawText(ow + int(popup_width/2) - tolw, oh + int(popup_height/2) - tolh, "loading...")
+		qp.drawText(ow + int(popup_width/2) - tolw, oh + int(popup_height/2) - tolh, self.overlay_text)
 
 		qp.end()
 

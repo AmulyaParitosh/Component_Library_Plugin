@@ -1,1 +1,2 @@
-from .items_view import ItemsView
+from .detail_view import DetailedView
+from .grid_view import GridView

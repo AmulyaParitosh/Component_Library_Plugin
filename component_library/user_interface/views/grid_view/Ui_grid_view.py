@@ -19,18 +19,16 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QScrollArea,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 
-from component_library.components.checkable_comboBox import CheckableComboBox
-from component_library.components.tag_bar import TagBar
-from component_library.views.items_widget import ItemWigdet
+from component_library.user_interface.widgets import (CheckableComboBox, GridItemWidget, TagBar)
 
-class Ui_itemsView(object):
-    def setupUi(self, itemsView):
-        if not itemsView.objectName():
-            itemsView.setObjectName(u"itemsView")
-        itemsView.resize(1136, 816)
-        self.verticalLayout = QVBoxLayout(itemsView)
+class Ui_gridView(object):
+    def setupUi(self, gridView):
+        if not gridView.objectName():
+            gridView.setObjectName(u"gridView")
+        gridView.resize(1136, 816)
+        self.verticalLayout = QVBoxLayout(gridView)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.titleFrame = QFrame(itemsView)
+        self.titleFrame = QFrame(gridView)
         self.titleFrame.setObjectName(u"titleFrame")
         self.titleFrame.setMaximumSize(QSize(16777215, 51))
         self.titleFrame.setFrameShape(QFrame.Shape.StyledPanel)
@@ -145,7 +143,7 @@ class Ui_itemsView(object):
 
         self.verticalLayout.addWidget(self.titleFrame)
 
-        self.titleFrame_2 = QFrame(itemsView)
+        self.titleFrame_2 = QFrame(gridView)
         self.titleFrame_2.setObjectName(u"titleFrame_2")
         self.titleFrame_2.setMaximumSize(QSize(16777215, 51))
         self.titleFrame_2.setFrameShape(QFrame.Shape.StyledPanel)
@@ -184,17 +182,17 @@ class Ui_itemsView(object):
 
         self.verticalLayout.addWidget(self.titleFrame_2)
 
-        self.scrollArea = QScrollArea(itemsView)
+        self.scrollArea = QScrollArea(gridView)
         self.scrollArea.setObjectName(u"scrollArea")
         self.scrollArea.setWidgetResizable(True)
-        self.scrollAreaContentItemsWidget = ItemWigdet()
+        self.scrollAreaContentItemsWidget = GridItemWidget()
         self.scrollAreaContentItemsWidget.setObjectName(u"scrollAreaContentItemsWidget")
         self.scrollAreaContentItemsWidget.setGeometry(QRect(0, 0, 1120, 651))
         self.scrollArea.setWidget(self.scrollAreaContentItemsWidget)
 
         self.verticalLayout.addWidget(self.scrollArea)
 
-        self.bottomBar = QWidget(itemsView)
+        self.bottomBar = QWidget(gridView)
         self.bottomBar.setObjectName(u"bottomBar")
         self.horizontalLayout = QHBoxLayout(self.bottomBar)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -225,34 +223,34 @@ class Ui_itemsView(object):
         self.verticalLayout.addWidget(self.bottomBar)
 
 
-        self.retranslateUi(itemsView)
+        self.retranslateUi(gridView)
 
-        QMetaObject.connectSlotsByName(itemsView)
+        QMetaObject.connectSlotsByName(gridView)
     # setupUi
 
-    def retranslateUi(self, itemsView):
-        itemsView.setWindowTitle(QCoreApplication.translate("itemsView", u"Form", None))
-        self.searchLabel.setText(QCoreApplication.translate("itemsView", u"Search", None))
-        self.sortLabel.setText(QCoreApplication.translate("itemsView", u"sort", None))
-        self.sortComboBox.setItemText(0, QCoreApplication.translate("itemsView", u"Name", None))
-        self.sortComboBox.setItemText(1, QCoreApplication.translate("itemsView", u"Created", None))
-        self.sortComboBox.setItemText(2, QCoreApplication.translate("itemsView", u"Updated", None))
-        self.sortComboBox.setItemText(3, QCoreApplication.translate("itemsView", u"Rating", None))
+    def retranslateUi(self, gridView):
+        gridView.setWindowTitle(QCoreApplication.translate("gridView", u"Form", None))
+        self.searchLabel.setText(QCoreApplication.translate("gridView", u"Search", None))
+        self.sortLabel.setText(QCoreApplication.translate("gridView", u"sort", None))
+        self.sortComboBox.setItemText(0, QCoreApplication.translate("gridView", u"Name", None))
+        self.sortComboBox.setItemText(1, QCoreApplication.translate("gridView", u"Created", None))
+        self.sortComboBox.setItemText(2, QCoreApplication.translate("gridView", u"Updated", None))
+        self.sortComboBox.setItemText(3, QCoreApplication.translate("gridView", u"Rating", None))
 
-        self.orderLabel.setText(QCoreApplication.translate("itemsView", u"order", None))
-        self.orderComboBox.setItemText(0, QCoreApplication.translate("itemsView", u"ascending", None))
-        self.orderComboBox.setItemText(1, QCoreApplication.translate("itemsView", u"descending", None))
+        self.orderLabel.setText(QCoreApplication.translate("gridView", u"order", None))
+        self.orderComboBox.setItemText(0, QCoreApplication.translate("gridView", u"ascending", None))
+        self.orderComboBox.setItemText(1, QCoreApplication.translate("gridView", u"descending", None))
 
-        self.fileTypeLabel.setText(QCoreApplication.translate("itemsView", u"filetype", None))
-        self.fileTypeComboBox.setItemText(0, QCoreApplication.translate("itemsView", u"step", None))
-        self.fileTypeComboBox.setItemText(1, QCoreApplication.translate("itemsView", u"fcstd", None))
-        self.fileTypeComboBox.setItemText(2, QCoreApplication.translate("itemsView", u"fcstd1", None))
-        self.fileTypeComboBox.setItemText(3, QCoreApplication.translate("itemsView", u"stl", None))
-        self.fileTypeComboBox.setItemText(4, QCoreApplication.translate("itemsView", u"stp", None))
+        self.fileTypeLabel.setText(QCoreApplication.translate("gridView", u"filetype", None))
+        self.fileTypeComboBox.setItemText(0, QCoreApplication.translate("gridView", u"step", None))
+        self.fileTypeComboBox.setItemText(1, QCoreApplication.translate("gridView", u"fcstd", None))
+        self.fileTypeComboBox.setItemText(2, QCoreApplication.translate("gridView", u"fcstd1", None))
+        self.fileTypeComboBox.setItemText(3, QCoreApplication.translate("gridView", u"stl", None))
+        self.fileTypeComboBox.setItemText(4, QCoreApplication.translate("gridView", u"stp", None))
 
-        self.tagBarLabel.setText(QCoreApplication.translate("itemsView", u"Tags", None))
-        self.prevButton.setText(QCoreApplication.translate("itemsView", u"Prev", None))
-        self.pageLable.setText(QCoreApplication.translate("itemsView", u"0 / 0", None))
-        self.nextButton.setText(QCoreApplication.translate("itemsView", u"Next", None))
+        self.tagBarLabel.setText(QCoreApplication.translate("gridView", u"Tags", None))
+        self.prevButton.setText(QCoreApplication.translate("gridView", u"Prev", None))
+        self.pageLable.setText(QCoreApplication.translate("gridView", u"0 / 0", None))
+        self.nextButton.setText(QCoreApplication.translate("gridView", u"Next", None))
     # retranslateUi
 

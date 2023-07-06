@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>itemsView</class>
- <widget class="QWidget" name="itemsView">
+ <class>gridView</class>
+ <widget class="QWidget" name="gridView">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -306,7 +306,7 @@
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
-     <widget class="ItemWigdet" name="scrollAreaContentItemsWidget">
+     <widget class="GridItemWidget" name="scrollAreaContentItemsWidget">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -375,20 +375,20 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ItemWigdet</class>
+   <class>GridItemWidget</class>
    <extends>QWidget</extends>
-   <header>component_library/views/items_widget</header>
+   <header location="global">component_library/user_interface/widgets</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CheckableComboBox</class>
    <extends>QComboBox</extends>
-   <header>component_library/components/checkable_comboBox</header>
+   <header location="global">component_library/user_interface/widgets</header>
   </customwidget>
   <customwidget>
    <class>TagBar</class>
    <extends>QWidget</extends>
-   <header>component_library/components/tag_bar</header>
+   <header location="global">component_library/user_interface/widgets</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

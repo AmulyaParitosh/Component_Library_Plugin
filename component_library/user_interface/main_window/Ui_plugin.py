@@ -18,8 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QMainWindow,
     QSizePolicy, QStackedWidget, QVBoxLayout, QWidget)
 
-from component_library.views.detailed_view import DetailedView
-from component_library.views.items_view import ItemsView
+from component_library.user_interface.views import (DetailedView, GridView)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -66,7 +65,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.stackedWidget = QStackedWidget(self.mainArea)
         self.stackedWidget.setObjectName(u"stackedWidget")
-        self.repoBrowser = ItemsView()
+        self.repoBrowser = GridView()
         self.repoBrowser.setObjectName(u"repoBrowser")
         self.stackedWidget.addWidget(self.repoBrowser)
         self.componentDetail = DetailedView()

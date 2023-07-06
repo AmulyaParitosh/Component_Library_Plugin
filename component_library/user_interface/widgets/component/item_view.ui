@@ -81,7 +81,7 @@
   <customwidget>
    <class>Thumbnail</class>
    <extends>QWidget</extends>
-   <header location="global">component_library/components/thumbnail</header>
+   <header location="global">component_library/user_interface/widgets</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -1,4 +1,3 @@
-from functools import cache
 from os import path
 
 from PySide6.QtCore import QObject, QUrl
@@ -35,8 +34,5 @@ class Api(QObject):
 		return ApiReply(self.manager.put(request, data), self)
 
 
-# component_management_api = Api("http://127.0.0.1:5000")
-
-@cache
 def getApi(api_url: str, manager: QNetworkAccessManager, ssl_config: QSslConfiguration) -> Api:
 	return Api(api_url, manager, ssl_config)

@@ -70,7 +70,7 @@
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
-         <widget class="ItemsView" name="repoBrowser"/>
+         <widget class="GridView" name="repoBrowser"/>
          <widget class="DetailedView" name="componentDetail"/>
         </widget>
        </item>
@@ -82,15 +82,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ItemsView</class>
+   <class>DetailedView</class>
    <extends>QWidget</extends>
-   <header location="global">component_library/views/items_view</header>
+   <header location="global">component_library/user_interface/views</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>DetailedView</class>
+   <class>GridView</class>
    <extends>QWidget</extends>
-   <header location="global">component_library/views/detailed_view</header>
+   <header location="global">component_library/user_interface/views</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

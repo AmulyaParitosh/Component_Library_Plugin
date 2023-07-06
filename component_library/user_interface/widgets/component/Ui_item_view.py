@@ -18,7 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
     QPushButton, QSizePolicy, QVBoxLayout, QWidget)
 
-from component_library.components.thumbnail import Thumbnail
+from component_library.user_interface.widgets import Thumbnail
 
 class Ui_ComponentItemView(object):
     def setupUi(self, ComponentItemView):
@@ -83,3 +83,4 @@ class Ui_ComponentItemView(object):
         self.componentLabel.setText(QCoreApplication.translate("ComponentItemView", u"Component Label", None))
         self.pushButton.setText(QCoreApplication.translate("ComponentItemView", u"Download", None))
     # retranslateUi
+

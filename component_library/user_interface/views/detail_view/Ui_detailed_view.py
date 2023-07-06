@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QGridLayout,
     QSizePolicy, QSpacerItem, QTextBrowser, QVBoxLayout,
     QWidget)
 
-from component_library.components.star_rating.rating import StarRating
+from component_library.user_interface.widgets import StarRating
 
 class Ui_detailedView(object):
     def setupUi(self, detailedView):
@@ -53,9 +53,6 @@ class Ui_detailedView(object):
         self.horizontalLayout.addWidget(self.downloadPushButton)
 
         self.filetypeComboBox = QComboBox(self.topArea)
-        self.filetypeComboBox.addItem("")
-        self.filetypeComboBox.addItem("")
-        self.filetypeComboBox.addItem("")
         self.filetypeComboBox.setObjectName(u"filetypeComboBox")
 
         self.horizontalLayout.addWidget(self.filetypeComboBox)
@@ -146,7 +143,7 @@ class Ui_detailedView(object):
         self.metadataWidget = QWidget(self.metadataFrame)
         self.metadataWidget.setObjectName(u"metadataWidget")
         self.metadataWidget.setMouseTracking(False)
-        self.metadataWidget.setFocusPolicy(Qt.NoFocus)
+        self.metadataWidget.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.gridLayout = QGridLayout(self.metadataWidget)
         self.gridLayout.setObjectName(u"gridLayout")
         self.authorLabel = QLabel(self.metadataWidget)
@@ -237,10 +234,6 @@ class Ui_detailedView(object):
         detailedView.setWindowTitle(QCoreApplication.translate("detailedView", u"Form", None))
         self.backPushButton.setText(QCoreApplication.translate("detailedView", u"Back", None))
         self.downloadPushButton.setText(QCoreApplication.translate("detailedView", u"Download", None))
-        self.filetypeComboBox.setItemText(0, QCoreApplication.translate("detailedView", u"step", None))
-        self.filetypeComboBox.setItemText(1, QCoreApplication.translate("detailedView", u"fcstd", None))
-        self.filetypeComboBox.setItemText(2, QCoreApplication.translate("detailedView", u"stl", None))
-
         self.filetypeComboBox.setPlaceholderText(QCoreApplication.translate("detailedView", u"filetype", None))
         self.contentLabel.setText(QCoreApplication.translate("detailedView", u"<html><head/><body><p><span style=\" font-size:28pt;\">Component Label</span></p></body></html>", None))
         self.descriptionLabel.setText(QCoreApplication.translate("detailedView", u"<html><head/><body><p><span style=\" font-size:18pt;\">Description :</span></p></body></html>", None))
@@ -256,4 +249,3 @@ class Ui_detailedView(object):
         self.updatedValue.setText("")
         self.ratingLabel.setText(QCoreApplication.translate("detailedView", u"<html><head/><body><p><span style=\" font-size:14pt;\">Rating:</span></p></body></html>", None))
     # retranslateUi
-

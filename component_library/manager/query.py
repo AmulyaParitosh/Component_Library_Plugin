@@ -1,7 +1,7 @@
-from ...network.api import ComponenetQueryParameters
+from ..network.api import ComponenetQueryParameters
 
 
-class BrowserQueryStateManager:
+class ComponentQueryStateManager:
 	query_states = ComponenetQueryParameters()
 
 

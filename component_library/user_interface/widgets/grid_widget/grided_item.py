@@ -1,9 +1,9 @@
 from PySide6.QtWidgets import QGridLayout, QWidget
 
-from ..widgets import ComponentItem
+from ..component import ComponentItem
 
 
-class ItemWigdet(QWidget):
+class GridItemWidget(QWidget):
 
 	def __init__(self) -> None:
 

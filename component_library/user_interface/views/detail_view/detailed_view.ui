@@ -289,7 +289,7 @@
   <customwidget>
    <class>StarRating</class>
    <extends>QWidget</extends>
-   <header location="global">component_library/components/star_rating/rating</header>
+   <header location="global">component_library/user_interface/widgets</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

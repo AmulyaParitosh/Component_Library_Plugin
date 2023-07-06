@@ -3,21 +3,24 @@ from typing import Any
 from PySide6.QtCore import QObject, Signal, Slot
 from PySide6.QtNetwork import QNetworkRequest
 
-from ...network import network_access_manager, sslConfig
-from ...network.api import Api, ApiReply, ComponentRequest, getApi
-from ..states import BrowserQueryStateManager, PageState, PageStateManager
+from ..network import network_access_manager, sslConfig
+from ..network.api import Api, ApiReply, ComponentRequest, getApi
+from .page import PageState, PageStateManager
+from .query import ComponentQueryStateManager
 
 
 class StateManager:
-	QueryManager = BrowserQueryStateManager()
+	QueryManager = ComponentQueryStateManager()
 	PageManager = PageStateManager()
 
 
 class BrowserManager(QObject):
 	component_loaded = Signal()
 	tags_loaded = Signal(list)
+	license_loaded = Signal(str)
 
 	def __init__(self, api_url: str, state_manager: StateManager) -> None:
+		super().__init__()
 		self.api: Api = getApi(api_url, network_access_manager, sslConfig)
 		self.state: StateManager = state_manager
 
@@ -32,15 +35,25 @@ class BrowserManager(QObject):
 		reply.finished.connect(self.__tags_list_response_handler)
 
 
+	def get_license(self, license_id: str):
+		reply = self.api.get(QNetworkRequest(f"license/{license_id}"))
+		reply.finished.connect(self.__got_license)
+
+
 	Slot(dict)
 	def __component_response_handler(self, json_data: dict[str, Any]):
 		page: PageState = self.state.PageManager.load_page(json_data)
 		self.state.QueryManager.set_page(page.page_no)
 		self.state.QueryManager.set_page_size(page.size)
 		self.component_loaded.emit()
+		print("page1", page)
 
 
 	Slot(dict)
 	def __tags_list_response_handler(self, json_data: dict):
 		word_list: list[str] = [tag.get("label") for tag in json_data.get("items", [])]
 		self.tags_loaded.emit(word_list)
+
+	Slot(dict)
+	def __got_license(self, json_data: dict):
+		self.license_loaded.emit(json_data.get("fullname", "None"))
