@@ -1,3 +1,4 @@
-from .component_management_system import ApiManager, network_access_manager, component_management_api
-from .requests import ComponentRequestState, ComponentRequest
+from .api_manager import Api, getApi
+from .queries import ComponenetQueryParameters
 from .replies import ApiReply
+from .requests import ComponentRequest

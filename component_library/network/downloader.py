@@ -5,6 +5,8 @@ from .network_manager import network_access_manager
 
 
 class ComponentDownloader(QObject):
+	# TODO dev incomplete
+
 	finished = Signal(str)
 	error = Signal(QNetworkReply.NetworkError)
 

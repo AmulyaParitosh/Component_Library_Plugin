@@ -3,7 +3,7 @@ from PySide6.QtGui import QFont
 from PySide6.QtNetwork import QNetworkRequest
 from PySide6.QtWidgets import QWidget
 
-from ..components.thumbnail import Thumbnail
+from ..widgets.thumbnail import Thumbnail
 from ..network import component_management_api
 from .ui import Ui_detailedView
 

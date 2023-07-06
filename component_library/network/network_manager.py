@@ -1,24 +1,13 @@
 import certifi
+from PySide6.QtCore import Slot
 from PySide6.QtNetwork import (QNetworkAccessManager, QNetworkReply,
                                QNetworkRequest, QSsl, QSslCertificate,
                                QSslConfiguration, QSslSocket)
 
-sslConfig = QSslConfiguration.defaultConfiguration()
-sslConfig.setProtocol(QSsl.SslProtocol.TlsV1_0)
-sslConfig.setPeerVerifyDepth(1)
-sslConfig.setPeerVerifyMode(QSslSocket.PeerVerifyMode.VerifyPeer)
-qcerts = QSslCertificate.fromPath(
-	certifi.where(),
-	QSsl.EncodingFormat.Pem,
-	QSslCertificate.PatternSyntax.Wildcard,
-)
+Slot(QNetworkReply)
+def on_finish(reply: QNetworkReply) -> None:
 
-sslConfig.setCaCertificates(qcerts)
-
-
-def handleResponse(reply: QNetworkReply):
-
-    er = reply.error()
+    er: QNetworkReply.NetworkError = reply.error()
 
     if er == QNetworkReply.NetworkError.NoError:
         print(reply.url().toString(), ":", reply.attribute(QNetworkRequest.Attribute.HttpStatusCodeAttribute))
@@ -31,5 +20,18 @@ def handleResponse(reply: QNetworkReply):
         print(reply.url().toString(), reply.errorString())
 
 
+sslConfig: QSslConfiguration = QSslConfiguration.defaultConfiguration()
+sslConfig.setProtocol(QSsl.SslProtocol.TlsV1_0)
+sslConfig.setPeerVerifyDepth(1)
+sslConfig.setPeerVerifyMode(QSslSocket.PeerVerifyMode.VerifyPeer)
+qcerts: list[QSslCertificate] = QSslCertificate.fromPath(
+	certifi.where(),
+	QSsl.EncodingFormat.Pem,
+	QSslCertificate.PatternSyntax.Wildcard,
+)
+
+sslConfig.setCaCertificates(qcerts)
+
+
 network_access_manager = QNetworkAccessManager()
-network_access_manager.finished.connect(handleResponse)
+network_access_manager.finished.connect(on_finish)

@@ -14,7 +14,7 @@ class ApiReply(QObject):
 		self.reply.finished.connect(self.response_serializer)
 
 	Slot()
-	def response_serializer(self):
+	def response_serializer(self) -> None:
 		if self.reply.error() != QNetworkReply.NetworkError.NoError:
 			print(f"Error : {self.reply.errorString()}")
 
