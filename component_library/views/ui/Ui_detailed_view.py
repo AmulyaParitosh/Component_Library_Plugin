@@ -15,9 +15,12 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QHBoxLayout,
-    QLabel, QPushButton, QScrollArea, QSizePolicy,
-    QSpacerItem, QTextBrowser, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QGridLayout,
+    QHBoxLayout, QLabel, QPushButton, QScrollArea,
+    QSizePolicy, QSpacerItem, QTextBrowser, QVBoxLayout,
+    QWidget)
+
+from component_library.components.star_rating.rating import StarRating
 
 class Ui_detailedView(object):
     def setupUi(self, detailedView):
@@ -50,6 +53,8 @@ class Ui_detailedView(object):
         self.horizontalLayout.addWidget(self.downloadPushButton)
 
         self.filetypeComboBox = QComboBox(self.topArea)
+        self.filetypeComboBox.addItem("")
+        self.filetypeComboBox.addItem("")
         self.filetypeComboBox.addItem("")
         self.filetypeComboBox.setObjectName(u"filetypeComboBox")
 
@@ -142,6 +147,73 @@ class Ui_detailedView(object):
         self.metadataWidget.setObjectName(u"metadataWidget")
         self.metadataWidget.setMouseTracking(False)
         self.metadataWidget.setFocusPolicy(Qt.NoFocus)
+        self.gridLayout = QGridLayout(self.metadataWidget)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.authorLabel = QLabel(self.metadataWidget)
+        self.authorLabel.setObjectName(u"authorLabel")
+
+        self.gridLayout.addWidget(self.authorLabel, 0, 0, 1, 1)
+
+        self.authorValue = QLabel(self.metadataWidget)
+        self.authorValue.setObjectName(u"authorValue")
+
+        self.gridLayout.addWidget(self.authorValue, 0, 1, 1, 1)
+
+        self.mainteinerLabel = QLabel(self.metadataWidget)
+        self.mainteinerLabel.setObjectName(u"mainteinerLabel")
+
+        self.gridLayout.addWidget(self.mainteinerLabel, 1, 0, 1, 1)
+
+        self.maintainerValue = QLabel(self.metadataWidget)
+        self.maintainerValue.setObjectName(u"maintainerValue")
+
+        self.gridLayout.addWidget(self.maintainerValue, 1, 1, 1, 1)
+
+        self.licenseLabel = QLabel(self.metadataWidget)
+        self.licenseLabel.setObjectName(u"licenseLabel")
+
+        self.gridLayout.addWidget(self.licenseLabel, 2, 0, 1, 1)
+
+        self.licenseValue = QLabel(self.metadataWidget)
+        self.licenseValue.setObjectName(u"licenseValue")
+
+        self.gridLayout.addWidget(self.licenseValue, 2, 1, 1, 1)
+
+        self.createdLabel = QLabel(self.metadataWidget)
+        self.createdLabel.setObjectName(u"createdLabel")
+
+        self.gridLayout.addWidget(self.createdLabel, 3, 0, 1, 1)
+
+        self.createdValue = QLabel(self.metadataWidget)
+        self.createdValue.setObjectName(u"createdValue")
+
+        self.gridLayout.addWidget(self.createdValue, 3, 1, 1, 1)
+
+        self.updatedLabel = QLabel(self.metadataWidget)
+        self.updatedLabel.setObjectName(u"updatedLabel")
+
+        self.gridLayout.addWidget(self.updatedLabel, 4, 0, 1, 1)
+
+        self.updatedValue = QLabel(self.metadataWidget)
+        self.updatedValue.setObjectName(u"updatedValue")
+
+        self.gridLayout.addWidget(self.updatedValue, 4, 1, 1, 1)
+
+        self.ratingLabel = QLabel(self.metadataWidget)
+        self.ratingLabel.setObjectName(u"ratingLabel")
+
+        self.gridLayout.addWidget(self.ratingLabel, 5, 0, 1, 1)
+
+        self.ratingwidget = StarRating(self.metadataWidget)
+        self.ratingwidget.setObjectName(u"ratingwidget")
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.ratingwidget.sizePolicy().hasHeightForWidth())
+        self.ratingwidget.setSizePolicy(sizePolicy4)
+
+        self.gridLayout.addWidget(self.ratingwidget, 5, 1, 1, 1, Qt.AlignmentFlag.AlignLeft)
+
 
         self.horizontalLayout_5.addWidget(self.metadataWidget)
 
@@ -155,6 +227,9 @@ class Ui_detailedView(object):
 
         self.retranslateUi(detailedView)
 
+        self.filetypeComboBox.setCurrentIndex(-1)
+
+
         QMetaObject.connectSlotsByName(detailedView)
     # setupUi
 
@@ -162,9 +237,23 @@ class Ui_detailedView(object):
         detailedView.setWindowTitle(QCoreApplication.translate("detailedView", u"Form", None))
         self.backPushButton.setText(QCoreApplication.translate("detailedView", u"Back", None))
         self.downloadPushButton.setText(QCoreApplication.translate("detailedView", u"Download", None))
-        self.filetypeComboBox.setItemText(0, QCoreApplication.translate("detailedView", u"filetype", None))
+        self.filetypeComboBox.setItemText(0, QCoreApplication.translate("detailedView", u"step", None))
+        self.filetypeComboBox.setItemText(1, QCoreApplication.translate("detailedView", u"fcstd", None))
+        self.filetypeComboBox.setItemText(2, QCoreApplication.translate("detailedView", u"stl", None))
 
+        self.filetypeComboBox.setPlaceholderText(QCoreApplication.translate("detailedView", u"filetype", None))
         self.contentLabel.setText(QCoreApplication.translate("detailedView", u"<html><head/><body><p><span style=\" font-size:28pt;\">Component Label</span></p></body></html>", None))
         self.descriptionLabel.setText(QCoreApplication.translate("detailedView", u"<html><head/><body><p><span style=\" font-size:18pt;\">Description :</span></p></body></html>", None))
+        self.authorLabel.setText(QCoreApplication.translate("detailedView", u"<html><head/><body><p><span style=\" font-size:14pt;\">Author:</span></p></body></html>", None))
+        self.authorValue.setText("")
+        self.mainteinerLabel.setText(QCoreApplication.translate("detailedView", u"<html><head/><body><p><span style=\" font-size:14pt;\">Maintainer:</span></p></body></html>", None))
+        self.maintainerValue.setText("")
+        self.licenseLabel.setText(QCoreApplication.translate("detailedView", u"<html><head/><body><p><span style=\" font-size:14pt;\">License:</span></p></body></html>", None))
+        self.licenseValue.setText("")
+        self.createdLabel.setText(QCoreApplication.translate("detailedView", u"<html><head/><body><p><span style=\" font-size:14pt;\">Created on:</span></p></body></html>", None))
+        self.createdValue.setText("")
+        self.updatedLabel.setText(QCoreApplication.translate("detailedView", u"<html><head/><body><p><span style=\" font-size:14pt;\">Upadted on:</span></p></body></html>", None))
+        self.updatedValue.setText("")
+        self.ratingLabel.setText(QCoreApplication.translate("detailedView", u"<html><head/><body><p><span style=\" font-size:14pt;\">Rating:</span></p></body></html>", None))
     # retranslateUi
 
