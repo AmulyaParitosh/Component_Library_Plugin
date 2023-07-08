@@ -51,6 +51,8 @@ class Ui_MainWindow(object):
         self.notificationArea.setObjectName(u"notificationArea")
         self.notificationArea.setFrameShape(QFrame.Shape.StyledPanel)
         self.notificationArea.setFrameShadow(QFrame.Shadow.Raised)
+        self.notificationAreaLayout = QVBoxLayout(self.notificationArea)
+        self.notificationAreaLayout.setObjectName(u"notificationAreaLayout")
 
         self.verticalLayout.addWidget(self.notificationArea)
 

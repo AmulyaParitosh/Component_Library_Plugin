@@ -21,9 +21,12 @@ class ApiReply(QObject):
 		data: str = self.reply.readAll().data().decode("utf-8")
 
 		try:
-			self.json_data: dict = json.loads(data)
+			self.data: dict = json.loads(data)
 		except json.decoder.JSONDecodeError:
-			self.json_data = dict()
+			self.data = dict()
 
-		self.finished.emit(self.json_data)
+		if isinstance(self.data, list):
+			self.data = {item.get("id"): item for item in self.data}
+
+		self.finished.emit(self.data)
 		self.reply.deleteLater()

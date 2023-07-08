@@ -1,4 +1,4 @@
-from PySide6.QtCore import Slot
+from PySide6.QtCore import Slot, QEvent
 from PySide6.QtWidgets import QWidget
 
 from ....manager import (BrowserManager, ComponentQueryStateManager,
@@ -28,14 +28,12 @@ class GridView(QWidget):
 
 
 	def setupSignals(self):
-
-
 		self.ui.searchLineEdit.returnPressed.connect(self.search_enter_pressed)
 		self.ui.nextButton.clicked.connect(self.on_nextButton_clicked)
 		self.ui.prevButton.clicked.connect(self.on_prevButton_clicked)
 		self.ui.sortComboBox.currentTextChanged.connect(self.on_sortComboBox_change)
 		self.ui.orderComboBox.currentTextChanged.connect(self.on_ordCombBox_change)
-		self.ui.fileTypeComboBox.itemChecked.connect(self.on_fileTypeComboBox_change)
+		self.ui.fileTypeComboBox.selectionUpdated.connect(self.on_fileTypeComboBox_change)
 		self.ui.tagBar.tag_added.connect(self.on_tagBar_tag_added)
 
 
@@ -67,7 +65,6 @@ class GridView(QWidget):
 		self.ui.scrollAreaContentItemsWidget.repopulate(self.page_manager.page.data)
 		self.ui.pageLable.setText(f"{self.page_manager.page.page_no} / {self.page_manager.page.total_pages}")
 		self.overlay.hide()
-		print("page2", self.page_manager.page)
 
 
 	Slot(list)

@@ -4,7 +4,7 @@ from PySide6.QtCore import QUrl
 from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtWidgets import QLabel, QWidget
 
-from ....network.downloader import ImageDownloader
+from ....manager import ImageDownloader
 
 
 class Thumbnail(QLabel):

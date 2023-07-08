@@ -18,6 +18,8 @@ class BrowserManager(QObject):
 	component_loaded = Signal()
 	tags_loaded = Signal(list)
 	license_loaded = Signal(str)
+	files_loaded = Signal(dict)
+
 
 	def __init__(self, api_url: str, state_manager: StateManager) -> None:
 		super().__init__()
@@ -40,13 +42,17 @@ class BrowserManager(QObject):
 		reply.finished.connect(self.__got_license)
 
 
+	def get_files(self, metadata_id: str):
+		reply = self.api.get(QNetworkRequest(f"metadata/{metadata_id}/files"))
+		reply.finished.connect(self.__get_files)
+
+
 	Slot(dict)
 	def __component_response_handler(self, json_data: dict[str, Any]):
 		page: PageState = self.state.PageManager.load_page(json_data)
 		self.state.QueryManager.set_page(page.page_no)
 		self.state.QueryManager.set_page_size(page.size)
 		self.component_loaded.emit()
-		print("page1", page)
 
 
 	Slot(dict)
@@ -54,6 +60,12 @@ class BrowserManager(QObject):
 		word_list: list[str] = [tag.get("label") for tag in json_data.get("items", [])]
 		self.tags_loaded.emit(word_list)
 
+
 	Slot(dict)
 	def __got_license(self, json_data: dict):
 		self.license_loaded.emit(json_data.get("fullname", "None"))
+
+
+	Slot(dict)
+	def __get_files(self, json_data: dict):
+		self.files_loaded.emit(json_data)

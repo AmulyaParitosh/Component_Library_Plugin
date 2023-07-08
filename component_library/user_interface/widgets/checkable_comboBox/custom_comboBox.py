@@ -1,35 +1,40 @@
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QStandardItemModel
 from PySide6.QtWidgets import QComboBox
 
 
 class CheckableComboBox(QComboBox):
 
-	itemChecked = Signal(list)
+	selectionUpdated = Signal(list)
 
-	def __init__(self, parent):
-		super().__init__()
-		self.setParent(parent) # type: ignore
-		self.view().pressed.connect(self.handle_item_pressed)
-		self.setModel(QStandardItemModel(self))
+	def __init__(self, parent=None):
+		super().__init__(parent)
+		self.view().pressed.connect(self.handleItemPressed)
+		self._changed = False
 
-
-	def handle_item_pressed(self, index):
-
+	def handleItemPressed(self, index):
 		item = self.model().itemFromIndex(index) # type: ignore
-
 		if item.checkState() == Qt.CheckState.Checked:
 			item.setCheckState(Qt.CheckState.Unchecked)
 		else:
 			item.setCheckState(Qt.CheckState.Checked)
+		self._changed = True
 
-		checked_items = self.checked_items()
-		self.itemChecked.emit(checked_items)
+	def hidePopup(self):
+		if not self._changed:
+			super().hidePopup()
+			self.selectionUpdated.emit(self.checked_items())
+		self._changed = False
 
-	def index_is_checked(self, index):
-		item = self.model().item(index, 0) # type: ignore
+	def itemChecked(self, index):
+		item = self.model().item(index, self.modelColumn()) # type: ignore
 		return item.checkState() == Qt.CheckState.Checked
 
+	def setItemChecked(self, index, checked=True):
+		item = self.model().item(index, self.modelColumn()) # type: ignore
+		if checked:
+			item.setCheckState(Qt.CheckState.Checked)
+		else:
+			item.setCheckState(Qt.CheckState.Unchecked)
 
 	def checked_items(self):
 		checkedItems: list[str] = []
@@ -40,6 +45,10 @@ class CheckableComboBox(QComboBox):
 				checkedItems.append(item.text())
 
 		return checkedItems
+
+	def index_is_checked(self, index):
+		item = self.model().item(index, 0) # type: ignore
+		return item.checkState() == Qt.CheckState.Checked
 
 	def make_pre_checked(self):
 

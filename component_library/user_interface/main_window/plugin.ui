@@ -54,6 +54,7 @@
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
+         <layout class="QVBoxLayout" name="notificationAreaLayout"/>
         </widget>
        </item>
       </layout>
