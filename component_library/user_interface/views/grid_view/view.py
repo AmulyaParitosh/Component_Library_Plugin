@@ -1,3 +1,5 @@
+from typing import Callable
+
 from PySide6.QtCore import Slot
 
 from ....manager import BrowserManager, Page
@@ -20,7 +22,7 @@ class GridView(BaseView):
 	def setupUi(self):
 		self.ui.setupUi(self)
 
-		self.overlay = LoadingOverlay(self.ui.scrollArea)
+		self.loading_overlay = LoadingOverlay(self.ui.scrollArea)
 		self.ui.fileTypeComboBox.make_pre_checked()
 
 
@@ -38,7 +40,6 @@ class GridView(BaseView):
 		self.manager: BrowserManager = manager
 
 		self.manager.component_loaded.connect(self.components_response_handler)
-		self.manager.tags_loaded.connect(self.tags_list_response_handler)
 		self.manager.page_manager.enable_next.connect(self.ui.nextButton.setEnabled)
 		self.manager.page_manager.enable_prev.connect(self.ui.prevButton.setEnabled)
 
@@ -48,76 +49,75 @@ class GridView(BaseView):
 	def updateContent(self, page: Page):
 		self.ui.scrollAreaContentItemsWidget.repopulate(page.data)
 		self.ui.pageLable.setText(f"{page.page_no} / {page.total_pages}")
-		self.loading = False
+		self.loading_overlay.loading = False
 
-
-	@property
-	def loading(self) -> bool:
-		return self.overlay.isVisible()
-
-	@loading.setter
-	def loading(self, load: bool):
-		if load:
-			self.overlay.show()
-		else:
-			self.overlay.hide()
+	@staticmethod
+	def loading(func: Callable):
+		def wraper(self, *args, **kwargs):
+			self.loading_overlay.loading = True
+			self.ui.scrollArea.verticalScrollBar().setValue(0)
+			return func(self, *args, **kwargs)
+		return wraper
 
 	Slot()
 	def components_response_handler(self):
 		self.updateContent(self.manager.page_manager.page)
 
 
+	@loading
 	def initial_load(self):
-		self.get_request()
-		self.manager.request_tags()
+		self.manager.reload_page()
+		reply = self.manager.request_tags()
+		reply.finished.connect(self.tags_list_response_handler)
 
 
-	def get_request(self):
-		self.overlay.show()
-		self.manager.request_components()
-
-
-	Slot(list)
-	def tags_list_response_handler(self, word_list: list):
+	Slot(dict)
+	def tags_list_response_handler(self, json_data: dict):
+		word_list: list[str] = [tag.get("label") for tag in json_data.get("items", [])]
 		self.ui.tagBar.set_suggestions(word_list)
 
 
 	Slot()
+	@loading
 	def on_nextButton_clicked(self):
-		self.loading = True
 		self.manager.next_page()
 
 
 	Slot()
+	@loading
 	def on_prevButton_clicked(self):
-		self.loading = True
 		self.manager.prev_page()
 
 
 	Slot()
+	@loading
 	def search_enter_pressed(self):
 		self.manager.query_manager.set_search_key(self.ui.searchLineEdit.text())
-		self.get_request()
+		self.manager.reload_page()
 
 
 	Slot(str)
+	@loading
 	def on_sortComboBox_change(self, value: str):
 		self.manager.query_manager.set_sort_by(value)
-		self.get_request()
+		self.manager.reload_page()
 
 
 	Slot(str)
+	@loading
 	def on_ordCombBox_change(self, value: str):
 		self.manager.query_manager.set_sort_ord(value)
-		self.get_request()
+		self.manager.reload_page()
 
 
 	Slot(list)
+	@loading
 	def on_fileTypeComboBox_change(self, checked_items: list[str]):
 		self.manager.query_manager.set_file_types(checked_items)
-		self.get_request()
+		self.manager.reload_page()
 
 	Slot()
+	@loading
 	def on_tagBar_tag_edited(self, tags: list[str]):
 		self.manager.query_manager.set_tags(tags)
-		self.get_request()
+		self.manager.reload_page()

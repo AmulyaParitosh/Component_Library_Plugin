@@ -21,4 +21,4 @@ class Window(QMainWindow):
 
 	def setup_network(self):
 		self.ui.repoBrowser.setupManager(self.browser_manager)
-		# self.ui.componentDetail.setup_network(self.browser_manager)
+		# self.ui.componentDetail.setupManager(self.browser_manager)
