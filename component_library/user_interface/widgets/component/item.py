@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QWidget
 
 from ....data import Component
+from ...views.base_view import BaseView
 from .Ui_item_view import Ui_ComponentItemView
 
 
@@ -12,7 +13,6 @@ class ComponentItem(QWidget):
 
 		self.ui = Ui_ComponentItemView()
 		self.ui.setupUi(self)
-
 		self.data: Component = data
 
 		self.setupItem()
@@ -24,8 +24,8 @@ class ComponentItem(QWidget):
 
 
 	def mouseReleaseEvent(self, event) -> None:
-		detailed_view = self.topLevelWidget().ui.componentDetail # type: ignore
-		detailed_view.update_content(self)
+		detailed_view: BaseView = self.topLevelWidget().ui.componentDetail # type: ignore
+		detailed_view.updateContent(self)
 		self.topLevelWidget().ui.stackedWidget.setCurrentWidget(detailed_view) # type: ignore
 
 		return super().mouseReleaseEvent(event)

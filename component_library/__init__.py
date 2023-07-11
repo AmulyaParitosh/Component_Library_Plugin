@@ -1,3 +1,3 @@
-from .user_interface.main_window import Window
+from .manager import BrowserManager
 from .network import network_access_manager
-from .manager import BrowserManager, StateManager
+from .user_interface.main_window import Window

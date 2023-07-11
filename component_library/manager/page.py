@@ -2,10 +2,12 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from PySide6.QtCore import QObject, Signal
-from ..data import DataFactory, DTypes, Component
+
+from ..data import Component, DataFactory, DTypes
+
 
 @dataclass
-class PageState(QObject):
+class Page(QObject):
 
 	data: list[Component] = field(default_factory=list)
 	total_items: int = 0
@@ -16,15 +18,15 @@ class PageState(QObject):
 	prev_page: int | None = None
 
 
-class PageStateManager(QObject):
+class PageManager(QObject):
 	enable_next = Signal(bool)
 	enable_prev = Signal(bool)
 
 	def __init__(self) -> None:
 		super().__init__()
-		self.page = PageState()
+		self.page = Page()
 
-	def load_page(self, json_response: dict[str, Any], d_type: DTypes) -> PageState:
+	def load_page(self, json_response: dict[str, Any], d_type: DTypes) -> Page:
 		self.page.data = DataFactory.load_many(data_list=json_response.get("items", []), d_type=d_type)
 		self.page.total_items = json_response.get("total", 0)
 		self.page.page_no = json_response.get("page", 1)

@@ -1,12 +1,12 @@
 from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QWidget
 
-from ....manager import (BrowserManager, ComponentQueryStateManager,
-                         PageStateManager)
+from ....manager import BrowserManager, Page
 from ...widgets.overlay import LoadingOverlay
+from ..base_view import BaseView
 from .Ui_grid_view import Ui_gridView
 
-class GridView(QWidget):
+
+class GridView(BaseView):
 
 	def __init__(self) -> None:
 		super().__init__()
@@ -34,17 +34,21 @@ class GridView(QWidget):
 		self.ui.tagBar.tags_edited.connect(self.on_tagBar_tag_edited)
 
 
-	def setup_network(self, manager: BrowserManager):
+	def setupManager(self, manager: BrowserManager):
 		self.manager: BrowserManager = manager
-		self.query_manager: ComponentQueryStateManager = self.manager.state.QueryManager
-		self.page_manager: PageStateManager = self.manager.state.PageManager
 
-		self.manager.component_loaded.connect(self.update_content)
+		self.manager.component_loaded.connect(self.components_response_handler)
 		self.manager.tags_loaded.connect(self.tags_list_response_handler)
-		self.page_manager.enable_next.connect(self.ui.nextButton.setEnabled)
-		self.page_manager.enable_prev.connect(self.ui.prevButton.setEnabled)
+		self.manager.page_manager.enable_next.connect(self.ui.nextButton.setEnabled)
+		self.manager.page_manager.enable_prev.connect(self.ui.prevButton.setEnabled)
 
 		self.initial_load()
+
+
+	def updateContent(self, page: Page):
+		self.ui.scrollAreaContentItemsWidget.repopulate(page.data)
+		self.ui.pageLable.setText(f"{page.page_no} / {page.total_pages}")
+		self.loading = False
 
 
 	@property
@@ -58,6 +62,10 @@ class GridView(QWidget):
 		else:
 			self.overlay.hide()
 
+	Slot()
+	def components_response_handler(self):
+		self.updateContent(self.manager.page_manager.page)
+
 
 	def initial_load(self):
 		self.get_request()
@@ -67,13 +75,6 @@ class GridView(QWidget):
 	def get_request(self):
 		self.overlay.show()
 		self.manager.request_components()
-
-
-	Slot()
-	def update_content(self):
-		self.ui.scrollAreaContentItemsWidget.repopulate(self.page_manager.page.data)
-		self.ui.pageLable.setText(f"{self.page_manager.page.page_no} / {self.page_manager.page.total_pages}")
-		self.loading = False
 
 
 	Slot(list)
@@ -95,28 +96,28 @@ class GridView(QWidget):
 
 	Slot()
 	def search_enter_pressed(self):
-		self.query_manager.set_search_key(self.ui.searchLineEdit.text())
+		self.manager.query_manager.set_search_key(self.ui.searchLineEdit.text())
 		self.get_request()
 
 
 	Slot(str)
 	def on_sortComboBox_change(self, value: str):
-		self.query_manager.set_sort_by(value)
+		self.manager.query_manager.set_sort_by(value)
 		self.get_request()
 
 
 	Slot(str)
 	def on_ordCombBox_change(self, value: str):
-		self.query_manager.set_sort_ord(value)
+		self.manager.query_manager.set_sort_ord(value)
 		self.get_request()
 
 
 	Slot(list)
 	def on_fileTypeComboBox_change(self, checked_items: list[str]):
-		self.query_manager.set_file_types(checked_items)
+		self.manager.query_manager.set_file_types(checked_items)
 		self.get_request()
 
 	Slot()
 	def on_tagBar_tag_edited(self, tags: list[str]):
-		self.query_manager.set_tags(tags)
+		self.manager.query_manager.set_tags(tags)
 		self.get_request()

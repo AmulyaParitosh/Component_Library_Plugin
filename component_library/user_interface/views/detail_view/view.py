@@ -1,15 +1,16 @@
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QFont
-from PySide6.QtWidgets import QProgressBar, QWidget
+from PySide6.QtWidgets import QProgressBar
 
 from component_library.manager.downloader import FileDownloader
 
 from ....data import Component
-from ...widgets import Thumbnail, ComponentItem
+from ...widgets import ComponentItem, Thumbnail
+from ..base_view import BaseView
 from .Ui_detailed_view import Ui_detailedView
 
 
-class DetailedView(QWidget):
+class DetailedView(BaseView):
 	def __init__(self) -> None:
 		super().__init__()
 
@@ -33,10 +34,15 @@ class DetailedView(QWidget):
 		self.ui.createdValue.setFont(font_14)
 		self.ui.updatedValue.setFont(font_14)
 
+
+	def setupSignals(self):
 		self.ui.downloadPushButton.clicked.connect(self.on_downloadButton_click)
 
 
-	def update_content(self, comp_item: ComponentItem):
+	def setupManager(self):...
+
+
+	def updateContent(self, comp_item: ComponentItem):
 		self.data = comp_item.data
 
 		self.ui.contentLabel.setText(self.data.name)
