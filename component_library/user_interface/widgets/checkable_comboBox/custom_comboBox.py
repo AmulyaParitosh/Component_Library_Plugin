@@ -10,6 +10,7 @@ class CheckableComboBox(QComboBox):
 		super().__init__(parent)
 		self.view().pressed.connect(self.handleItemPressed)
 		self._changed = False
+		self._last_checked_items = []
 
 	def handleItemPressed(self, index):
 		item = self.model().itemFromIndex(index) # type: ignore
@@ -22,7 +23,11 @@ class CheckableComboBox(QComboBox):
 	def hidePopup(self):
 		if not self._changed:
 			super().hidePopup()
-			self.selectionUpdated.emit(self.checked_items())
+
+			if self._last_checked_items != self.checked_items():
+				self._last_checked_items = self.checked_items()
+
+				self.selectionUpdated.emit(self.checked_items())
 		self._changed = False
 
 	def itemChecked(self, index):
@@ -57,3 +62,4 @@ class CheckableComboBox(QComboBox):
 			if item.checkState() == Qt.CheckState.Checked:
 				continue
 			item.setCheckState(Qt.CheckState.Checked)
+		self._last_checked_items = self.checked_items()

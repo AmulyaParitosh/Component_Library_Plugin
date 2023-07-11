@@ -2,12 +2,12 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from PySide6.QtCore import QObject, Signal
-
+from ..data import DataFactory, DTypes, Component
 
 @dataclass
 class PageState(QObject):
 
-	data: list[dict[str, Any]] = field(default_factory=list)
+	data: list[Component] = field(default_factory=list)
 	total_items: int = 0
 	page_no: int = 0
 	total_pages = 0
@@ -24,8 +24,8 @@ class PageStateManager(QObject):
 		super().__init__()
 		self.page = PageState()
 
-	def load_page(self, json_response: dict[str, Any]) -> PageState:
-		self.page.data = json_response.get("items", [])
+	def load_page(self, json_response: dict[str, Any], d_type: DTypes) -> PageState:
+		self.page.data = DataFactory.load_many(data_list=json_response.get("items", []), d_type=d_type)
 		self.page.total_items = json_response.get("total", 0)
 		self.page.page_no = json_response.get("page", 1)
 		self.page.size = json_response.get("per_page", 18)

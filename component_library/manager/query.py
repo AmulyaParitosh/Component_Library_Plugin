@@ -1,4 +1,5 @@
 from ..network.api import ComponenetQueryParameters
+from .page import PageState
 
 
 class ComponentQueryStateManager:
@@ -7,6 +8,12 @@ class ComponentQueryStateManager:
 
 	def set_page(self, value):
 		self.query_states.page = value
+
+	def set_next_page(self, page: PageState):
+		self.set_page(page.next_page)
+
+	def set_prev_page(self, page: PageState):
+		self.set_page(page.prev_page)
 
 	def set_page_size(self, value):
 		self.query_states.page_size = value

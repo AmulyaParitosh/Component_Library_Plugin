@@ -1,11 +1,11 @@
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QFont
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QProgressBar
+from PySide6.QtWidgets import QProgressBar, QWidget
 
 from component_library.manager.downloader import FileDownloader
 
-from ....manager import BrowserManager
-from ...widgets.thumbnail import Thumbnail
+from ....data import Component
+from ...widgets import Thumbnail, ComponentItem
 from .Ui_detailed_view import Ui_detailedView
 
 
@@ -15,11 +15,8 @@ class DetailedView(QWidget):
 
 		self.ui = Ui_detailedView()
 
-		self.thumbnail = None
-		self.license = "None"
-		self.data = dict()
-		self.files = []
-
+		self.thumbnail: Thumbnail = None # type: ignore
+		self.data: Component = None # type: ignore
 		self.files_on_download = {}
 
 		self.setupUi()
@@ -39,41 +36,37 @@ class DetailedView(QWidget):
 		self.ui.downloadPushButton.clicked.connect(self.on_downloadButton_click)
 
 
-	def setup_network(self, manager: BrowserManager):
-		self.manager: BrowserManager = manager
-		self.manager.license_loaded.connect(self.__got_license)
-		self.manager.files_loaded.connect(self.__got_files)
+	def update_content(self, comp_item: ComponentItem):
+		self.data = comp_item.data
 
-
-	def updateContent(self, data: dict):
-
-		self.data = data
-
-		self.ui.contentLabel.setText(data.get("name", "default"))
+		self.ui.contentLabel.setText(self.data.name)
 
 		if self.thumbnail != None:
 			self.ui.thumbnailAreaHorizontalLayout.removeWidget(self.thumbnail)
 
-		self.thumbnail = Thumbnail(self)
-
-		self.thumbnail.setupThumbnail(data.get("thumbnail", ""))
+		self.thumbnail = Thumbnail.from_existing(self, comp_item.ui.thumbnail)
 		self.ui.thumbnailAreaHorizontalLayout.addWidget(self.thumbnail)
 
-		self.ui.descriptionTextBrowser.setText(data.get("description", "None"))
-		self.ui.authorValue.setText(data.get("author", "None"))
-		self.ui.maintainerValue.setText(data.get("maintainer", "None"))
-		self.ui.createdValue.setText(data.get("created_at", "None"))
-		self.ui.updatedValue.setText(data.get("updated_at", "None"))
-		self.ui.ratingwidget.setRating(data.get("rating", 0))
+		self.ui.descriptionTextBrowser.setText(self.data.description)
+		self.ui.authorValue.setText(self.data.author)
+		self.ui.maintainerValue.setText(self.data.maintainer)
+		self.ui.createdValue.setText(self.data.created_at)
+		self.ui.updatedValue.setText(self.data.updated_at)
+		self.ui.ratingwidget.setRating(self.data.rating)
+		self.ui.licenseValue.setText(self.data.license.fullname)
 
-		if data.get("id") in self.files_on_download:
+		self.ui.filetypeComboBox.clear()
+		for file in self.data.files:
+			self.ui.filetypeComboBox.addItem(file.type.value)
+		self.ui.filetypeComboBox.setCurrentIndex(0)
+
+
+		if self.data.id in self.files_on_download:
 			self.ui.downloadPushButton.setText("Downloading...")
 			self.ui.downloadPushButton.setEnabled(False)
 		else:
 			self.ui.downloadPushButton.setText("Download")
 			self.ui.downloadPushButton.setEnabled(True)
-
-		self.manager.get_files(data.get("id", "None"))
 
 
 	Slot()
@@ -87,34 +80,22 @@ class DetailedView(QWidget):
 		self.ui.downloadPushButton.setText("Downloading...")
 		self.ui.downloadPushButton.setEnabled(False)
 
-		for file in self.files:
-			if file["type"]["name"] == self.ui.filetypeComboBox.currentText():
-				downloader = FileDownloader(file["url"], "/home/encryptedbee/tesla/projects/GSOC/Component_Library_Plugin/test/downloads", f"{self.data['name']}.{file['type']['name']}")
+		for file in self.data.files:
+			if file.type == self.ui.filetypeComboBox.currentText():
+				downloader = FileDownloader(file.url, "/home/encryptedbee/tesla/projects/GSOC/Component_Library_Plugin/test/downloads", f"{self.data.name}.{file.type}")
 				downloader.reply.downloadProgress.connect(self.__update_download_progress)
 				downloader.finished.connect(self.on_component_downloaded)
 				print("Download started...")
 
-		self.files_on_download[self.data["id"]] = QProgressBar()
+		self.files_on_download[self.data.id] = QProgressBar()
 		self.topLevelWidget().ui.notificationAreaLayout.addWidget(self.files_on_download[self.data["id"]]) # type: ignore
-
-
-	Slot(str)
-	def __got_license(self, license_name: str):
-		self.ui.licenseValue.setText(license_name)
 
 
 	Slot(int, int)
 	def __update_download_progress(self, bytes_received, total_bytes):
-		self.files_on_download[self.data["id"]].setMaximum(total_bytes)
-		self.files_on_download[self.data["id"]].setValue(bytes_received)
+		self.files_on_download[self.data.id].setMaximum(total_bytes)
+		self.files_on_download[self.data.id].setValue(bytes_received)
 
-	Slot(dict)
-	def __got_files(self, files: dict):
-		self.files = files.values()
-		self.ui.filetypeComboBox.clear()
-		for file in files.values():
-			self.ui.filetypeComboBox.addItem(file["type"]["name"])
-		self.ui.filetypeComboBox.setCurrentIndex(0)
 
 	Slot(str)
 	def on_component_downloaded(self, filepath: str):

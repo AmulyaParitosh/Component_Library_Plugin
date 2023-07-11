@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import QGridLayout, QWidget
 
+from ....data import Component
 from ..component import ComponentItem
 
 
@@ -24,12 +25,12 @@ class GridItemWidget(QWidget):
 		self.__cur_row = 0
 		self.__cur_col = 0
 
-	def repopulate(self, metadata:list[dict]):
+	def repopulate(self, components: list[Component]):
 		self.reset()
-		self.populate(metadata)
+		self.populate(components)
 
-	def populate(self, metadata:list[dict]):
-		for data in metadata:
+	def populate(self, components: list[Component]):
+		for data in components:
 			component = ComponentItem(self, data)
 			self.addItem(component)
 

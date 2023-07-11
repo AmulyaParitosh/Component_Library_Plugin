@@ -8,7 +8,7 @@ from ....manager import ImageDownloader
 
 
 class Thumbnail(QLabel):
-	def __init__(self, parent: QWidget) -> None:
+	def __init__(self, parent: QWidget, url: str|None=None) -> None:
 		super().__init__(parent)
 		self.setScaledContents(True)
 		self.setPixmap(QPixmap(ImageDownloader.LOADING_THUMBNAIL_PATH))
@@ -16,9 +16,18 @@ class Thumbnail(QLabel):
 		self.downloader = ImageDownloader()
 		self.downloader.finished.connect(self.loadImage)
 
+		if url:
+			self.setupThumbnail(url)
+
 	def setupThumbnail(self, url_str: str):
 		self.downloader.start_download(QUrl.fromUserInput(url_str))
 
 	def loadImage(self, image: QImage):
 		pixmap = QPixmap(image)
 		self.setPixmap(pixmap)
+
+	@staticmethod
+	def from_existing(parent, thumbnail: Thumbnail):
+		new_thumbnail = Thumbnail(parent)
+		new_thumbnail.setPixmap(thumbnail.pixmap())
+		return new_thumbnail
