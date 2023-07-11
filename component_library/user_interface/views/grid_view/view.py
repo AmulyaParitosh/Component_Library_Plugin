@@ -1,4 +1,4 @@
-from PySide6.QtCore import Slot, QEvent
+from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QWidget
 
 from ....manager import (BrowserManager, ComponentQueryStateManager,
@@ -17,8 +17,6 @@ class GridView(QWidget):
 		self.setupUi()
 		self.setupSignals()
 
-		# self.show()
-
 
 	def setupUi(self):
 		self.ui.setupUi(self)
@@ -34,7 +32,7 @@ class GridView(QWidget):
 		self.ui.sortComboBox.currentTextChanged.connect(self.on_sortComboBox_change)
 		self.ui.orderComboBox.currentTextChanged.connect(self.on_ordCombBox_change)
 		self.ui.fileTypeComboBox.selectionUpdated.connect(self.on_fileTypeComboBox_change)
-		self.ui.tagBar.tag_added.connect(self.on_tagBar_tag_added)
+		self.ui.tagBar.tags_edited.connect(self.on_tagBar_tag_edited)
 
 
 	def setup_network(self, manager: BrowserManager):
@@ -108,6 +106,6 @@ class GridView(QWidget):
 		self.get_request()
 
 	Slot()
-	def on_tagBar_tag_added(self, tags: list[str]):
+	def on_tagBar_tag_edited(self, tags: list[str]):
 		self.query_manager.set_tags(tags)
 		self.get_request()

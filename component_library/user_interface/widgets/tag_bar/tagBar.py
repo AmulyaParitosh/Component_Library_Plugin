@@ -8,7 +8,7 @@ from PySide6.QtCore import Qt, Signal
 
 class TagBar(QWidget):
 
-    tag_added = Signal(list)
+    tags_edited = Signal(list)
 
     def __init__(self, parent):
         super(TagBar, self).__init__()
@@ -31,7 +31,7 @@ class TagBar(QWidget):
         self.line_edit.returnPressed.connect(self.create_tags)
 
     def create_tags(self):
-        new_tags = self.line_edit.text().split(', ')
+        new_tags = [tag for tag in self.line_edit.text().split(', ') if tag]
         self.line_edit.setText('')
         self.tags.extend(new_tags)
         self.tags = list(set(self.tags))
@@ -68,14 +68,16 @@ class TagBar(QWidget):
         tag.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)
         self.h_layout.addWidget(tag)
 
-        self.tag_added.emit(self.tags)
+        self.tags_edited.emit(self.tags)
 
     def delete_tag(self, tag_name):
         self.tags.remove(tag_name)
         self.refresh()
+        self.tags_edited.emit(self.tags)
 
     def set_suggestions(self, word_list: list[str]):
         self.word_list = word_list
         tagsCompleter = QCompleter(self.word_list)
+        tagsCompleter.activated.connect(self.create_tags)
         tagsCompleter.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
         self.line_edit.setCompleter(tagsCompleter)

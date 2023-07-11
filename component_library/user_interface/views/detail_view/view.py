@@ -89,7 +89,7 @@ class DetailedView(QWidget):
 
 		for file in self.files:
 			if file["type"]["name"] == self.ui.filetypeComboBox.currentText():
-				downloader = FileDownloader(file["url"], "/home/encryptedbee/tesla/projects/GSOC/Component_Library_Plugin/test/downloads", f"{file['name']}.{file['type']['name']}")
+				downloader = FileDownloader(file["url"], "/home/encryptedbee/tesla/projects/GSOC/Component_Library_Plugin/test/downloads", f"{self.data['name']}.{file['type']['name']}")
 				downloader.reply.downloadProgress.connect(self.__update_download_progress)
 				downloader.finished.connect(self.on_component_downloaded)
 				print("Download started...")
