@@ -8,6 +8,8 @@ from ..data import Component, DataFactory, DTypes
 
 @dataclass
 class Page(QObject):
+	enable_next = Signal(bool)
+	enable_prev = Signal(bool)
 
 	data: list[Component] = field(default_factory=list)
 	total_items: int = 0
@@ -18,34 +20,38 @@ class Page(QObject):
 	prev_page: int | None = None
 
 
-class PageManager(QObject):
-	enable_next = Signal(bool)
-	enable_prev = Signal(bool)
+	def __init__(self, *args, **kwargs):
+		super(QObject, self).__init__()
+		super().__init__(*args, **kwargs)
 
-	def __init__(self) -> None:
-		super().__init__()
-		self.page = Page()
 
-	def load_page(self, json_response: dict[str, Any], d_type: DTypes) -> Page:
-		self.page.data = DataFactory.load_many(data_list=json_response.get("items", []), d_type=d_type)
-		self.page.total_items = json_response.get("total", 0)
-		self.page.page_no = json_response.get("page", 1)
-		self.page.size = json_response.get("per_page", 18)
+	def load_page(self, json_response: dict[str, Any], d_type: DTypes):
+		self.data = DataFactory.load_many(data_list=json_response.get("items", []), d_type=d_type)
+		self.total_items = json_response.get("total", 0)
+		self.page_no = json_response.get("page", 1)
+		self.size = json_response.get("per_page", 18)
 
-		self.page.total_pages = (self.page.total_items + self.page.size -1) // self.page.size
+		self.total_pages = (self.total_items + self.size -1) // self.size
 
-		if self.page.page_no==1:
-			self.page.prev_page = None
+		if self.page_no==1:
+			self.prev_page = None
 			self.enable_prev.emit(False)
 		else:
-			self.page.prev_page = self.page.page_no - 1
+			self.prev_page = self.page_no - 1
 			self.enable_prev.emit(True)
 
-		if (self.page.total_items - (self.page.page_no * self.page.size)) < 0:
-			self.page.next_page = None
+		if (self.total_items - (self.page_no * self.size)) < 0:
+			self.next_page = None
 			self.enable_next.emit(False)
 		else:
-			self.page.next_page = self.page.page_no + 1
+			self.next_page = self.page_no + 1
 			self.enable_next.emit(True)
 
-		return self.page
+		return self
+
+
+# class PageManager(QObject):
+
+# 	def __init__(self) -> None:
+# 		super().__init__()
+# 		self = Page()

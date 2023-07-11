@@ -1,7 +1,7 @@
 from PySide6.QtCore import QUrl, QUrlQuery
 from PySide6.QtNetwork import QNetworkRequest
 
-from .queries import ComponenetQueryParameters
+from ...manager.queries import ComponenetQueryParameters
 
 
 class ComponentRequest(QNetworkRequest):

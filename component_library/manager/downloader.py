@@ -6,7 +6,6 @@ from ..network.network_manager import network_access_manager
 
 
 class FileDownloader(QObject):
-	# TODO dev incomplete
 
 	finished = Signal(str)
 	error = Signal(QNetworkReply.NetworkError)
