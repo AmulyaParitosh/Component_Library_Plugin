@@ -1,1 +1,1 @@
-from .data import Component, DataFactory, DTypes
+from .data import Component, DataFactory, DTypes, FileTypes

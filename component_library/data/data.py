@@ -117,12 +117,14 @@ class Tag(_Data, d_type=DTypes.TAG):
 
 @dataclass(kw_only=True)
 class Component(Metadata, d_type=DTypes.COMPONENT):
-	files: list[File]
+	files: dict[FileTypes, File]
 	license: License
 	tags: list[Tag]
 
 	def __post_init__(self, *args, **kwargs):
-		self.files = DataFactory.load_many(data_list=self.files, d_type=DTypes.FILE)
+		self.files = {file.type : file for file in
+			DataFactory.load_many(data_list=self.files, d_type=DTypes.FILE) # type: ignore
+		}
 		self.license = DataFactory(d_type=DTypes.LICENSE, **self.license) # type: ignore
 		self.tags = DataFactory.load_many(data_list=self.tags, d_type=DTypes.TAG)
 		return super().__post_init__(*args, **kwargs)

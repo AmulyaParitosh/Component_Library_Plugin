@@ -21,6 +21,7 @@ class FileDownloader(QObject):
 		request = QNetworkRequest(self.url)
 		self.reply: QNetworkReply = network_access_manager.get(request)
 		self.reply.finished.connect(lambda : self.__downloaded(self.reply))
+		self.downloadProgress = self.reply.downloadProgress
 
 
 	Slot(QNetworkReply)

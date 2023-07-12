@@ -3,8 +3,9 @@ from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QProgressBar
 
 from ....controller.downloader import FileDownloader
-from ....controller.manager_interface import ManagerInterface
-from ....data import Component
+from ....controller.manager_interface import (ManagerInterface,
+                                              OnlineRepoManager)
+from ....data import Component, FileTypes
 from ...widgets import ComponentItem, Thumbnail
 from ..base_view import BaseView
 from .Ui_detailed_view import Ui_detailedView
@@ -41,7 +42,8 @@ class DetailedView(BaseView):
 		self.ui.downloadPushButton.clicked.connect(self.on_downloadButton_click)
 
 
-	def setupManager(self, manager: ManagerInterface):...
+	def setupManager(self, manager: ManagerInterface):
+		self.manage: OnlineRepoManager = manager
 
 
 	def updateContent(self, comp_item: ComponentItem):
@@ -65,7 +67,7 @@ class DetailedView(BaseView):
 
 		self.ui.filetypeComboBox.clear()
 		for file in self.component.files:
-			self.ui.filetypeComboBox.addItem(file.type.value)
+			self.ui.filetypeComboBox.addItem(file.value)
 		self.ui.filetypeComboBox.setCurrentIndex(0)
 
 
@@ -88,13 +90,13 @@ class DetailedView(BaseView):
 		self.ui.downloadPushButton.setText("Downloading...")
 		self.ui.downloadPushButton.setEnabled(False)
 
-		for file in self.component.files:
-			print(file.type,file.type.value,  self.ui.filetypeComboBox.currentText())
-			if file.type.value == self.ui.filetypeComboBox.currentText():
-				downloader = FileDownloader(file.url, "/home/encryptedbee/tesla/projects/GSOC/Component_Library_Plugin/test/downloads", f"{self.component.name}.{file.type}")
-				downloader.reply.downloadProgress.connect(self.__update_download_progress)
-				downloader.finished.connect(self.on_component_downloaded)
-				print("Download started...")
+		downloader: FileDownloader = self.manage.download_component(
+			self.component,
+			FileTypes(self.ui.filetypeComboBox.currentText()),
+		)
+		downloader.downloadProgress.connect(self.__update_download_progress)
+		downloader.finished.connect(self.on_component_downloaded)
+		print("Download started...")
 
 		self.files_on_download[self.component.id] = QProgressBar()
 		self.topLevelWidget().add_notification(self.files_on_download[self.component.id]) # type: ignore
