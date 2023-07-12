@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QMainWindow
 
-from ...manager.browser import BrowserManager
+from ...controller import RepoManager
 from .Ui_plugin import Ui_MainWindow
 
 
@@ -8,7 +8,7 @@ class Window(QMainWindow):
 	def __init__(self, api_url: str, parent=None) -> None:
 		super().__init__(parent=parent)
 
-		self.browser_manager = BrowserManager(api_url)
+		self.repo_manager = RepoManager(api_url)
 
 		self.show()
 
@@ -20,5 +20,5 @@ class Window(QMainWindow):
 		self.ui.setupUi(self)
 
 	def setup_network(self):
-		self.ui.repoBrowser.setupManager(self.browser_manager)
+		self.ui.repoBrowser.setupManager(self.repo_manager)
 		# self.ui.componentDetail.setupManager(self.browser_manager)

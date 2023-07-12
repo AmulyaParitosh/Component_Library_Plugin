@@ -2,7 +2,9 @@ from typing import Callable
 
 from PySide6.QtCore import Slot
 
-from ....manager import BrowserManager, Page
+from component_library.controller.manager_interface import ManagerInterface
+
+from ....controller import ManagerInterface, Page
 from ...widgets.overlay import LoadingOverlay
 from ..base_view import BaseView
 from .Ui_grid_view import Ui_gridView
@@ -36,9 +38,8 @@ class GridView(BaseView):
 		self.ui.tagBar.tags_edited.connect(self.on_tagBar_tag_edited)
 
 
-	def setupManager(self, manager: BrowserManager):
-		# TODO after makeing abstract maanger, update here
-		self.manager: BrowserManager = manager
+	def setupManager(self, manager: ManagerInterface):
+		self.manager: ManagerInterface = manager
 
 		self.manager.component_loaded.connect(self.components_response_handler)
 		self.manager.page.enable_next.connect(self.ui.nextButton.setEnabled)

@@ -2,7 +2,7 @@ from PySide6.QtCore import Slot
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QProgressBar
 
-from component_library.manager.downloader import FileDownloader
+from component_library.controller.downloader import FileDownloader
 
 from ....data import Component
 from ...widgets import ComponentItem, Thumbnail

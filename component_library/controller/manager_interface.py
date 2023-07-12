@@ -6,11 +6,29 @@ from PySide6.QtNetwork import QNetworkRequest
 from ..data import DTypes
 from ..network import network_access_manager, sslConfig
 from ..network.api import Api, ApiReply, ComponentRequest, getApi
+from ..utils import Interface
 from .page import Page
 from .queries import ComponenetQueryParameters
 
 
-class BrowserManager(QObject):
+class ManagerInterface(Interface):
+	component_loaded: Signal
+
+	api: Any # TODO change type of api to APIInterface
+	page: Page
+	query: Any # TODO change type of query to QueryInterface
+
+	def reload_page(self):
+		raise NotImplementedError
+
+	def next_page(self):
+		raise NotImplementedError
+
+	def prev_page(self):
+		raise NotImplementedError
+
+
+class RepoManager(QObject):
 	component_loaded = Signal()
 
 	def __init__(self, api_url: str) -> None:
@@ -20,6 +38,7 @@ class BrowserManager(QObject):
 		self.page = Page()
 
 	def reload_page(self):
+		self.query.page = 1
 		return self.request_components()
 
 	def next_page(self):

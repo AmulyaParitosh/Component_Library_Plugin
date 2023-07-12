@@ -3,7 +3,7 @@ from typing import Any
 
 from PySide6.QtWidgets import QWidget
 
-from ...abstraction import AbstractQObject
+from ...utils import AbstractQObject
 
 
 class BaseView(QWidget, metaclass=AbstractQObject):
