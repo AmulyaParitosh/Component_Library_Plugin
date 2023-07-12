@@ -1,31 +1,27 @@
 from PySide6.QtWidgets import QWidget
 
 from ....data import Component
-from ...views.base_view import BaseView
 from .Ui_item_view import Ui_ComponentItemView
 
 
 class ComponentItem(QWidget):
 
-	def __init__(self, parent: QWidget, data: Component) -> None:
+	def __init__(self, parent: QWidget, component: Component) -> None:
 
 		super().__init__(parent)
 
 		self.ui = Ui_ComponentItemView()
 		self.ui.setupUi(self)
-		self.data: Component = data
+		self.component: Component = component
 
 		self.setupItem()
 
 
 	def setupItem(self):
-		self.ui.componentLabel.setText(self.data.name)
-		self.ui.thumbnail.setupThumbnail(self.data.thumbnail)
+		self.ui.componentLabel.setText(self.component.name)
+		self.ui.thumbnail.setupThumbnail(self.component.thumbnail)
 
 
 	def mouseReleaseEvent(self, event) -> None:
-		detailed_view: BaseView = self.topLevelWidget().ui.componentDetail # type: ignore
-		detailed_view.updateContent(self)
-		self.topLevelWidget().ui.stackedWidget.setCurrentWidget(detailed_view) # type: ignore
-
+		self.topLevelWidget().display_detail_view(self)
 		return super().mouseReleaseEvent(event)

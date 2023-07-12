@@ -8,7 +8,7 @@ from ..network import network_access_manager, sslConfig
 from ..network.api import Api, ApiReply, ComponentRequest, getApi
 from ..utils import Interface
 from .page import PageStates
-from .query import ComponentQuery
+from .query import ComponentQueryInterface, RepoComponentQuery
 
 
 class ManagerInterface(Interface):
@@ -16,7 +16,7 @@ class ManagerInterface(Interface):
 
 	api: Any # TODO change type of api to APIInterface
 	page_states: PageStates
-	query: Any # TODO change type of query to QueryInterface
+	query: ComponentQueryInterface
 
 	def reload_page(self):
 		raise NotImplementedError
@@ -40,14 +40,15 @@ class ManagerInterface(Interface):
 
 
 
-class RepoManager(QObject):
+class OnlineRepoManager(QObject):
 	component_loaded = Signal()
+
+	query = RepoComponentQuery()
+	page_states = PageStates()
 
 	def __init__(self, api_url: str) -> None:
 		super().__init__()
 		self.api: Api = getApi(api_url, network_access_manager, sslConfig)
-		self.query = ComponentQuery()
-		self.page_states = PageStates()
 
 	def reload_page(self):
 		self.query.page = 1
@@ -93,3 +94,6 @@ class RepoManager(QObject):
 		self.query.page = page.page_no
 		self.query.page_size = page.size
 		self.component_loaded.emit()
+
+
+class LocalStorageManager(QObject):...

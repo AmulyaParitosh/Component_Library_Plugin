@@ -1,11 +1,21 @@
+from typing import Any, Union
+
 from ..utils import Interface
 
+QueryParam = Union[Any, str]
 
-class ComponentQueryInterface(Interface):...
+class ComponentQueryInterface(Interface):
+	page: QueryParam
+	page_size: QueryParam
+	search_key: QueryParam
+	sort_by: QueryParam
+	sort_ord: QueryParam
+	file_types: QueryParam
+	tags: QueryParam
+	columns: QueryParam
 
 
-
-class ComponentQuery:
+class RepoComponentQuery:
 
 	def __init__(self) -> None:
 		self.__page: int | None = 1
@@ -129,3 +139,6 @@ class ComponentQuery:
 		else:
 			value = [v.strip() for v in value if v]
 		self.__columns = value
+
+
+class LocalComponentQuery:...

@@ -1,14 +1,15 @@
-from PySide6.QtWidgets import QMainWindow
+from PySide6.QtWidgets import QMainWindow, QWidget
 
-from ...controller import RepoManager
+from ...controller import OnlineRepoManager
+from ..widgets import ComponentItem
 from .Ui_plugin import Ui_MainWindow
 
 
 class Window(QMainWindow):
-	def __init__(self, api_url: str, parent=None) -> None:
+	def __init__(self, parent=None) -> None:
 		super().__init__(parent=parent)
 
-		self.repo_manager = RepoManager(api_url)
+		self.repo_manager = OnlineRepoManager("http://127.0.0.1:5000")
 
 		self.show()
 
@@ -21,4 +22,14 @@ class Window(QMainWindow):
 
 	def setup_network(self):
 		self.ui.repoBrowser.setupManager(self.repo_manager)
-		# self.ui.componentDetail.setupManager(self.browser_manager)
+		self.ui.componentDetail.setupManager(self.repo_manager)
+
+	def display_detail_view(self, item: ComponentItem):
+		self.ui.componentDetail.updateContent(item)
+		self.ui.stackedWidget.setCurrentWidget(self.ui.componentDetail)
+
+	def switch_to_grid_view(self):
+		self.ui.stackedWidget.setCurrentWidget(self.ui.repoBrowser)
+
+	def add_notification(self, notification: QWidget):
+		self.ui.notificationAreaLayout.addWidget(notification)
