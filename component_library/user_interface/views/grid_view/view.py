@@ -4,7 +4,7 @@ from PySide6.QtCore import Slot
 
 from component_library.controller.manager_interface import ManagerInterface
 
-from ....controller import ManagerInterface, Page
+from ....controller import ManagerInterface, PageStates
 from ...widgets.overlay import LoadingOverlay
 from ..base_view import BaseView
 from .Ui_grid_view import Ui_gridView
@@ -42,13 +42,13 @@ class GridView(BaseView):
 		self.manager: ManagerInterface = manager
 
 		self.manager.component_loaded.connect(self.components_response_handler)
-		self.manager.page.enable_next.connect(self.ui.nextButton.setEnabled)
-		self.manager.page.enable_prev.connect(self.ui.prevButton.setEnabled)
+		self.manager.page_states.enable_next.connect(self.ui.nextButton.setEnabled)
+		self.manager.page_states.enable_prev.connect(self.ui.prevButton.setEnabled)
 
 		self.initial_load()
 
 
-	def updateContent(self, page: Page):
+	def updateContent(self, page: PageStates):
 		self.ui.scrollAreaContentItemsWidget.repopulate(page.data)
 		self.ui.pageLable.setText(f"{page.page_no} / {page.total_pages}")
 		self.loading_overlay.loading = False
@@ -63,7 +63,7 @@ class GridView(BaseView):
 
 	Slot()
 	def components_response_handler(self):
-		self.updateContent(self.manager.page)
+		self.updateContent(self.manager.page_states)
 
 
 	@loading
@@ -94,32 +94,40 @@ class GridView(BaseView):
 	Slot()
 	@loading
 	def search_enter_pressed(self):
-		self.manager.query.search_key = self.ui.searchLineEdit.text()
-		self.manager.reload_page()
+		self.manager.search(self.ui.searchLineEdit.text())
 
 
 	Slot(str)
 	@loading
 	def on_sortComboBox_change(self, value: str):
-		self.manager.query.sort_by = value
-		self.manager.reload_page()
+		self.manager.sort(
+			by = value,
+			order = self.ui.orderComboBox.currentText(),
+		)
 
 
 	Slot(str)
 	@loading
 	def on_ordCombBox_change(self, value: str):
-		self.manager.query.sort_ord = value
-		self.manager.reload_page()
+		self.manager.sort(
+			by = self.ui.sortComboBox.currentText(),
+			order = value,
+		)
 
 
 	Slot(list)
 	@loading
 	def on_fileTypeComboBox_change(self, checked_items: list[str]):
-		self.manager.query.file_types = checked_items
-		self.manager.reload_page()
+		self.manager.filter(
+			filetypes = checked_items,
+			tags = self.ui.tagBar.tags,
+		)
 
 	Slot()
 	@loading
 	def on_tagBar_tag_edited(self, tags: list[str]):
 		self.manager.query.tags = tags
-		self.manager.reload_page()
+		self.manager.filter(
+			filetypes = self.ui.fileTypeComboBox.checked_items(),
+			tags = tags,
+		)

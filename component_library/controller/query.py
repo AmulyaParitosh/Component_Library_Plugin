@@ -1,4 +1,11 @@
-class ComponenetQueryParameters:
+from ..utils import Interface
+
+
+class ComponentQueryInterface(Interface):...
+
+
+
+class ComponentQuery:
 
 	def __init__(self) -> None:
 		self.__page: int | None = 1

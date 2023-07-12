@@ -1,21 +1,21 @@
 from PySide6.QtCore import QUrl, QUrlQuery
 from PySide6.QtNetwork import QNetworkRequest
 
-from ...controller.queries import ComponenetQueryParameters
+from ...controller.query import ComponentQuery
 
 
 class ComponentRequest(QNetworkRequest):
 
 	endpoint: str = "component"
 
-	def __init__(self, state: ComponenetQueryParameters|None=None, *args, **kwargs) -> None:
+	def __init__(self, state: ComponentQuery|None=None, *args, **kwargs) -> None:
 		super().__init__(*args, **kwargs)
 		self.setUrl(self.endpoint)
 		self.query = QUrlQuery()
-		if isinstance(state, ComponenetQueryParameters):
+		if isinstance(state, ComponentQuery):
 			self.from_states(state)
 
-	def from_states(self, state: ComponenetQueryParameters) -> None:
+	def from_states(self, state: ComponentQuery) -> None:
 		query_list: list[str] = [
 			state.page,
 			state.page_size,

@@ -7,7 +7,7 @@ from ..data import Component, DataFactory, DTypes
 
 
 @dataclass
-class Page(QObject):
+class PageStates(QObject):
 	enable_next = Signal(bool)
 	enable_prev = Signal(bool)
 
@@ -48,10 +48,3 @@ class Page(QObject):
 			self.enable_next.emit(True)
 
 		return self
-
-
-# class PageManager(QObject):
-
-# 	def __init__(self) -> None:
-# 		super().__init__()
-# 		self = Page()

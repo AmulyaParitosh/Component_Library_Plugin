@@ -1,10 +1,10 @@
 # from PySide6 import
 from functools import partial
 
-from PySide6.QtWidgets import (QFrame, QHBoxLayout, QLabel, QLineEdit,
-                               QPushButton, QSizePolicy, QWidget, QCompleter)
-
 from PySide6.QtCore import Qt, Signal
+from PySide6.QtWidgets import (QCompleter, QFrame, QHBoxLayout, QLabel,
+                               QLineEdit, QPushButton, QSizePolicy, QWidget)
+
 
 class TagBar(QWidget):
 
@@ -14,7 +14,7 @@ class TagBar(QWidget):
         super(TagBar, self).__init__()
         self.setParent(parent)
         self.setWindowTitle('Tag Bar')
-        self.tags = []
+        self.tags: list[str] = []
         self.word_list = []
         self.h_layout = QHBoxLayout()
         self.setLayout(self.h_layout)
