@@ -7,7 +7,7 @@ from ...manager import ManagerInterface
 from ...utils import AbstractQObject
 
 
-class BaseView(QWidget, metaclass=AbstractQObject):
+class BaseView(AbstractQObject):
 
 	@abstractmethod
 	def setupUi(self):...

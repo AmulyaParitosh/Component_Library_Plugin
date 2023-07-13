@@ -3,6 +3,7 @@ from typing import Any, Union
 QueryParam = Union[Any, str]
 
 class ComponentQueryInterface():
+	# TODO introduce abstraction here
 	page: QueryParam
 	page_size: QueryParam
 	search_key: QueryParam

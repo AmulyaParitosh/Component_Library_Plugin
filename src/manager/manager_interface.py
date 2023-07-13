@@ -11,7 +11,7 @@ from .page import PageStates
 from .query import ComponentQueryInterface, RepoComponentQuery
 
 
-class ManagerInterface(QObject, metaclass=AbstractQObject):
+class ManagerInterface(AbstractQObject):
 	component_loaded: Signal
 
 	api: Any # TODO change type of api to APIInterface
@@ -86,13 +86,13 @@ class OnlineRepoManager(ManagerInterface):
 
 
 	def request_components(self) -> CMSReply:
-		reply: CMSReply = self.api.get(ComponentRequest(self.query))
+		reply: CMSReply = self.api.read(ComponentRequest(self.query))
 		reply.finished.connect(self.__component_response_handler)
 		return reply
 
 
 	def request_tags(self) -> CMSReply:
-		reply: CMSReply = self.api.get(QNetworkRequest("tag"))
+		reply: CMSReply = self.api.read(QNetworkRequest("tag"))
 		return reply
 
 

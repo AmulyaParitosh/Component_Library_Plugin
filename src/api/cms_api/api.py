@@ -1,14 +1,15 @@
 from functools import cache
 from os import path
 
-from PySide6.QtCore import QObject, QUrl
+from PySide6.QtCore import QUrl
 from PySide6.QtNetwork import QNetworkRequest
 
 from ...network import get_network_access_manager
+from ..base_api import ApiInterface
 from .replies import CMSReply
 
 
-class CMSApi(QObject):
+class CMSApi(ApiInterface):
 	network_access_manager, sslConfig = get_network_access_manager()
 
 	def __init__(self, base_url: str) -> None:
@@ -21,17 +22,20 @@ class CMSApi(QObject):
 		request.setUrl(absolute_url)
 		request.setSslConfiguration(self.sslConfig)
 
-	def get(self, request: QNetworkRequest) -> CMSReply:
+	def read(self, request: QNetworkRequest) -> CMSReply:
 		self.prepare_api_request(request)
 		return CMSReply(self.network_access_manager.get(request), self)
 
-	def post(self, request: QNetworkRequest, data: bytes) -> CMSReply:
+	def create(self, request: QNetworkRequest, data: bytes) -> CMSReply:
 		self.prepare_api_request(request)
 		return CMSReply(self.network_access_manager.post(request, data), self)
 
-	def put(self, request: QNetworkRequest, data: bytes) -> CMSReply:
+	def update(self, request: QNetworkRequest, data: bytes) -> CMSReply:
 		self.prepare_api_request(request)
 		return CMSReply(self.network_access_manager.put(request, data), self)
+
+	def delete(self):...
+
 
 @cache
 def getApi(api_url: str) -> CMSApi:

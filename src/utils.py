@@ -1,7 +1,9 @@
-from abc import ABCMeta
+from abc import ABC, ABCMeta
 
 from PySide6.QtCore import QObject
 
-QObjectWrapperType = type(QObject)
+QObjectMeta = type(QObject)
 
-class AbstractQObject(QObjectWrapperType, ABCMeta):...
+class ABCQObjectMeta(QObjectMeta, ABCMeta):...
+
+class AbstractQObject(QObject, ABC, metaclass=ABCQObjectMeta):...
