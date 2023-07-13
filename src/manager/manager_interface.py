@@ -3,9 +3,9 @@ from typing import Any
 from PySide6.QtCore import QObject, Signal, Slot
 from PySide6.QtNetwork import QNetworkRequest
 
+from ..api.online_api import Api, ApiReply, ComponentRequest, getApi
 from ..data import Component, DTypes, FileTypes
 from ..network import network_access_manager, sslConfig
-from ..network.api import Api, ApiReply, ComponentRequest, getApi
 from ..utils import AbstractQObject
 from .downloader import FileDownloader
 from .page import PageStates
