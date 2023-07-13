@@ -1,13 +1,11 @@
 from abc import abstractmethod
 from typing import Any
 
-from PySide6.QtWidgets import QWidget
-
 from ...manager import ManagerInterface
-from ...utils import AbstractQObject
+from ...utils import ABCQWidget
 
 
-class BaseView(AbstractQObject):
+class BaseView(ABCQWidget):
 
 	@abstractmethod
 	def setupUi(self):...

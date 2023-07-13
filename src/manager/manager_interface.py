@@ -5,13 +5,13 @@ from PySide6.QtNetwork import QNetworkRequest
 
 from ..api.cms_api import CMSApi, CMSReply, ComponentRequest, getApi
 from ..data import Component, DTypes, FileTypes
-from ..utils import AbstractQObject
+from ..utils import ABCQObject
 from .downloader import FileDownloader
 from .page import PageStates
 from .query import ComponentQueryInterface, RepoComponentQuery
 
 
-class ManagerInterface(AbstractQObject):
+class ManagerInterface(ABCQObject):
 	component_loaded: Signal
 
 	api: Any # TODO change type of api to APIInterface

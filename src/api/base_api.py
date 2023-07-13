@@ -2,10 +2,10 @@ from abc import abstractmethod
 
 from PySide6.QtCore import QObject
 
-from ..utils import AbstractQObject
+from ..utils import ABCQObject
 
 
-class ApiInterface(AbstractQObject):
+class ApiInterface(ABCQObject):
 
 	@abstractmethod
 	def create(self):...
