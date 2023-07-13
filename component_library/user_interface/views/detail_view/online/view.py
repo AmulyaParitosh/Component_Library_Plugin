@@ -1,29 +1,24 @@
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QFont
-from PySide6.QtWidgets import QProgressBar
+from PySide6.QtWidgets import QProgressBar, QPushButton
 
-from ....controller.downloader import FileDownloader
-from ....controller.manager_interface import (ManagerInterface,
-                                              OnlineRepoManager)
-from ....data import Component, FileTypes
-from ...widgets import ComponentItem, Thumbnail
-from ..base_view import BaseView
-from .Ui_detailed_view import Ui_detailedView
+from .....controller.downloader import FileDownloader
+from .....controller.manager_interface import (ManagerInterface,
+                                               OnlineRepoManager)
+from .....data import FileTypes
+from ....widgets import ComponentItem, Thumbnail
+from ..base_detail_view import BaseDetailedView
 
 
-class DetailedView(BaseView):
-	files_on_download = {}
+class OnlineDetailedView(BaseDetailedView):
+	manager: OnlineRepoManager
 
 	def __init__(self) -> None:
 		super().__init__()
 
-		self.ui = Ui_detailedView()
-
-		self.thumbnail: Thumbnail = None # type: ignore
-		self.component: Component = None # type: ignore
-
 		self.setupUi()
 		self.setupSignals()
+
 
 	def setupUi(self):
 		self.ui.setupUi(self)
@@ -37,13 +32,16 @@ class DetailedView(BaseView):
 		self.ui.createdValue.setFont(font_14)
 		self.ui.updatedValue.setFont(font_14)
 
+		self.downloadPushButton = QPushButton("Download")
+		self.addControlWidget(self.downloadPushButton)
+
 
 	def setupSignals(self):
-		self.ui.downloadPushButton.clicked.connect(self.on_downloadButton_click)
+		self.downloadPushButton.clicked.connect(self.on_downloadButton_click)
 
 
 	def setupManager(self, manager: ManagerInterface):
-		self.manage: OnlineRepoManager = manager
+		super().setupManager(manager)
 
 
 	def updateContent(self, comp_item: ComponentItem):
@@ -72,11 +70,11 @@ class DetailedView(BaseView):
 
 
 		if self.component.id in self.files_on_download:
-			self.ui.downloadPushButton.setText("Downloading...")
-			self.ui.downloadPushButton.setEnabled(False)
+			self.downloadPushButton.setText("Downloading...")
+			self.downloadPushButton.setEnabled(False)
 		else:
-			self.ui.downloadPushButton.setText("Download")
-			self.ui.downloadPushButton.setEnabled(True)
+			self.downloadPushButton.setText("Download")
+			self.downloadPushButton.setEnabled(True)
 
 
 	Slot()
@@ -87,10 +85,10 @@ class DetailedView(BaseView):
 	Slot()
 	def on_downloadButton_click(self):
 
-		self.ui.downloadPushButton.setText("Downloading...")
-		self.ui.downloadPushButton.setEnabled(False)
+		self.downloadPushButton.setText("Downloading...")
+		self.downloadPushButton.setEnabled(False)
 
-		downloader: FileDownloader = self.manage.download_component(
+		downloader: FileDownloader = self.manager.download_component(
 			self.component,
 			FileTypes(self.ui.filetypeComboBox.currentText()),
 		)
@@ -110,7 +108,7 @@ class DetailedView(BaseView):
 
 	Slot(str)
 	def on_component_downloaded(self, filepath: str):
-		self.ui.downloadPushButton.setText("Remove")
-		self.ui.downloadPushButton.setEnabled(True)
+		self.downloadPushButton.setText("Remove")
+		self.downloadPushButton.setEnabled(True)
 		print("Download Successful!")
 		print("file at", filepath)

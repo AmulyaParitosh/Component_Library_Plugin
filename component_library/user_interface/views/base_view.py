@@ -10,17 +10,14 @@ from ...utils import AbstractQObject
 class BaseView(QWidget, metaclass=AbstractQObject):
 
 	@abstractmethod
-	def setupUi(self):
-		raise NotImplementedError
+	def setupUi(self):...
 
 	@abstractmethod
-	def setupSignals(self):
-		raise NotImplementedError
+	def setupSignals(self):...
 
 	@abstractmethod
 	def setupManager(self, manager: ManagerInterface):
-		raise NotImplementedError
+		self.manager: ManagerInterface = manager
 
 	@abstractmethod
-	def updateContent(self, content: Any):
-		raise NotImplementedError
+	def updateContent(self, content: Any):...

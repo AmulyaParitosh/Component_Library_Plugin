@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>detailedView</class>
- <widget class="QWidget" name="detailedView">
+ <class>detailedWidget</class>
+ <widget class="QWidget" name="detailedWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -44,11 +44,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="downloadPushButton">
-        <property name="text">
-         <string>Download</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="controlArea"/>
       </item>
       <item>
        <widget class="QComboBox" name="filetypeComboBox">
@@ -64,6 +60,9 @@
     </widget>
    </item>
    <item>
+    <layout class="QVBoxLayout" name="processesArea"/>
+   </item>
+   <item>
     <widget class="QScrollArea" name="mainScrollArea">
      <property name="widgetResizable">
       <bool>true</bool>
@@ -74,7 +73,7 @@
         <x>0</x>
         <y>0</y>
         <width>1112</width>
-        <height>763</height>
+        <height>755</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">

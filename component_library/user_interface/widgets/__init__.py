@@ -5,3 +5,4 @@ from .grid_widget import GridItemWidget
 from .overlay import LoadingOverlay
 from .star_rating import StarRating
 from .tag_bar import TagBar
+from .detail_widget import DetailedWidget

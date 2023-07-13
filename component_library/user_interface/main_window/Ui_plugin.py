@@ -18,7 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QMainWindow,
     QSizePolicy, QStackedWidget, QVBoxLayout, QWidget)
 
-from component_library.user_interface.views import (DetailedView, GridView)
+from component_library.user_interface.views import (OnlineDetailedView, GridView)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -70,7 +70,7 @@ class Ui_MainWindow(object):
         self.repoBrowser = GridView()
         self.repoBrowser.setObjectName(u"repoBrowser")
         self.stackedWidget.addWidget(self.repoBrowser)
-        self.componentDetail = DetailedView()
+        self.componentDetail = OnlineDetailedView()
         self.componentDetail.setObjectName(u"componentDetail")
         self.stackedWidget.addWidget(self.componentDetail)
 
@@ -89,4 +89,3 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
     # retranslateUi
-

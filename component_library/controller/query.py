@@ -1,10 +1,8 @@
 from typing import Any, Union
 
-from ..utils import Interface
-
 QueryParam = Union[Any, str]
 
-class ComponentQueryInterface(Interface):
+class ComponentQueryInterface():
 	page: QueryParam
 	page_size: QueryParam
 	search_key: QueryParam
@@ -15,7 +13,7 @@ class ComponentQueryInterface(Interface):
 	columns: QueryParam
 
 
-class RepoComponentQuery:
+class RepoComponentQuery(ComponentQueryInterface):
 
 	def __init__(self) -> None:
 		self.__page: int | None = 1
@@ -141,4 +139,4 @@ class RepoComponentQuery:
 		self.__columns = value
 
 
-class LocalComponentQuery:...
+class LocalComponentQuery(ComponentQueryInterface):...

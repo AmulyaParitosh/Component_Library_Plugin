@@ -8,7 +8,7 @@ class ComponentRequest(QNetworkRequest):
 
 	endpoint: str = "component"
 
-	def __init__(self, state: RepoComponentQuery|None=None, *args, **kwargs) -> None:
+	def __init__(self, state: RepoComponentQuery | None=None, *args, **kwargs) -> None:
 		super().__init__(*args, **kwargs)
 		self.setUrl(self.endpoint)
 		self.query = QUrlQuery()

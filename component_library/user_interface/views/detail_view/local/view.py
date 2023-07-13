@@ -1,0 +1,3 @@
+from ..base_detail_view import BaseDetailedView
+
+class LocalDetailedView(BaseDetailedView):...

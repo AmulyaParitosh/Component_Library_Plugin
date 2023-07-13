@@ -2,13 +2,15 @@ from typing import Callable
 
 from PySide6.QtCore import Slot
 
-from ....controller import ManagerInterface, PageStates, OnlineRepoManager
+from ....controller import ManagerInterface, OnlineRepoManager, PageStates
 from ...widgets.overlay import LoadingOverlay
 from ..base_view import BaseView
 from .Ui_grid_view import Ui_gridView
 
 
 class GridView(BaseView):
+
+	manager: OnlineRepoManager
 
 	def __init__(self) -> None:
 		super().__init__()
@@ -37,8 +39,7 @@ class GridView(BaseView):
 
 
 	def setupManager(self, manager: ManagerInterface):
-		self.manager: OnlineRepoManager = manager
-
+		super().setupManager(manager)
 		self.manager.component_loaded.connect(self.components_response_handler)
 		self.manager.page_states.enable_next.connect(self.ui.nextButton.setEnabled)
 		self.manager.page_states.enable_prev.connect(self.ui.prevButton.setEnabled)

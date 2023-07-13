@@ -6,13 +6,13 @@ from PySide6.QtNetwork import QNetworkRequest
 from ..data import Component, DTypes, FileTypes
 from ..network import network_access_manager, sslConfig
 from ..network.api import Api, ApiReply, ComponentRequest, getApi
-from ..utils import Interface
+from ..utils import AbstractQObject
 from .downloader import FileDownloader
 from .page import PageStates
 from .query import ComponentQueryInterface, RepoComponentQuery
 
 
-class ManagerInterface(Interface):
+class ManagerInterface(QObject, metaclass=AbstractQObject):
 	component_loaded: Signal
 
 	api: Any # TODO change type of api to APIInterface
@@ -32,19 +32,19 @@ class ManagerInterface(Interface):
 		raise NotImplementedError
 
 	def sort(self, /, by: str, order: str):
-		# TODO make ENums for by and order
+		# ? make ENums for by and order
 		raise NotImplementedError
 
 	def filter(self,/ , filetypes: list[str], tags: list[str]):
-		# TODO replace typehint of filetypes & tags with enum
+		# ? replace typehint of filetypes & tags with enum
 		raise NotImplementedError
 
 
 
-class OnlineRepoManager(QObject):
+class OnlineRepoManager(ManagerInterface):
 	component_loaded = Signal()
 
-	query = RepoComponentQuery()
+	query: RepoComponentQuery = RepoComponentQuery()
 	page_states = PageStates()
 	DOWNLOAD_PATH = "/home/encryptedbee/tesla/projects/GSOC/Component_Library_Plugin/test/downloads"
 
@@ -105,4 +105,4 @@ class OnlineRepoManager(QObject):
 		self.component_loaded.emit()
 
 
-class LocalStorageManager(QObject):...
+class LocalStorageManager(ManagerInterface):...
