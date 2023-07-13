@@ -1,3 +1,5 @@
+from functools import cache
+
 import certifi
 from PySide6.QtCore import Slot
 from PySide6.QtNetwork import (QNetworkAccessManager, QNetworkReply,
@@ -20,18 +22,21 @@ def on_finish(reply: QNetworkReply) -> None:
         print(reply.url().toString(), reply.errorString())
 
 
-sslConfig: QSslConfiguration = QSslConfiguration.defaultConfiguration()
-sslConfig.setProtocol(QSsl.SslProtocol.TlsV1_0)
-sslConfig.setPeerVerifyDepth(1)
-sslConfig.setPeerVerifyMode(QSslSocket.PeerVerifyMode.VerifyPeer)
-qcerts: list[QSslCertificate] = QSslCertificate.fromPath(
-	certifi.where(),
-	QSsl.EncodingFormat.Pem,
-	QSslCertificate.PatternSyntax.Wildcard,
-)
+@cache
+def get_network_access_manager() -> tuple[QNetworkAccessManager, QSslConfiguration]:
+    qcerts: list[QSslCertificate] = QSslCertificate.fromPath(
+        certifi.where(),
+        QSsl.EncodingFormat.Pem,
+        QSslCertificate.PatternSyntax.Wildcard,
+    )
 
-sslConfig.setCaCertificates(qcerts)
+    sslConfig: QSslConfiguration = QSslConfiguration.defaultConfiguration()
+    sslConfig.setProtocol(QSsl.SslProtocol.TlsV1_0)
+    sslConfig.setPeerVerifyDepth(1)
+    sslConfig.setPeerVerifyMode(QSslSocket.PeerVerifyMode.VerifyPeer)
+    sslConfig.setCaCertificates(qcerts)
 
+    network_access_manager = QNetworkAccessManager()
+    network_access_manager.finished.connect(on_finish)
 
-network_access_manager = QNetworkAccessManager()
-network_access_manager.finished.connect(on_finish)
+    return network_access_manager, sslConfig

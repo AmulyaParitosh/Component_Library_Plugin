@@ -1,1 +1,1 @@
-from .network_manager import network_access_manager, sslConfig
+from .network_manager import get_network_access_manager

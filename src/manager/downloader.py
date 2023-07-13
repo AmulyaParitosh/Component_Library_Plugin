@@ -2,13 +2,16 @@ from PySide6.QtCore import QFile, QIODevice, QObject, QUrl, Signal, Slot
 from PySide6.QtGui import QImage
 from PySide6.QtNetwork import QNetworkReply, QNetworkRequest
 
-from ..network.network_manager import network_access_manager
+from ..network.network_manager import get_network_access_manager
 
 
 class FileDownloader(QObject):
 
 	finished = Signal(str)
 	error = Signal(QNetworkReply.NetworkError)
+
+	network_access_manager, sslConfig = get_network_access_manager()
+
 
 	def __init__(self, url: str, save_path: str, filename: str) -> None:
 		super().__init__()
@@ -19,7 +22,7 @@ class FileDownloader(QObject):
 		self.filepath: str = f"{self.path}/{self.filename}"
 
 		request = QNetworkRequest(self.url)
-		self.reply: QNetworkReply = network_access_manager.get(request)
+		self.reply: QNetworkReply = self.network_access_manager.get(request)
 		self.reply.finished.connect(lambda : self.__downloaded(self.reply))
 		self.downloadProgress = self.reply.downloadProgress
 
@@ -48,12 +51,14 @@ class ImageDownloader(QObject):
 
 	finished = Signal(QImage)
 
+	network_access_manager, sslConfig = get_network_access_manager()
+
 	def __init__(self, parent=None):
 		super().__init__(parent)
 
 
 	def start_download(self, url: QUrl):
-		reply: QNetworkReply = network_access_manager.get(QNetworkRequest(url))
+		reply: QNetworkReply = self.network_access_manager.get(QNetworkRequest(url))
 		reply.finished.connect(lambda : self.handle_finished(reply))
 
 	def handle_finished(self, reply: QNetworkReply):

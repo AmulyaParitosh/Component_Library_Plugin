@@ -4,7 +4,7 @@ from PySide6.QtCore import QObject, Signal, Slot
 from PySide6.QtNetwork import QNetworkReply
 
 
-class ApiReply(QObject):
+class CMSReply(QObject):
 
 	finished = Signal(dict)
 

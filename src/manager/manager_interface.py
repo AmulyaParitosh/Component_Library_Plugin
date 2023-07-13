@@ -3,9 +3,8 @@ from typing import Any
 from PySide6.QtCore import QObject, Signal, Slot
 from PySide6.QtNetwork import QNetworkRequest
 
-from ..api.online_api import Api, ApiReply, ComponentRequest, getApi
+from ..api.cms_api import CMSApi, CMSReply, ComponentRequest, getApi
 from ..data import Component, DTypes, FileTypes
-from ..network import network_access_manager, sslConfig
 from ..utils import AbstractQObject
 from .downloader import FileDownloader
 from .page import PageStates
@@ -50,30 +49,30 @@ class OnlineRepoManager(ManagerInterface):
 
 	def __init__(self, api_url: str) -> None:
 		super().__init__()
-		self.api: Api = getApi(api_url, network_access_manager, sslConfig)
+		self.api: CMSApi = getApi(api_url)
 
-	def reload_page(self) -> ApiReply:
+	def reload_page(self) -> CMSReply:
 		self.query.page = 1
 		return self.request_components()
 
-	def next_page(self) -> ApiReply:
+	def next_page(self) -> CMSReply:
 		self.query.page = self.page_states.next_page
 		return self.request_components()
 
-	def prev_page(self) -> ApiReply:
+	def prev_page(self) -> CMSReply:
 		self.query.page = self.page_states.prev_page
 		return self.request_components()
 
-	def search(self, search_key: str) -> ApiReply:
+	def search(self, search_key: str) -> CMSReply:
 		self.query.search_key = search_key
 		return self.reload_page()
 
-	def sort(self, /, by: str, order: str) -> ApiReply:
+	def sort(self, /, by: str, order: str) -> CMSReply:
 		self.query.sort_by = by
 		self.query.sort_ord = order
 		return self.reload_page()
 
-	def filter(self,/ , filetypes: list[str], tags: list[str]) -> ApiReply:
+	def filter(self,/ , filetypes: list[str], tags: list[str]) -> CMSReply:
 		self.query.file_types = filetypes
 		self.query.tags = tags
 		return self.reload_page()
@@ -86,14 +85,14 @@ class OnlineRepoManager(ManagerInterface):
 		return FileDownloader(file.url, self.DOWNLOAD_PATH, f"{component.name}.{file.type.value}")
 
 
-	def request_components(self) -> ApiReply:
-		reply: ApiReply = self.api.get(ComponentRequest(self.query))
+	def request_components(self) -> CMSReply:
+		reply: CMSReply = self.api.get(ComponentRequest(self.query))
 		reply.finished.connect(self.__component_response_handler)
 		return reply
 
 
-	def request_tags(self) -> ApiReply:
-		reply: ApiReply = self.api.get(QNetworkRequest("tag"))
+	def request_tags(self) -> CMSReply:
+		reply: CMSReply = self.api.get(QNetworkRequest("tag"))
 		return reply
 
 
