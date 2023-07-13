@@ -34,7 +34,9 @@ class CMSApi(ApiInterface):
 		self.prepare_api_request(request)
 		return CMSReply(self.network_access_manager.put(request, data), self)
 
-	def delete(self):...
+	def delete(self, request: QNetworkRequest):
+		self.prepare_api_request(request)
+		return CMSReply(self.network_access_manager.deleteResource(request), self)
 
 
 @cache

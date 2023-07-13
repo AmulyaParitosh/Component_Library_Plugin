@@ -1,7 +1,5 @@
 from abc import abstractmethod
 
-from PySide6.QtCore import QObject
-
 from ..utils import ABCQObject
 
 
