@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Amulya Paritosh <amulya1171@gmail.com>"]
 readme = "README.md"
-packages = [{include = "component_library_plugin"}]
+packages = [{include = "src_plugin"}]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
