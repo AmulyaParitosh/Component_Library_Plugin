@@ -1,9 +1,9 @@
 from typing import Any
 
-from PySide6.QtCore import QObject, Signal, Slot
+from PySide6.QtCore import Signal, Slot
 from PySide6.QtNetwork import QNetworkRequest
 
-from ..api.cms_api import CMSApi, CMSReply, ComponentRequest, getApi
+from ..api import ApiInterface, CMSApi, CMSReply, ComponentRequest, getApi
 from ..data import Component, DTypes, FileTypes
 from ..utils import ABCQObject
 from .downloader import FileDownloader
@@ -14,7 +14,7 @@ from .query import ComponentQueryInterface, RepoComponentQuery
 class ManagerInterface(ABCQObject):
 	component_loaded: Signal
 
-	api: Any # TODO change type of api to APIInterface
+	api: ApiInterface
 	page_states: PageStates
 	query: ComponentQueryInterface
 

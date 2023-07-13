@@ -1,17 +1,34 @@
+from abc import ABC, abstractproperty
 from typing import Any, Union
 
 QueryParam = Union[Any, str]
 
-class ComponentQueryInterface():
+class ComponentQueryInterface(ABC):
 	# TODO introduce abstraction here
-	page: QueryParam
-	page_size: QueryParam
-	search_key: QueryParam
-	sort_by: QueryParam
-	sort_ord: QueryParam
-	file_types: QueryParam
-	tags: QueryParam
-	columns: QueryParam
+	@abstractproperty
+	def page(self) -> QueryParam:...
+
+	@abstractproperty
+	def page_size(self) -> QueryParam:...
+
+	@abstractproperty
+	def search_key(self) -> QueryParam:...
+
+	@abstractproperty
+	def sort_by(self) -> QueryParam:...
+
+	@abstractproperty
+	def sort_ord(self) -> QueryParam:...
+
+	@abstractproperty
+	def file_types(self) -> QueryParam:...
+
+	@abstractproperty
+	def tags(self) -> QueryParam:...
+
+	@abstractproperty
+	def columns(self) -> QueryParam:...
+
 
 
 class RepoComponentQuery(ComponentQueryInterface):
