@@ -19,15 +19,21 @@ class TagBar(QWidget):
         self.h_layout = QHBoxLayout()
         self.setLayout(self.h_layout)
         self.line_edit = QLineEdit()
-        self.line_edit.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Maximum)
-        self.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+        self.line_edit.setSizePolicy(
+            QSizePolicy.Policy.Minimum,
+            QSizePolicy.Policy.Minimum,
+        )
+        self.setSizePolicy(
+            QSizePolicy.Policy.Minimum,
+            QSizePolicy.Policy.Minimum,
+        )
         self.setContentsMargins(0,0,0,0)
         self.h_layout.setContentsMargins(0,0,0,0)
         self.refresh()
-        self.setup_ui()
+        self.setupUi()
         self.show()
 
-    def setup_ui(self):
+    def setupUi(self):
         self.line_edit.returnPressed.connect(self.create_tags)
 
     def create_tags(self):
@@ -50,22 +56,34 @@ class TagBar(QWidget):
         tag = QFrame()
         tag.setStyleSheet('border:1px solid rgb(192, 192, 192); border-radius: 4px;')
         tag.setContentsMargins(0,0,0,0)
-        tag.setFixedHeight(28)
+        # tag.setFixedHeight(28)
+        tag.setSizePolicy(
+            QSizePolicy.Policy.Maximum,
+            QSizePolicy.Policy.Minimum,
+        )
         hbox = QHBoxLayout()
         hbox.setContentsMargins(0,0,0,0)
         hbox.setSpacing(10)
         tag.setLayout(hbox)
         label = QLabel(text)
         label.setStyleSheet('border:0px')
-        label.setFixedHeight(16)
+        # label.setFixedHeight(16)
+        label.setSizePolicy(
+            QSizePolicy.Policy.Maximum,
+            QSizePolicy.Policy.Minimum,
+        )
         hbox.addWidget(label)
         x_button = QPushButton('x')
         x_button.setFixedSize(20, 20)
         x_button.setStyleSheet('border:0px; font-weight:bold')
-        x_button.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+        # x_button.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+        x_button.setSizePolicy(
+            QSizePolicy.Policy.Maximum,
+            QSizePolicy.Policy.Minimum,
+        )
         x_button.clicked.connect(partial(self.delete_tag, text))
         hbox.addWidget(x_button)
-        tag.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)
+        # tag.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)
         self.h_layout.addWidget(tag)
 
         self.tags_edited.emit(self.tags)

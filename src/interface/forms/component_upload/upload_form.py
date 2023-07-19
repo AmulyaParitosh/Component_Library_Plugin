@@ -12,8 +12,10 @@ class ComponetUploadForm(QWidget):
 
 	def setupUi(self):
 		self.ui.setupUi(self)
+
 		self.create_button = QPushButton("Create")
 		self.discard_button = QPushButton("Discard")
+
 		self.ui.bottomWidget.layout().addWidget(self.create_button)
 		self.ui.bottomWidget.layout().addWidget(self.discard_button)
 
