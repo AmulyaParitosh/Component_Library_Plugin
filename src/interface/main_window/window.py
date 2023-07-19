@@ -1,6 +1,7 @@
-from PySide6.QtWidgets import QMainWindow, QWidget
 from PySide6.QtCore import Slot
+from PySide6.QtWidgets import QMainWindow, QWidget
 
+from ...config import API_URL
 from ...manager import OnlineRepoManager
 from ..forms import ComponetUploadForm
 from ..views import GridView, OnlineDetailedView
@@ -13,7 +14,7 @@ class Window(QMainWindow):
 	def __init__(self, parent=None) -> None:
 		super().__init__(parent=parent)
 
-		self.repo_manager = OnlineRepoManager("http://127.0.0.1:5000")
+		self.repo_manager = OnlineRepoManager(API_URL)
 
 		self.show()
 

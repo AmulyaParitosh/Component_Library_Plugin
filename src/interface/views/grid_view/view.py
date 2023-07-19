@@ -5,6 +5,8 @@ from PySide6.QtWidgets import QWidget
 
 from ....manager import ManagerInterface, OnlineRepoManager
 from ....manager.page import PageStates
+from ....data import DataFactory, DTypes
+# from ....manager.data_loader import load_tags
 from ...widgets.overlay import LoadingOverlay
 from ..base_view import BaseView
 from .Ui_grid_view import Ui_gridView
@@ -70,15 +72,7 @@ class GridView(BaseView):
 	@loading
 	def initial_load(self):
 		self.manager.reload_page()
-		reply = self.manager.request_tags()
-		reply.finished.connect(self.tags_list_response_handler)
-
-
-	@Slot(dict)
-	def tags_list_response_handler(self, json_data: dict):
-		word_list: list[str] = [tag.get("label") for tag in json_data.get("items", [])]
-		self.ui.tagBar.set_suggestions(word_list)
-
+		self.ui.tagBar.set_suggestions(DataFactory.load_from_db(DTypes.TAG))
 
 	@loading
 	@Slot()

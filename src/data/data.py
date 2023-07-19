@@ -1,6 +1,13 @@
 from dataclasses import InitVar, asdict, dataclass, field, is_dataclass
 from enum import Enum
+from functools import lru_cache
 from typing import Any, Callable
+
+from PySide6.QtCore import QEventLoop, QObject, Signal
+from PySide6.QtNetwork import QNetworkRequest
+
+from ..api import CMSReply, getApi
+from ..config import API_URL
 
 
 class DTypes(Enum):
@@ -50,6 +57,24 @@ class DataFactory:
 		for data in data_list:
 			many.append(DataFactory(d_type=d_type, **data))
 		return many
+
+	@classmethod
+	@lru_cache
+	def load_from_db(cls, d_type: DTypes):
+		data = DbDataLoader(d_type).data.get("items", [])
+		return cls.load_many(data, d_type)
+
+
+class DbDataLoader(QObject):
+	data_loaded = Signal(DTypes, list)
+
+	def __init__(self, d_type: DTypes) -> None:
+		super().__init__()
+		reply: CMSReply = getApi(API_URL).read(QNetworkRequest(d_type.value))
+		loop = QEventLoop()
+		reply.finished.connect(loop.quit)
+		loop.exec()
+		self.data = reply.data
 
 
 class GenericData(DataFactory, d_type=DTypes.GENERIC):

@@ -1,10 +1,10 @@
 # from PySide6 import
 from functools import partial
-
+from typing import Sequence
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (QCompleter, QFrame, QHBoxLayout, QLabel,
                                QLineEdit, QPushButton, QSizePolicy, QWidget)
-
+from ....data.data import Tag
 
 class TagBar(QWidget):
 
@@ -15,7 +15,6 @@ class TagBar(QWidget):
         self.setParent(parent)
         self.setWindowTitle('Tag Bar')
         self.tags: list[str] = []
-        self.word_list = []
         self.h_layout = QHBoxLayout()
         self.setLayout(self.h_layout)
         self.line_edit = QLineEdit()
@@ -93,9 +92,8 @@ class TagBar(QWidget):
         self.refresh()
         self.tags_edited.emit(self.tags)
 
-    def set_suggestions(self, word_list: list[str]):
-        self.word_list = word_list
-        tagsCompleter = QCompleter(self.word_list)
+    def set_suggestions(self, tag_list: Sequence[Tag]):
+        tagsCompleter = QCompleter([tag.label for tag in tag_list])
         tagsCompleter.activated.connect(self.create_tags)
         tagsCompleter.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
         self.line_edit.setCompleter(tagsCompleter)
