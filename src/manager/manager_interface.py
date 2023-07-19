@@ -91,11 +91,6 @@ class OnlineRepoManager(ManagerInterface):
 		return reply
 
 
-	def request_tags(self) -> CMSReply:
-		reply: CMSReply = self.api.read(QNetworkRequest("tag"))
-		return reply
-
-
 	@Slot(dict)
 	def __component_response_handler(self, json_data: dict[str, Any]):
 		page: PageStates = self.page_states.load_page(json_data, DTypes.COMPONENT)

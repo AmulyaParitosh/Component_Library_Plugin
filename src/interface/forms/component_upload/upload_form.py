@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import QPushButton, QWidget
 
+from ....data import DataFactory, DTypes
 from ..Ui_component_form import Ui_componentCreationForm
 
 
@@ -18,6 +19,8 @@ class ComponetUploadForm(QWidget):
 
 		self.ui.bottomWidget.layout().addWidget(self.create_button)
 		self.ui.bottomWidget.layout().addWidget(self.discard_button)
+
+		self.ui.tagsWidget.set_suggestions(DataFactory.load_from_db(DTypes.TAG))
 
 	def pack_data(self):
 		...
