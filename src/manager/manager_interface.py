@@ -96,7 +96,7 @@ class OnlineRepoManager(ManagerInterface):
 		return reply
 
 
-	Slot(dict)
+	@Slot(dict)
 	def __component_response_handler(self, json_data: dict[str, Any]):
 		page: PageStates = self.page_states.load_page(json_data, DTypes.COMPONENT)
 		self.query.page = page.page_no

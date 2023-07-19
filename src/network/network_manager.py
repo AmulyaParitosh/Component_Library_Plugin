@@ -6,7 +6,8 @@ from PySide6.QtNetwork import (QNetworkAccessManager, QNetworkReply,
                                QNetworkRequest, QSsl, QSslCertificate,
                                QSslConfiguration, QSslSocket)
 
-Slot(QNetworkReply)
+
+@Slot(QNetworkReply)
 def on_finish(reply: QNetworkReply) -> None:
 
     er: QNetworkReply.NetworkError = reply.error()

@@ -1,6 +1,7 @@
 from typing import Callable
 
 from PySide6.QtCore import Slot
+from PySide6.QtWidgets import QWidget
 
 from ....manager import ManagerInterface, OnlineRepoManager
 from ....manager.page import PageStates
@@ -13,8 +14,8 @@ class GridView(BaseView):
 
 	manager: OnlineRepoManager
 
-	def __init__(self) -> None:
-		super().__init__()
+	def __init__(self, parent: QWidget) -> None:
+		super().__init__(parent)
 
 		self.ui = Ui_gridView()
 
@@ -61,7 +62,7 @@ class GridView(BaseView):
 			return func(self, *args, **kwargs)
 		return wraper
 
-	Slot()
+	@Slot()
 	def components_response_handler(self):
 		self.updateContent(self.manager.page_states)
 
@@ -73,32 +74,32 @@ class GridView(BaseView):
 		reply.finished.connect(self.tags_list_response_handler)
 
 
-	Slot(dict)
+	@Slot(dict)
 	def tags_list_response_handler(self, json_data: dict):
 		word_list: list[str] = [tag.get("label") for tag in json_data.get("items", [])]
 		self.ui.tagBar.set_suggestions(word_list)
 
 
-	Slot()
 	@loading
+	@Slot()
 	def on_nextButton_clicked(self):
 		self.manager.next_page()
 
 
-	Slot()
 	@loading
+	@Slot()
 	def on_prevButton_clicked(self):
 		self.manager.prev_page()
 
 
-	Slot()
 	@loading
+	@Slot()
 	def search_enter_pressed(self):
 		self.manager.search(self.ui.searchLineEdit.text())
 
 
-	Slot(str)
 	@loading
+	@Slot(str)
 	def on_sortComboBox_change(self, value: str):
 		self.manager.sort(
 			by = value,
@@ -106,8 +107,8 @@ class GridView(BaseView):
 		)
 
 
-	Slot(str)
 	@loading
+	@Slot(str)
 	def on_ordCombBox_change(self, value: str):
 		self.manager.sort(
 			by = self.ui.sortComboBox.currentText(),
@@ -115,16 +116,16 @@ class GridView(BaseView):
 		)
 
 
-	Slot(list)
 	@loading
+	@Slot(list)
 	def on_fileTypeComboBox_change(self, checked_items: list[str]):
 		self.manager.filter(
 			filetypes = checked_items,
 			tags = self.ui.tagBar.tags,
 		)
 
-	Slot()
 	@loading
+	@Slot()
 	def on_tagBar_tag_edited(self, tags: list[str]):
 		self.manager.query.tags = tags
 		self.manager.filter(

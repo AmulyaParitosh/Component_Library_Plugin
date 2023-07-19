@@ -1,6 +1,6 @@
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QFont
-from PySide6.QtWidgets import QProgressBar, QPushButton
+from PySide6.QtWidgets import QProgressBar, QPushButton, QWidget
 
 from .....data import FileTypes
 from .....manager import ManagerInterface, OnlineRepoManager
@@ -11,8 +11,8 @@ from ..base_detail_view import BaseDetailedView
 class OnlineDetailedView(BaseDetailedView):
 	manager: OnlineRepoManager
 
-	def __init__(self) -> None:
-		super().__init__()
+	def __init__(self, parent: QWidget) -> None:
+		super().__init__(parent)
 
 		self.setupUi()
 		self.setupSignals()
@@ -75,12 +75,12 @@ class OnlineDetailedView(BaseDetailedView):
 			self.downloadPushButton.setEnabled(True)
 
 
-	Slot()
+	@Slot()
 	def on_backPushButton_click(self):
 		self.topLevelWidget().switch_to_grid_view() # type: ignore
 
 
-	Slot()
+	@Slot()
 	def on_downloadButton_click(self):
 
 		self.downloadPushButton.setText("Downloading...")
@@ -98,13 +98,13 @@ class OnlineDetailedView(BaseDetailedView):
 		self.topLevelWidget().add_notification(self.files_on_download[self.component.id]) # type: ignore
 
 
-	Slot(int, int)
+	@Slot(int, int)
 	def __update_download_progress(self, bytes_received, total_bytes):
 		self.files_on_download[self.component.id].setMaximum(total_bytes)
 		self.files_on_download[self.component.id].setValue(bytes_received)
 
 
-	Slot(str)
+	@Slot(str)
 	def on_component_downloaded(self, filepath: str):
 		self.downloadPushButton.setText("Remove")
 		self.downloadPushButton.setEnabled(True)

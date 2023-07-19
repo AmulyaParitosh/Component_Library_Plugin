@@ -27,7 +27,7 @@ class FileDownloader(QObject):
 		self.downloadProgress = self.reply.downloadProgress
 
 
-	Slot(QNetworkReply)
+	@Slot(QNetworkReply)
 	def __downloaded(self, reply: QNetworkReply):
 
 		if reply.error() != QNetworkReply.NetworkError.NoError:
