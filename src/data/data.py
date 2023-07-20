@@ -33,12 +33,10 @@ class DataFactory:
 		return super().__new__(subclass) # type: ignore
 
 	def __is_field(self, attr):
-		if any((
+		return not any((
 			attr.startswith("_"),
 			isinstance(getattr(self, attr), Callable),
-		)):
-			return False
-		return True
+		))
 
 
 	def serialize(self, base_info: bool = False):
