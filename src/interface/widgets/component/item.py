@@ -18,8 +18,8 @@ class ComponentItem(QWidget):
 
 
 	def setupItem(self):
-		self.ui.componentLabel.setText(self.component.name)
-		self.ui.thumbnail.setupThumbnail(self.component.thumbnail)
+		self.ui.componentLabel.setText(self.component.metadata.name)
+		self.ui.thumbnail.setupThumbnail(self.component.metadata.thumbnail)
 
 
 	def mouseReleaseEvent(self, event) -> None:

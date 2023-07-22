@@ -25,8 +25,8 @@ class PageStates(QObject):
 		super().__init__(*args, **kwargs)
 
 
-	def load_page(self, json_response: dict[str, Any], d_type: DTypes):
-		self.data = DataFactory.load_many(data_list=json_response.get("items", []), d_type=d_type)
+	def load_page(self, json_response: dict[str, Any]):
+		self.data = DataFactory.load_many(data_list=json_response.get("items", []), d_type=DTypes.COMPONENT)
 		self.total_items = json_response.get("total", 0)
 		self.page_no = json_response.get("page", 1)
 		self.size = json_response.get("per_page", 18)

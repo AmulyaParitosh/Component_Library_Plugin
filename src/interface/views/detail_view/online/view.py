@@ -45,7 +45,7 @@ class OnlineDetailedView(BaseDetailedView):
 	def updateContent(self, comp_item: ComponentItem):
 		self.component = comp_item.component
 
-		self.ui.contentLabel.setText(self.component.name)
+		self.ui.contentLabel.setText(self.component.metadata.name)
 
 		if self.thumbnail != None:
 			self.ui.thumbnailAreaHorizontalLayout.removeWidget(self.thumbnail)
@@ -53,12 +53,12 @@ class OnlineDetailedView(BaseDetailedView):
 		self.thumbnail = Thumbnail.from_existing(self, comp_item.ui.thumbnail)
 		self.ui.thumbnailAreaHorizontalLayout.addWidget(self.thumbnail)
 
-		self.ui.descriptionTextBrowser.setText(self.component.description)
-		self.ui.authorValue.setText(self.component.author)
-		self.ui.maintainerValue.setText(self.component.maintainer)
-		self.ui.createdValue.setText(self.component.created_at)
-		self.ui.updatedValue.setText(self.component.updated_at)
-		self.ui.ratingwidget.setRating(self.component.rating)
+		self.ui.descriptionTextBrowser.setText(self.component.metadata.description)
+		self.ui.authorValue.setText(self.component.metadata.author)
+		self.ui.maintainerValue.setText(self.component.metadata.maintainer)
+		self.ui.createdValue.setText(self.component.metadata.created_at)
+		self.ui.updatedValue.setText(self.component.metadata.updated_at)
+		self.ui.ratingwidget.setRating(self.component.metadata.rating)
 		self.ui.licenseValue.setText(self.component.license.fullname)
 
 		self.ui.filetypeComboBox.clear()

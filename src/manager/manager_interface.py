@@ -82,7 +82,7 @@ class OnlineRepoManager(ManagerInterface):
 		file = component.files.get(filetype)
 		if file is None:
 			raise FileNotFoundError()
-		return FileDownloader(file.url, self.DOWNLOAD_PATH, f"{component.name}.{file.type.value}")
+		return FileDownloader(file.url, self.DOWNLOAD_PATH, f"{component.metadata.name}.{file.type.value}")
 
 
 	def request_components(self) -> CMSReply:
@@ -93,7 +93,7 @@ class OnlineRepoManager(ManagerInterface):
 
 	@Slot(dict)
 	def __component_response_handler(self, json_data: dict[str, Any]):
-		page: PageStates = self.page_states.load_page(json_data, DTypes.COMPONENT)
+		page: PageStates = self.page_states.load_page(json_data)
 		self.query.page = page.page_no
 		self.query.page_size = page.size
 		self.component_loaded.emit()
