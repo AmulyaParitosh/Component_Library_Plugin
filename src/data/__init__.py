@@ -1,1 +1,3 @@
-from .data import Component, DataFactory, DTypes, FileTypes
+from .data_types import FileTypes
+from .datadef import Component, Tag
+from .factory import DataFactory, DTypes

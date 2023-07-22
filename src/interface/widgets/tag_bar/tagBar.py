@@ -1,10 +1,13 @@
 # from PySide6 import
 from functools import partial
 from typing import Sequence
+
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (QCompleter, QFrame, QHBoxLayout, QLabel,
                                QLineEdit, QPushButton, QSizePolicy, QWidget)
-from ....data.data import Tag
+
+from ....data import Tag
+
 
 class TagBar(QWidget):
 

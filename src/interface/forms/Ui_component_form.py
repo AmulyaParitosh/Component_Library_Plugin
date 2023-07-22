@@ -166,13 +166,13 @@ class Ui_componentCreationForm(object):
 
         self.gridLayout.addWidget(self.mainteinerLabel, 4, 0, 1, 1)
 
-        self.comboBox = QComboBox(self.metadataWidget)
-        self.comboBox.setObjectName(u"comboBox")
-        sizePolicy2.setHeightForWidth(self.comboBox.sizePolicy().hasHeightForWidth())
-        self.comboBox.setSizePolicy(sizePolicy2)
-        self.comboBox.setMaximumSize(QSize(16777215, 16777215))
+        self.licenseInput = QComboBox(self.metadataWidget)
+        self.licenseInput.setObjectName(u"licenseInput")
+        sizePolicy2.setHeightForWidth(self.licenseInput.sizePolicy().hasHeightForWidth())
+        self.licenseInput.setSizePolicy(sizePolicy2)
+        self.licenseInput.setMaximumSize(QSize(16777215, 16777215))
 
-        self.gridLayout.addWidget(self.comboBox, 6, 1, 1, 1)
+        self.gridLayout.addWidget(self.licenseInput, 6, 1, 1, 1)
 
         self.authorLabel = QLabel(self.metadataWidget)
         self.authorLabel.setObjectName(u"authorLabel")

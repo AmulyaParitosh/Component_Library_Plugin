@@ -20,7 +20,9 @@ class ComponetUploadForm(QWidget):
 		self.ui.bottomWidget.layout().addWidget(self.create_button)
 		self.ui.bottomWidget.layout().addWidget(self.discard_button)
 
-		self.ui.tagsWidget.set_suggestions(DataFactory.load_from_db(DTypes.TAG))
+		self.ui.tagsWidget.set_suggestions(DataFactory.load_from_db(DTypes.TAG)) # type: ignore
+		# print(DataFactory.load_from_db(DTypes.LICENSE))
+		self.ui.licenseInput.addItems((license.fullname for license in DataFactory.load_from_db(DTypes.LICENSE))) # type: ignore
 
 	def pack_data(self):
 		...
