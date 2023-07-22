@@ -45,9 +45,7 @@ class RepoComponentQuery(ComponentQueryInterface):
 
 	@property
 	def page(self) -> str:
-		if self.__page == None:
-			return ''
-		return f"page={self.__page}"
+		return '' if self.__page is None else f"page={self.__page}"
 
 	@page.setter
 	def page(self, value: int|None) -> None:
@@ -55,9 +53,7 @@ class RepoComponentQuery(ComponentQueryInterface):
 
 	@property
 	def page_size(self) -> str:
-		if self.__page_size == None:
-			return ""
-		return f"page_size={self.__page_size}"
+		return "" if self.__page_size is None else f"page_size={self.__page_size}"
 
 	@page_size.setter
 	def page_size(self, value: int|None) -> None:
@@ -65,9 +61,7 @@ class RepoComponentQuery(ComponentQueryInterface):
 
 	@property
 	def search_key(self) -> str:
-		if self.__search_key == None:
-			return ""
-		return f"search_key={self.__search_key}"
+		return "" if self.__search_key is None else f"search_key={self.__search_key}"
 
 	@search_key.setter
 	def search_key(self, value: str|None) -> None:
@@ -75,9 +69,7 @@ class RepoComponentQuery(ComponentQueryInterface):
 
 	@property
 	def sort_by(self) -> str:
-		if self.__sort_by == None:
-			return ""
-		return f"sort_by={self.__sort_by}"
+		return "" if self.__sort_by is None else f"sort_by={self.__sort_by}"
 
 	@sort_by.setter
 	def sort_by(self, value: str|None) -> None:
@@ -94,13 +86,11 @@ class RepoComponentQuery(ComponentQueryInterface):
 
 	@property
 	def sort_ord(self) -> str:
-		if self.__sort_ord == None:
-			return ""
-		return f"sort_ord={self.__sort_ord}"
+		return "" if self.__sort_ord is None else f"sort_ord={self.__sort_ord}"
 
 	@sort_ord.setter
 	def sort_ord(self, value: str|None) -> None:
-		if value == None:
+		if value is None:
 			pass
 		elif value.lower() == "ascending":
 			value = "asc"
@@ -113,46 +103,40 @@ class RepoComponentQuery(ComponentQueryInterface):
 
 	@property
 	def file_types(self) -> str:
-		if self.__file_types == None or len(self.__file_types) == 0:
-				return ""
+		if self.__file_types is None or len(self.__file_types) == 0:
+			return ""
 
 		return "&".join(f"file_types%5B%5D={ft.replace(' ', '%20')}" for ft in self.__file_types)
 
 	@file_types.setter
 	def file_types(self, value: list[str]|None) -> None:
-		if value == None:
-			pass
-		else:
+		if value != None:
 			value = [v.strip() for v in value if v]
 		self.__file_types = value
 
 	@property
 	def tags(self):
-		if self.__tags == None or len(self.__tags) == 0:
-				return ""
+		if self.__tags is None or len(self.__tags) == 0:
+			return ""
 
 		return "&".join(f"tags%5B%5D={t.replace(' ', '%20')}" for t in self.__tags)
 
 	@tags.setter
 	def tags(self, value: list[str]|None) -> None:
-		if value == None:
-			pass
-		else:
+		if value != None:
 			value = [v.strip() for v in value if v]
 		self.__tags = value
 
 	@property
 	def columns(self) -> str:
-		if self.__columns == None or len(self.__columns) == 0:
-				return ""
+		if self.__columns is None or len(self.__columns) == 0:
+			return ""
 
 		return "&".join(f"columns%5B%5D={t.replace(' ', '%20')}" for t in self.__columns)
 
 	@columns.setter
 	def columns(self, value: list[str]|None) -> None:
-		if value == None:
-			pass
-		else:
+		if value != None:
 			value = [v.strip() for v in value if v]
 		self.__columns = value
 

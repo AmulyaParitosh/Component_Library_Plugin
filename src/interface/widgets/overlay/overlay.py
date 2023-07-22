@@ -24,7 +24,11 @@ class Overlay(QWidget):
 		qp.setPen(QColor(70, 70, 70))
 		qp.setPen(Qt.GlobalColor.white)
 		tolw, tolh = 80, -5
-		qp.drawText(ow + int(popup_width/2) - tolw, oh + int(popup_height/2) - tolh, self.overlay_text)
+		qp.drawText(
+			ow + popup_width // 2 - tolw,
+			oh + popup_height // 2 - tolh,
+			self.overlay_text,
+		)
 
 		qp.end()
 

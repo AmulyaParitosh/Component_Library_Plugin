@@ -40,21 +40,17 @@ class DataFactory:
 
 
 	def serialize(self, base_info: bool = False):
-		if is_dataclass(self):
-			data = asdict(self) # type: ignore
-			if not base_info:
-				for key in ("id", "created_at", "updated_at"):
-					data.pop(key)
-			return data
-		else:
+		if not is_dataclass(self):
 			return {attr: getattr(self, attr) for attr in dir(self) if self.__is_field(attr)}
+		data = asdict(self) # type: ignore
+		if not base_info:
+			for key in ("id", "created_at", "updated_at"):
+				data.pop(key)
+		return data
 
 	@staticmethod
 	def load_many(data_list: list, d_type: DTypes = DTypes.GENERIC):
-		many = []
-		for data in data_list:
-			many.append(DataFactory(d_type=d_type, **data))
-		return many
+		return [DataFactory(d_type=d_type, **data) for data in data_list]
 
 	@classmethod
 	@lru_cache
