@@ -66,6 +66,6 @@ class DbDataLoader:
 			case DTypes.TAG:
 				return "tag"
 			case DTypes.LICENSE:
-				return "license/all"
+				return "license"
 			case _:
 				return ""
