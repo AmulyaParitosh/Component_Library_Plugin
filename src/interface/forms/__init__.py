@@ -1,1 +1,1 @@
-from .component_upload import ComponetUploadForm
+from .component_upload import ComponetUploadDialog

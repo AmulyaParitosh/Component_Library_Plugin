@@ -7,4 +7,4 @@ from src.interface import Window
 
 app = QApplication(sys.argv)
 plugin = Window()
-sys.exit(app.exec())
+sys.exit(app.exec_())

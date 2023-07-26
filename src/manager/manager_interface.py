@@ -1,9 +1,9 @@
 from typing import Any
 
-from PySide6.QtCore import Signal, Slot
+from PySide6.QtCore import Signal, Slot, QByteArray
 from PySide6.QtNetwork import QNetworkRequest
 
-from ..api import ApiInterface, CMSApi, CMSReply, ComponentRequest, getApi
+from ..api import ApiInterface, CMSApi, CMSReply, ComponentRequest, getApi, construct_multipart
 from ..data import Component, DTypes, FileTypes
 from ..utils import ABCQObject
 from .downloader import FileDownloader
@@ -18,25 +18,19 @@ class ManagerInterface(ABCQObject):
 	page_states: PageStates
 	query: ComponentQueryInterface
 
-	def reload_page(self):
-		raise NotImplementedError
+	def reload_page(self):...
 
-	def next_page(self):
-		raise NotImplementedError
+	def next_page(self):...
 
-	def prev_page(self):
-		raise NotImplementedError
+	def prev_page(self):...
 
-	def search(self, search_key: str):
-		raise NotImplementedError
+	def search(self, search_key: str):...
 
-	def sort(self, /, by: str, order: str):
+	def sort(self, /, by: str, order: str):...
 		# ? make ENums for by and order
-		raise NotImplementedError
 
-	def filter(self,/ , filetypes: list[str], tags: list[str]):
+	def filter(self,/ , filetypes: list[str], tags: list[str]):...
 		# ? replace typehint of filetypes & tags with enum
-		raise NotImplementedError
 
 
 
@@ -88,6 +82,16 @@ class OnlineRepoManager(ManagerInterface):
 	def request_components(self) -> CMSReply:
 		reply: CMSReply = self.api.read(ComponentRequest(self.query))
 		reply.finished.connect(self.__component_response_handler)
+		return reply
+
+
+	def create_component(self, data: dict):
+		multi_part = construct_multipart(data)
+		if not multi_part: return
+		request = ComponentRequest()
+		request.setRawHeader("X-Access-Token".encode(), "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".encode())
+		reply = self.api.create(request, multi_part)
+		multi_part.setParent(reply)
 		return reply
 
 

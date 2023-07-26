@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QMainWindow, QWidget
 
 from ...config import API_URL
 from ...manager import OnlineRepoManager
-from ..forms import ComponetUploadForm
+from ..forms import ComponetUploadDialog
 from ..views import GridView, OnlineDetailedView
 from ..widgets import ComponentItem
 from .Ui_window import Ui_MainWindow
@@ -34,12 +34,12 @@ class Window(QMainWindow):
 		self.onlineDetailView = OnlineDetailedView(self)
 		self.ui.stackedWidget.insertWidget(1, self.onlineDetailView)
 
-		self.componentCreator = ComponetUploadForm(self)
-		self.ui.stackedWidget.insertWidget(2, self.componentCreator)
 
 	def setupSignals(self):
 		self.ui.browseButton.clicked.connect(self.switch_to_grid_view)
-		self.ui.uploadButton.clicked.connect(self.swith_to_upload_form)
+		# ~ self.ui.uploadButton.clicked.connect(self.on_uploadButton_clicked)
+		# * no need to connect manually as in setupUi() method at the end QMetaObject.connectSlotsByName(ComponentCreationForm) is used
+		# * which will automaticaly connect the on_uploadButton_clicked with the uploadButton
 
 	def setupNetwork(self):
 		self.gridView.setupManager(self.repo_manager)
@@ -54,8 +54,9 @@ class Window(QMainWindow):
 		self.ui.stackedWidget.setCurrentWidget(self.gridView)
 
 	@Slot()
-	def swith_to_upload_form(self):
-		self.ui.stackedWidget.setCurrentWidget(self.componentCreator)
+	def on_uploadButton_clicked(self):
+		data = ComponetUploadDialog.create_component(self, self.repo_manager)
+		print(data)
 
 	def add_notification(self, notification: QWidget):
 		self.ui.notificationArea.addWidget(notification)

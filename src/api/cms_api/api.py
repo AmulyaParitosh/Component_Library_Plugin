@@ -1,5 +1,6 @@
 from functools import cache
 from os import path
+from typing import Any
 
 from PySide6.QtCore import QUrl
 from PySide6.QtNetwork import QNetworkRequest
@@ -18,15 +19,14 @@ class CMSApi(ApiInterface):
 
 	def prepare_api_request(self, request: QNetworkRequest):
 		absolute_path: str = path.join(self.base_url, request.url().toString())
-		absolute_url: QUrl = QUrl.fromUserInput(absolute_path)
-		request.setUrl(absolute_url)
+		request.setUrl(QUrl.fromUserInput(absolute_path))
 		request.setSslConfiguration(self.sslConfig)
 
 	def read(self, request: QNetworkRequest) -> CMSReply:
 		self.prepare_api_request(request)
 		return CMSReply(self.network_access_manager.get(request), self)
 
-	def create(self, request: QNetworkRequest, data: bytes) -> CMSReply:
+	def create(self, request: QNetworkRequest, data: Any) -> CMSReply:
 		self.prepare_api_request(request)
 		return CMSReply(self.network_access_manager.post(request, data), self)
 

@@ -9,6 +9,9 @@ from PySide6.QtWidgets import (QApplication, QFileDialog, QFrame, QHBoxLayout,
 class FileItem(QFrame):
 	def __init__(self, parent=None) -> None:
 		super().__init__(parent)
+
+		self.filepath = ""
+
 		layout = QHBoxLayout()
 		self.choose_file_btn = QPushButton("Choose File")
 		self.choose_file_btn.clicked.connect(self.open_file_dialog)
@@ -19,17 +22,17 @@ class FileItem(QFrame):
 		self.setLayout(layout)
 
 	def open_file_dialog(self):
-		filename, _ = QFileDialog.getOpenFileName(
+		self.filepath, _ = QFileDialog.getOpenFileName(
 			self,
 			"Select Files",
 		)
-		if filename:
-			self.label.setText(Path(filename).name)
+		if self.filepath: self.label.setText(Path(self.filepath).name)
 
 
 class FileList(QWidget):
 	def __init__(self, parent=None) -> None:
 		super().__init__(parent)
+
 		layout = QVBoxLayout()
 
 		self.list_widget = QListWidget()
@@ -59,6 +62,10 @@ class FileList(QWidget):
 
 	def remove_item(self, item: QListWidgetItem):
 		self.list_widget.takeItem(self.list_widget.row(item))
+
+	@property
+	def filepaths(self) -> list[str]:
+		return [self.list_widget.itemWidget(self.list_widget.item(i)).filepath for i in range(self.list_widget.count())] # type: ignore
 
 
 if __name__ == '__main__':

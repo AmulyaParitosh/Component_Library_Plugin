@@ -1,5 +1,6 @@
-from PySide6.QtCore import QUrl, QUrlQuery
-from PySide6.QtNetwork import QNetworkRequest
+from typing import Iterable
+from PySide6.QtCore import QUrl, QUrlQuery, QFile, QIODevice
+from PySide6.QtNetwork import QNetworkRequest, QHttpMultiPart, QHttpPart
 
 from ...manager.query import RepoComponentQuery
 
@@ -11,7 +12,6 @@ class ComponentRequest(QNetworkRequest):
 	def __init__(self, state: RepoComponentQuery | None=None, *args, **kwargs) -> None:
 		super().__init__(*args, **kwargs)
 		self.setUrl(self.endpoint)
-		self.query = QUrlQuery()
 		if isinstance(state, RepoComponentQuery):
 			self.from_states(state)
 
@@ -26,8 +26,50 @@ class ComponentRequest(QNetworkRequest):
 			state.tags,
 			state.columns,
 		]
-		self.query.setQuery("&".join(item for item in query_list if item))
+		query = QUrlQuery()
+		query.setQuery("&".join(item for item in query_list if item))
 
 		url: QUrl = self.url()
-		url.setQuery(self.query)
+		url.setQuery(query)
 		self.setUrl(url)
+
+
+
+def construct_multipart(data: dict) -> QHttpMultiPart:
+	multi_part = QHttpMultiPart(QHttpMultiPart.ContentType.FormDataType)
+
+	for field, val in data.pop("files").items():
+		if isinstance(val, (list, tuple, set)):
+			for filepath in val:
+				multi_part.append(construct_file_part(field, filepath)) # type: ignore
+		else:
+			multi_part.append(construct_file_part(field, val)) # type: ignore
+
+	for field, value in data.items():
+		if isinstance(value, (list, tuple, set)):
+			value = ','.join(value)
+		multi_part.append(construct_text_parts(field, value))
+
+	return multi_part
+
+
+def construct_text_parts(field, value):
+	post_part = QHttpPart()
+	post_part.setHeader(
+		QNetworkRequest.KnownHeaders.ContentDispositionHeader,
+		f'form-data; name=\"{field}\"',
+	)
+	post_part.setBody(str(value).encode())
+	return post_part
+
+
+def construct_file_part(field, filepath) -> QHttpPart | None:
+	file = QFile(filepath)
+	if not file.open(QIODevice.OpenModeFlag.ReadOnly): return
+	post_part = QHttpPart()
+	post_part.setHeader(
+		QNetworkRequest.KnownHeaders.ContentDispositionHeader,
+		f'form-data; name=\"{field}\"; filename=\"{file.fileName()}\"',
+	)
+	post_part.setBodyDevice(file)
+	return post_part

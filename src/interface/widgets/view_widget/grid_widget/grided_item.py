@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QGridLayout, QWidget
 
-from ....data import Component
-from ..component import ComponentItem
+from .....data import Component
+from ...component import ComponentItem
 
 
 class GridItemWidget(QWidget):

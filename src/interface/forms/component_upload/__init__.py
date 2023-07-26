@@ -1,1 +1,1 @@
-from .upload_form import ComponetUploadForm
+from .upload_form import ComponetUploadDialog
