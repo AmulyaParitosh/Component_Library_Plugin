@@ -1,10 +1,11 @@
 from typing import Any
 
-from PySide6.QtCore import Signal, Slot, QByteArray
-from PySide6.QtNetwork import QNetworkRequest
+from PySide6.QtCore import Signal, Slot
 
-from ..api import ApiInterface, CMSApi, CMSReply, ComponentRequest, getApi, construct_multipart
-from ..data import Component, DTypes, FileTypes
+from ..api import (ApiInterface, CMSApi, CMSReply, ComponentRequest,
+                   construct_multipart, getApi)
+from ..config import Config
+from ..data import Component, FileTypes
 from ..utils import ABCQObject
 from .downloader import FileDownloader
 from .page import PageStates
@@ -89,7 +90,7 @@ class OnlineRepoManager(ManagerInterface):
 		multi_part = construct_multipart(data)
 		if not multi_part: return
 		request = ComponentRequest()
-		request.setRawHeader("X-Access-Token".encode(), "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".encode())
+		request.setRawHeader("X-Access-Token".encode(), Config.GITHUB_ACCESS_TOKEN.encode())
 		reply = self.api.create(request, multi_part)
 		multi_part.setParent(reply)
 		return reply

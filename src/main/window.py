@@ -1,11 +1,11 @@
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QMainWindow, QWidget
 
-from ...config import API_URL
-from ...manager import OnlineRepoManager
-from ..forms import ComponetUploadDialog
-from ..views import GridView, OnlineDetailedView
-from ..widgets import ComponentItem
+from ..config import Config
+from ..interface.forms import ComponetUploadDialog
+from ..interface.views import GridView, OnlineDetailedView
+from ..interface.widgets import ComponentItem
+from ..manager import OnlineRepoManager
 from .Ui_window import Ui_MainWindow
 
 
@@ -14,7 +14,7 @@ class Window(QMainWindow):
 	def __init__(self, parent=None) -> None:
 		super().__init__(parent=parent)
 
-		self.repo_manager = OnlineRepoManager(API_URL)
+		self.repo_manager = OnlineRepoManager(Config.API_URL)
 
 		self.show()
 
