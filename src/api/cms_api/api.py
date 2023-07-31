@@ -1,9 +1,10 @@
 from functools import cache
-from os import path
 from typing import Any
 
 from PySide6.QtCore import QUrl
 from PySide6.QtNetwork import QNetworkRequest
+
+from src.config.config import Config
 
 from ...network import get_network_access_manager
 from ..base_api import ApiInterface
@@ -13,12 +14,13 @@ from .replies import CMSReply
 class CMSApi(ApiInterface):
 	network_access_manager, sslConfig = get_network_access_manager()
 
-	def __init__(self, base_url: str) -> None:
+	BASEURL: str = Config.API_URL + '/api'
+
+	def __init__(self) -> None:
 		super().__init__()
-		self.base_url: str = path.join(base_url, "api")
 
 	def prepare_api_request(self, request: QNetworkRequest):
-		absolute_path: str = path.join(self.base_url, request.url().toString())
+		absolute_path: str = f'{self.BASEURL}/{request.url().toString()}'
 		request.setUrl(QUrl.fromUserInput(absolute_path))
 		request.setSslConfiguration(self.sslConfig)
 
@@ -40,5 +42,11 @@ class CMSApi(ApiInterface):
 
 
 @cache
-def getApi(api_url: str) -> CMSApi:
-	return CMSApi(api_url)
+def getApi() -> CMSApi:
+	return CMSApi()
+	# TODO apply singleton with
+	# _instance = None
+    # def __new__(cls, *args, **kwargs):
+    #     if cls._instance is None:
+    #         cls._instance = super().__new__(cls)
+    #     return cls._instance

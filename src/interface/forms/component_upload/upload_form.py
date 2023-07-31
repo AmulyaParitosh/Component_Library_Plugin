@@ -1,7 +1,7 @@
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QDialog, QPushButton
 
-from ....data import DataFactory, DTypes
+from ....data import DTypes
 from ....manager import OnlineRepoManager
 from ..Ui_component_form import Ui_ComponentCreationForm
 
@@ -26,8 +26,8 @@ class ComponetUploadDialog(QDialog):
 		self.ui.bottomWidget.layout().addWidget(self.create_button)
 		self.ui.bottomWidget.layout().addWidget(self.discard_button)
 
-		self.ui.tagsWidget.set_suggestions(DataFactory.load_from_db(DTypes.TAG)) # type: ignore
-		self.ui.licenseInput.addItems((license.fullname for license in DataFactory.load_from_db(DTypes.LICENSE))) # type: ignore
+		self.ui.tagsWidget.set_suggestions(self.manager.load_from_db(DTypes.TAG)) # type: ignore
+		self.ui.licenseInput.addItems((license.fullname for license in self.manager.load_from_db(DTypes.LICENSE))) # type: ignore
 
 
 	def pack_data(self):
@@ -36,7 +36,7 @@ class ComponetUploadDialog(QDialog):
 			"description" : self.ui.descriptionInput.toPlainText(),
 			"license_id" : next((
 								lis.id for # type: ignore
-								lis in DataFactory.load_from_db(DTypes.LICENSE)
+								lis in self.manager.load_from_db(DTypes.LICENSE)
 								if lis.fullname == self.ui.licenseInput.currentText() # type: ignore
 							)),
 			"maintainer" : self.ui.maintainerInput.text(),

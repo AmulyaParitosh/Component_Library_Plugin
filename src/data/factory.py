@@ -1,16 +1,7 @@
 from dataclasses import asdict, is_dataclass
-from functools import lru_cache
-from typing import TYPE_CHECKING, Any, Callable
+from typing import Any, Callable
 
-from PySide6.QtCore import QEventLoop
-from PySide6.QtNetwork import QNetworkRequest
-
-from ..api import getApi
-from ..config import API_URL
 from .data_types import DTypes
-
-if TYPE_CHECKING:
-	from ..api import CMSReply
 
 
 class DataFactory:
@@ -45,27 +36,3 @@ class DataFactory:
 	@staticmethod
 	def load_many(data_list: list, dtype: DTypes = DTypes.GENERIC):
 		return [DataFactory(dtype=dtype, **data) for data in data_list]
-
-	@classmethod
-	@lru_cache
-	def load_from_db(cls, dtype: DTypes):
-		return cls.load_many(DbDataLoader(dtype).data, dtype)
-
-
-class DbDataLoader:
-	def __init__(self, dtype: DTypes) -> None:
-		reply: CMSReply = getApi(API_URL).read(QNetworkRequest(self.get_route(dtype)))
-		loop = QEventLoop()
-		reply.finished.connect(loop.quit)
-		loop.exec()
-		self.data: list = reply.data.get("items", [])
-
-	@staticmethod
-	def get_route(dtype: DTypes) -> str:
-		match dtype:
-			case DTypes.TAG:
-				return "tag"
-			case DTypes.LICENSE:
-				return "license"
-			case _:
-				return ""

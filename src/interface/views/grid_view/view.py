@@ -72,7 +72,7 @@ class GridView(BaseView):
 	@loading
 	def initial_load(self):
 		self.manager.reload_page()
-		self.ui.tagBar.set_suggestions(DataFactory.load_from_db(DTypes.TAG))
+		self.ui.tagBar.set_suggestions(self.manager.load_from_db(DTypes.TAG)) # type: ignore
 
 	@loading
 	@Slot()
