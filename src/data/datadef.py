@@ -28,6 +28,7 @@ class File(_Data, dtype=DTypes.FILE):
 	size: int
 	url: str
 	type : FileTypes = field(default=None) # type: ignore
+	EXISTS: bool = False
 
 	def __post_init__(self, *args, **kwargs):
 		self.type = FileTypes(self.type.get("name")) # type: ignore

@@ -2,9 +2,9 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from PySide6.QtCore import QObject, Signal
-
+from ..api.local_api.storage_adapter import LocalData
 from ..data import Component, DataFactory, DTypes
-
+from ..config import Config
 
 @dataclass
 class PageStates(QObject):
@@ -26,7 +26,13 @@ class PageStates(QObject):
 
 
 	def load_page(self, json_response: dict[str, Any]):
-		self.data = DataFactory.load_many(data_list=json_response.get("items", []), dtype=DTypes.COMPONENT) # type: ignore
+		self.data: list[Component] = DataFactory.load_many(data_list=json_response.get("items", []), dtype=DTypes.COMPONENT) # type: ignore
+		with LocalData(Config.LOCAL_COMPONENT_PATH) as local_data:
+			for component in self.data:
+				for file in component.files:
+					component.files.get(file).EXISTS = component.metadata.name in local_data["filetypes"].get(file.value, set())
+
+
 		self.total_items = json_response.get("total", 0)
 		self.page_no = json_response.get("page", 1)
 		self.size = json_response.get("per_page", 18)

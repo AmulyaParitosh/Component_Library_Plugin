@@ -93,7 +93,7 @@ class OnlineRepoManager(ManagerInterface):
 			f"{component.metadata.name}.{file.type.value}",
 		)
 
-		if not any(path.match("thumbnail.*") for path in comp_path.glob("thumbnail.*")):
+		if component.metadata.thumbnail and not any(path.match("thumbnail.*") for path in comp_path.glob("thumbnail.*")):
 			FileDownloader(
 				component.metadata.thumbnail,
 				comp_path,

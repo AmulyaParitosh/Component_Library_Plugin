@@ -1,14 +1,20 @@
+from enum import Enum, auto
 from pathlib import Path
 
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QFont
-from PySide6.QtWidgets import QProgressBar, QPushButton, QWidget
+from PySide6.QtWidgets import QProgressBar, QWidget
 
-from .....data import FileTypes
+from .....data import FileTypes, File
 from .....manager import ManagerInterface, OnlineRepoManager
-from ....widgets import ComponentItem, Thumbnail
+from ....widgets import ComponentItem, StatefullPushButton, Thumbnail
 from ..base_detail_view import BaseDetailedView
 
+
+class DownloadStates(Enum):
+	DOWNLOAD = auto()
+	IN_PROGRESS = auto()
+	FINISHED = auto()
 
 class OnlineDetailedView(BaseDetailedView):
 	manager: OnlineRepoManager
@@ -32,12 +38,31 @@ class OnlineDetailedView(BaseDetailedView):
 		self.ui.createdValue.setFont(font_14)
 		self.ui.updatedValue.setFont(font_14)
 
-		self.downloadPushButton = QPushButton("Download")
+		self.downloadPushButton = StatefullPushButton(self)
 		self.addControlWidget(self.downloadPushButton)
 
 
 	def setupSignals(self):
-		self.downloadPushButton.clicked.connect(self.on_downloadButton_click)
+		self.downloadPushButton.register_state(
+			DownloadStates.DOWNLOAD,
+			self.on_downloadButton_click,
+			"Download",
+			True
+		)
+		self.downloadPushButton.register_state(
+			DownloadStates.IN_PROGRESS,
+			None,
+			"Downloading...",
+			False
+		)
+		self.downloadPushButton.register_state(
+			DownloadStates.FINISHED,
+			None,
+			"Remove",
+			True
+		)
+
+		self.ui.filetypeComboBox.currentTextChanged.connect(self.update_download_button_state)
 
 
 	def setupManager(self, manager: ManagerInterface):
@@ -68,13 +93,7 @@ class OnlineDetailedView(BaseDetailedView):
 			self.ui.filetypeComboBox.addItem(file.value)
 		self.ui.filetypeComboBox.setCurrentIndex(0)
 
-
-		if self.component.id in self.files_on_download:
-			self.downloadPushButton.setText("Downloading...")
-			self.downloadPushButton.setEnabled(False)
-		else:
-			self.downloadPushButton.setText("Download")
-			self.downloadPushButton.setEnabled(True)
+		self.update_download_button_state()
 
 
 	@Slot()
@@ -85,8 +104,7 @@ class OnlineDetailedView(BaseDetailedView):
 	@Slot()
 	def on_downloadButton_click(self):
 
-		self.downloadPushButton.setText("Downloading...")
-		self.downloadPushButton.setEnabled(False)
+		self.downloadPushButton.setState(DownloadStates.IN_PROGRESS)
 
 		downloader = self.manager.download_component(
 			self.component,
@@ -96,19 +114,39 @@ class OnlineDetailedView(BaseDetailedView):
 		downloader.finished.connect(self.on_component_downloaded)
 		print("Download started...")
 
-		self.files_on_download[self.component.id] = QProgressBar()
-		self.topLevelWidget().add_notification(self.files_on_download[self.component.id]) # type: ignore
+		self.files_on_download[self.current_file().id] = QProgressBar()
+		self.topLevelWidget().add_notification(self.files_on_download[self.current_file().id]) # type: ignore
 
 
 	@Slot(int, int)
 	def __update_download_progress(self, bytes_received, total_bytes):
-		self.files_on_download[self.component.id].setMaximum(total_bytes)
-		self.files_on_download[self.component.id].setValue(bytes_received)
+		self.files_on_download[self.current_file().id].setMaximum(total_bytes)
+		self.files_on_download[self.current_file().id].setValue(bytes_received)
 
 
 	@Slot(Path)
 	def on_component_downloaded(self, filepath: Path):
-		self.downloadPushButton.setText("Remove")
-		self.downloadPushButton.setEnabled(True)
+		self.downloadPushButton.setState(DownloadStates.FINISHED)
+		self.current_file().EXISTS = True
+		self.files_on_download.pop(self.current_file().id)
 		print("Download Successful!")
 		print("file at", filepath)
+
+
+	def is_file_on_download(self):
+		return self.current_file() and self.current_file().id in self.files_on_download
+
+
+	def current_file(self) -> File:
+		txt = self.ui.filetypeComboBox.currentText()
+		if txt and FileTypes(txt):
+			return self.component.files.get(FileTypes(txt)) # type: ignore
+
+	@Slot(str)
+	def update_download_button_state(self):
+		if self.is_file_on_download():
+			self.downloadPushButton.setState(DownloadStates.IN_PROGRESS)
+		elif self.current_file().EXISTS:
+			self.downloadPushButton.setState(DownloadStates.FINISHED)
+		else:
+			self.downloadPushButton.setState(DownloadStates.DOWNLOAD)

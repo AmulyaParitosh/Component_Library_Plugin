@@ -23,5 +23,8 @@ class BaseDetailedView(BaseView):
 	def addControlWidget(self, widget: QWidget):
 		self.ui.controlArea.addWidget(widget)
 
+	def removeControlWidget(self, widget: QWidget):
+		self.ui.controlArea.removeWidget(widget)
+
 	def addProgressWidget(self, widget: QWidget):
 		self.ui.processesArea.addWidget(widget)
