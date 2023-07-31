@@ -1,10 +1,11 @@
+from pathlib import Path
 from typing import Any
 from functools import cache
 
 from PySide6.QtCore import Signal, Slot
 
 from ..api import (ApiInterface, CMSApi, CMSReply, ComponentRequest,
-                   construct_multipart, getApi)
+                   construct_multipart, getApi, LocalApi)
 from ..config import Config
 from ..data import Component, FileTypes, DTypes, DataFactory
 from ..utils import ABCQObject
@@ -42,11 +43,16 @@ class OnlineRepoManager(ManagerInterface):
 
 	query: RepoComponentQuery = RepoComponentQuery()
 	page_states = PageStates()
-	DOWNLOAD_PATH = "test/downloads"
 
 	def __init__(self) -> None:
 		super().__init__()
 		self.api: CMSApi = getApi()
+		self.local = LocalApi()
+
+	def request_components(self) -> CMSReply:
+		reply: CMSReply = self.api.read(ComponentRequest(self.query))
+		reply.finished.connect(self.__component_response_handler)
+		return reply
 
 	def reload_page(self) -> CMSReply:
 		self.query.page = 1
@@ -74,19 +80,29 @@ class OnlineRepoManager(ManagerInterface):
 		self.query.tags = tags
 		return self.reload_page()
 
-
 	def download_component(self, component: Component, filetype: FileTypes) -> FileDownloader:
 		file = component.files.get(filetype)
 		if file is None:
 			raise FileNotFoundError()
-		return FileDownloader(file.url, self.DOWNLOAD_PATH, f"{component.metadata.name}.{file.type.value}")
 
+		comp_path = self.local.component_path(component.metadata.name)
 
-	def request_components(self) -> CMSReply:
-		reply: CMSReply = self.api.read(ComponentRequest(self.query))
-		reply.finished.connect(self.__component_response_handler)
-		return reply
+		filedownloader = FileDownloader(
+			file.url,
+			comp_path,
+			f"{component.metadata.name}.{file.type.value}",
+		)
 
+		if not any(path.match("thumbnail.*") for path in comp_path.glob("thumbnail.*")):
+			FileDownloader(
+				component.metadata.thumbnail,
+				comp_path,
+				f"thumbnail{Path(component.metadata.thumbnail).suffix}",
+			)
+
+		self.local.create(component, filetype)
+
+		return filedownloader
 
 	def create_component(self, data: dict):
 		multi_part = construct_multipart(data)

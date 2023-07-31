@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QProgressBar, QPushButton, QWidget
@@ -104,8 +106,8 @@ class OnlineDetailedView(BaseDetailedView):
 		self.files_on_download[self.component.id].setValue(bytes_received)
 
 
-	@Slot(str)
-	def on_component_downloaded(self, filepath: str):
+	@Slot(Path)
+	def on_component_downloaded(self, filepath: Path):
 		self.downloadPushButton.setText("Remove")
 		self.downloadPushButton.setEnabled(True)
 		print("Download Successful!")

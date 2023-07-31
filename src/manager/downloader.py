@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from PySide6.QtCore import QFile, QIODevice, QObject, QUrl, Signal, Slot
 from PySide6.QtGui import QImage
 from PySide6.QtNetwork import QNetworkReply, QNetworkRequest
@@ -7,19 +9,19 @@ from ..network.network_manager import get_network_access_manager
 
 class FileDownloader(QObject):
 
-	finished = Signal(str)
+	finished = Signal(Path)
 	error = Signal(QNetworkReply.NetworkError)
 
 	network_access_manager, sslConfig = get_network_access_manager()
 
 
-	def __init__(self, url: str, save_path: str, filename: str) -> None:
+	def __init__(self, url: str, save_path: Path, filename: str) -> None:
 		super().__init__()
 
 		self.url = QUrl(url)
-		self.path: str = save_path
+		save_path.mkdir(exist_ok=True)
 		self.filename: str = filename
-		self.filepath: str = f"{self.path}/{self.filename}"
+		self.filepath = save_path/self.filename
 
 		request = QNetworkRequest(self.url)
 		self.reply: QNetworkReply = self.network_access_manager.get(request)
@@ -45,7 +47,7 @@ class FileDownloader(QObject):
 		self.deleteLater()
 
 
-class ImageDownloader(QObject):
+class ImageLoader(QObject):
 	LOADING_THUMBNAIL_PATH = "src/interface/resources/loading.jpeg"
 	DEFAULT_THUMBNAIL_PATH = "src/interface/resources/default.png"
 

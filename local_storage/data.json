@@ -1,0 +1,37 @@
+{
+    "components": [
+        "2020_corner_bracket",
+        "2-4_tft_spi_240x320"
+    ],
+    "tags": {
+        "mechanical parts": [
+            "2020_corner_bracket"
+        ],
+        "mountings": [
+            "2020_corner_bracket"
+        ],
+        "corner": [
+            "2020_corner_bracket"
+        ],
+        "electronics parts": [
+            "2-4_tft_spi_240x320"
+        ],
+        "displays": [
+            "2-4_tft_spi_240x320"
+        ],
+        "tft": [
+            "2-4_tft_spi_240x320"
+        ]
+    },
+    "filetypes": {
+        "fcstd": [
+            "2020_corner_bracket"
+        ],
+        "stl": [
+            "2-4_tft_spi_240x320"
+        ],
+        "step": [
+            "2-4_tft_spi_240x320"
+        ]
+    }
+}

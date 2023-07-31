@@ -4,16 +4,16 @@ from PySide6.QtCore import QUrl
 from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtWidgets import QLabel, QWidget
 
-from ....manager.downloader import ImageDownloader
+from ....manager.downloader import ImageLoader
 
 
 class Thumbnail(QLabel):
 	def __init__(self, parent: QWidget, url: str|None=None) -> None:
 		super().__init__(parent)
 		self.setScaledContents(True)
-		self.setPixmap(QPixmap(ImageDownloader.LOADING_THUMBNAIL_PATH))
+		self.setPixmap(QPixmap(ImageLoader.LOADING_THUMBNAIL_PATH))
 
-		self.downloader = ImageDownloader()
+		self.downloader = ImageLoader()
 		self.downloader.finished.connect(self.loadImage)
 
 		if url:
