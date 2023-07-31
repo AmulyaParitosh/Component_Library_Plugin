@@ -72,14 +72,11 @@ class OnlineDetailedView(BaseDetailedView):
 	def updateContent(self, comp_item: ComponentItem):
 		self.component = comp_item.component
 
+		self._update_thumbnail(comp_item.ui.thumbnail)
+		self._update_filetype_combobox()
+		self.update_download_button_state()
+
 		self.ui.contentLabel.setText(self.component.metadata.name)
-
-		if self.thumbnail != None:
-			self.ui.thumbnailAreaHorizontalLayout.removeWidget(self.thumbnail)
-
-		self.thumbnail = Thumbnail.from_existing(self, comp_item.ui.thumbnail)
-		self.ui.thumbnailAreaHorizontalLayout.addWidget(self.thumbnail)
-
 		self.ui.descriptionTextBrowser.setText(self.component.metadata.description)
 		self.ui.authorValue.setText(self.component.metadata.author)
 		self.ui.maintainerValue.setText(self.component.metadata.maintainer)
@@ -88,12 +85,19 @@ class OnlineDetailedView(BaseDetailedView):
 		self.ui.ratingwidget.setRating(self.component.metadata.rating)
 		self.ui.licenseValue.setText(self.component.license.fullname)
 
+
+	def _update_thumbnail(self, thumbnail_widget):
+		if self.thumbnail is not None:
+			self.ui.thumbnailAreaHorizontalLayout.removeWidget(self.thumbnail)
+
+		self.thumbnail = Thumbnail.from_existing(self, thumbnail_widget)
+		self.ui.thumbnailAreaHorizontalLayout.addWidget(self.thumbnail)
+
+	def _update_filetype_combobox(self):
 		self.ui.filetypeComboBox.clear()
 		for file in self.component.files:
 			self.ui.filetypeComboBox.addItem(file.value)
 		self.ui.filetypeComboBox.setCurrentIndex(0)
-
-		self.update_download_button_state()
 
 
 	@Slot()
@@ -103,44 +107,53 @@ class OnlineDetailedView(BaseDetailedView):
 
 	@Slot()
 	def on_downloadButton_click(self):
+		file = self.current_file()
+		if file is None:
+			return
+		self.files_on_download[file.id] = QProgressBar()
+		self.topLevelWidget().add_notification(self.files_on_download[file.id]) # type: ignore
 
 		self.downloadPushButton.setState(DownloadStates.IN_PROGRESS)
 
 		downloader = self.manager.download_component(
 			self.component,
-			FileTypes(self.ui.filetypeComboBox.currentText()),
+			file.type,
 		)
 		downloader.downloadProgress.connect(self.__update_download_progress)
 		downloader.finished.connect(self.on_component_downloaded)
 		print("Download started...")
 
-		self.files_on_download[self.current_file().id] = QProgressBar()
-		self.topLevelWidget().add_notification(self.files_on_download[self.current_file().id]) # type: ignore
-
 
 	@Slot(int, int)
 	def __update_download_progress(self, bytes_received, total_bytes):
-		self.files_on_download[self.current_file().id].setMaximum(total_bytes)
-		self.files_on_download[self.current_file().id].setValue(bytes_received)
+		file = self.current_file()
+		if file is None:
+			return
+		self.files_on_download[file.id].setMaximum(total_bytes)
+		self.files_on_download[file.id].setValue(bytes_received)
 
 
 	@Slot(Path)
 	def on_component_downloaded(self, filepath: Path):
+		file = self.current_file()
+		if file is None:
+			return
 		self.downloadPushButton.setState(DownloadStates.FINISHED)
-		self.current_file().EXISTS = True
-		self.files_on_download.pop(self.current_file().id)
+		file.EXISTS = True
+		self.files_on_download.pop(file.id)
 		print("Download Successful!")
 		print("file at", filepath)
 
 
 	def is_file_on_download(self):
-		return self.current_file() and self.current_file().id in self.files_on_download
+		file = self.current_file()
+		return (file is not None) and (file.id in self.files_on_download)
 
 
-	def current_file(self) -> File:
+	def current_file(self) -> File | None:
 		txt = self.ui.filetypeComboBox.currentText()
 		if txt and FileTypes(txt):
-			return self.component.files.get(FileTypes(txt)) # type: ignore
+			return self.component.files.get(FileTypes(txt))
 
 	@Slot(str)
 	def update_download_button_state(self):

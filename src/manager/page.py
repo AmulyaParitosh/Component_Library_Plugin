@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from PySide6.QtCore import QObject, Signal
-from ..api.local_api.storage_adapter import LocalData
+from ..api.local_api.storage_adapter import LocalData, LocalDataComp
 from ..data import Component, DataFactory, DTypes
 from ..config import Config
 
@@ -26,20 +26,33 @@ class PageStates(QObject):
 
 
 	def load_page(self, json_response: dict[str, Any]):
-		self.data: list[Component] = DataFactory.load_many(data_list=json_response.get("items", []), dtype=DTypes.COMPONENT) # type: ignore
-		with LocalData(Config.LOCAL_COMPONENT_PATH) as local_data:
-			for component in self.data:
-				for file in component.files:
-					component.files.get(file).EXISTS = component.metadata.name in local_data["filetypes"].get(file.value, set())
+		self.load_page_data(json_response)
+		self.calculate_pagination()
+		return self
 
+	def load_page_data(self, json_response: dict[str, Any]) -> None:
+		self.data: list[Component] = DataFactory.load_many(data_list=json_response.get("items", []), dtype=DTypes.COMPONENT) # type: ignore
+		self.update_existing_comps(self.data) # type: ignore
 
 		self.total_items = json_response.get("total", 0)
 		self.page_no = json_response.get("page", 1)
 		self.size = json_response.get("per_page", 18)
 
-		self.total_pages = (self.total_items + self.size -1) // self.size
+	def update_existing_comps(self, components: list[Component]) -> None:
+		with LocalData(Config.LOCAL_COMPONENT_PATH) as local_data:
+			for component in components:
+				self.update_existing_files_for_component(component, local_data)
 
-		if self.page_no==1:
+	def update_existing_files_for_component(self, component: Component, local_data) -> None:
+		for file in component.files:
+			existing_comps = local_data["filetypes"].get(file.value, set())
+			component.files[file].EXISTS = component.metadata.name in existing_comps
+
+
+	def calculate_pagination(self) -> None:
+		self.total_pages = (self.total_items + self.size - 1) // self.size
+
+		if self.page_no == 1:
 			self.prev_page = None
 			self.enable_prev.emit(False)
 		else:
@@ -52,5 +65,3 @@ class PageStates(QObject):
 		else:
 			self.next_page = self.page_no + 1
 			self.enable_next.emit(True)
-
-		return self

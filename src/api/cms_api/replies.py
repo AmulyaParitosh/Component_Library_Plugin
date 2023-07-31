@@ -18,15 +18,20 @@ class CMSReply(QObject):
 		if self.reply.error() != QNetworkReply.NetworkError.NoError:
 			print(f"Error : {self.reply.errorString()}")
 
-		data: str = self.reply.readAll().data().decode("utf-8")
+		raw_data: str = self.reply.readAll().data().decode("utf-8")
 
-		try:
-			self.data: dict = json.loads(data)
-		except json.decoder.JSONDecodeError:
-			self.data = dict()
+		self.data = self.parse_json(raw_data)
 
 		if isinstance(self.data, list):
 			self.data = {item.get("id"): item for item in self.data}
 
 		self.finished.emit(self.data)
 		self.reply.deleteLater()
+
+	@staticmethod
+	def parse_json(data: str):
+		try:
+			parsed_json: dict = json.loads(data)
+		except json.decoder.JSONDecodeError:
+			parsed_json = dict()
+		return parsed_json

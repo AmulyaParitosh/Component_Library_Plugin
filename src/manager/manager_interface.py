@@ -85,24 +85,24 @@ class OnlineRepoManager(ManagerInterface):
 		if file is None:
 			raise FileNotFoundError()
 
-		comp_path = self.local.component_path(component.metadata.name)
+		component_path = self.local.component_path(component.metadata.name)
 
-		filedownloader = FileDownloader(
+		component_downloader = FileDownloader(
 			file.url,
-			comp_path,
+			component_path,
 			f"{component.metadata.name}.{file.type.value}",
 		)
 
-		if component.metadata.thumbnail and not any(path.match("thumbnail.*") for path in comp_path.glob("thumbnail.*")):
+		if component.metadata.thumbnail and not any(path.match("thumbnail.*") for path in component_path.glob("thumbnail.*")):
 			FileDownloader(
 				component.metadata.thumbnail,
-				comp_path,
+				component_path,
 				f"thumbnail{Path(component.metadata.thumbnail).suffix}",
 			)
 
 		self.local.create(component, filetype)
 
-		return filedownloader
+		return component_downloader
 
 	def create_component(self, data: dict):
 		multi_part = construct_multipart(data)

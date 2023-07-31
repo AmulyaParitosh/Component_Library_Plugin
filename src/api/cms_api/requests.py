@@ -39,11 +39,10 @@ def construct_multipart(data: dict) -> QHttpMultiPart:
 	multi_part = QHttpMultiPart(QHttpMultiPart.ContentType.FormDataType)
 
 	for field, val in data.pop("files").items():
-		if isinstance(val, (list, tuple, set)):
-			for filepath in val:
-				multi_part.append(construct_file_part(field, filepath)) # type: ignore
-		else:
+		if not isinstance(val, (list, tuple, set)):
 			multi_part.append(construct_file_part(field, val)) # type: ignore
+		for filepath in val:
+			multi_part.append(construct_file_part(field, filepath)) # type: ignore
 
 	for field, value in data.items():
 		if isinstance(value, (list, tuple, set)):

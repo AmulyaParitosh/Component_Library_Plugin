@@ -17,16 +17,12 @@ class LocalApi(ApiInterface):
 
 			data["components"].add(comp_name)
 
-			old_filetype = data["filetypes"].get(filetype.value, LocalDataComp())
-			old_filetype.add(comp_name)
-			data["filetypes"].update({filetype.value: old_filetype})
+			data["filetypes"].setdefault(filetype.value, LocalDataComp()).add(comp_name)
 
 			for tag in component.tags:
-				old_tags = data["tags"].get(tag.label, LocalDataComp())
-				old_tags.add(comp_name)
-				data["tags"].update({tag.label : old_tags})
+				data["tags"].setdefault(tag.label, LocalDataComp()).add(comp_name)
 
-		with self.metadata_path(comp_name).open('+w') as file:
+		with self.metadata_path(comp_name).open('w') as file:
 			metadata = DataFactory.serialize(component.metadata)
 			metadata.pop("thumbnail")
 			json.dump(metadata, file, indent=4)
@@ -37,6 +33,7 @@ class LocalApi(ApiInterface):
 	def update(self):...
 
 	def delete(self):...
+
 
 	@classmethod
 	def component_path(cls, component_name: str):

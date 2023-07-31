@@ -64,25 +64,27 @@ class ImageLoader(QObject):
 		reply.finished.connect(lambda : self.handle_finished(reply))
 
 	def handle_finished(self, reply: QNetworkReply):
+		image = self.load_image_from_reply(reply)
 
+		if image.isNull():
+			print("Error: Unable to load image from the reply.")
+			return
+
+		self.finished.emit(image)
+		reply.deleteLater()
+
+	def load_image_from_reply(self, reply: QNetworkReply) -> QImage:
 		image = QImage()
 
 		if reply.error() == QNetworkReply.NetworkError.ProtocolUnknownError:
+			default_thumbnail_file = QFile(self.DEFAULT_THUMBNAIL_PATH)
 
-			file = QFile(self.DEFAULT_THUMBNAIL_PATH)
-
-			if file.open(QIODevice.OpenModeFlag.ReadOnly):
-				content = file.readAll()
+			if default_thumbnail_file.open(QIODevice.OpenModeFlag.ReadOnly):
+				content = default_thumbnail_file.readAll()
+				default_thumbnail_file.close()
 				image.loadFromData(content)
-				self.finished.emit(image)
-
-			file.close()
 
 		elif reply.error() == QNetworkReply.NetworkError.NoError:
 			image.loadFromData(reply.readAll())
-			self.finished.emit(image)
 
-		else:
-			print("error: ", reply.errorString())
-
-		reply.deleteLater()
+		return image
