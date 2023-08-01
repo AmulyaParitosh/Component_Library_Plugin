@@ -5,34 +5,53 @@ from .data_types import DTypes
 
 
 class DataFactory:
-	_registry: dict[DTypes, type] = {}
+    # A class that acts as a factory for creating and serializing data objects.
 
-	@classmethod
-	def __init_subclass__(cls, /, dtype: DTypes|None, **kwargs):
-		super().__init_subclass__(**kwargs)
-		if dtype:
-			cls._registry[dtype] = cls
+    _registry: dict[DTypes, type] = {}
 
-	def __new__(cls, dtype: DTypes = DTypes.GENERIC, **kwargs: dict[str, Any]):
-		subclass: type = cls._registry.get(dtype, DataFactory)
-		return super().__new__(subclass) # type: ignore
+    @classmethod
+    def __init_subclass__(cls, /, dtype: DTypes|None, **kwargs):
+        # A metaclass method called when a subclass is defined.
+        # It registers the subclass in the _registry dictionary based on the dtype provided.
 
-	def __is_field(self, attr):
-		return not any((
-			attr.startswith("_"),
-			isinstance(getattr(self, attr), Callable),
-		))
+        super().__init_subclass__(**kwargs)
+        if dtype:
+            cls._registry[dtype] = cls
 
+    def __new__(cls, dtype: DTypes = DTypes.GENERIC, **kwargs: dict[str, Any]):
+        # A method that returns an instance of the appropriate subclass based on the dtype provided.
 
-	def serialize(self, base_info: bool = False):
-		if not is_dataclass(self):
-			return {attr: getattr(self, attr) for attr in dir(self) if self.__is_field(attr)}
-		data = asdict(self)
-		if not base_info:
-			for key in ("id", "created_at", "updated_at"):
-				data.pop(key)
-		return data
+        subclass: type = cls._registry.get(dtype, DataFactory)
+        return super().__new__(subclass)  # type: ignore
 
-	@staticmethod
-	def load_many(data_list: list, dtype: DTypes = DTypes.GENERIC):
-		return [DataFactory(dtype=dtype, **data) for data in data_list]
+    def __is_field(self, attr):
+        # A method to check if the attribute should be considered as a field for serialization.
+
+        return not any((
+            attr.startswith("_"),  # Exclude private attributes (starting with '_').
+            isinstance(getattr(self, attr), Callable),  # Exclude callable attributes (methods).
+        ))
+
+    def serialize(self, base_info: bool = False):
+        # A method to serialize the data object into a dictionary.
+
+        if not is_dataclass(self):
+            return {attr: getattr(self, attr) for attr in dir(self) if self.__is_field(attr)}
+            # Serialize non-dataclass objects by including only non-private, non-method attributes.
+
+        data = asdict(self)
+        # Convert the dataclass object to a dictionary.
+
+        if not base_info:
+            for key in ("id", "created_at", "updated_at"):
+                data.pop(key)
+                # If base_info is False, remove "id", "created_at", and "updated_at" fields from the dictionary.
+
+        return data
+
+    @staticmethod
+    def load_many(data_list: list, dtype: DTypes = DTypes.GENERIC):
+        # A static method to create and load multiple data objects from a list of dictionaries.
+
+        return [DataFactory(dtype=dtype, **data) for data in data_list]
+        # Create and load data objects using the provided dtype and data from the list.

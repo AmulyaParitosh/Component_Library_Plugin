@@ -6,36 +6,52 @@ from .factory import DataFactory
 
 @dataclass(kw_only=True)
 class _Data(DataFactory, dtype=None):
-	dtype : InitVar[DTypes|None] = None
-	id: str
-	created_at: str
-	updated_at: str
+    # A base dataclass representing generic data objects.
 
-	def __post_init__(self, *args, **kwargs):...
+    dtype: InitVar[DTypes|None] = None
+    id: str
+    created_at: str
+    updated_at: str
+
+    def __post_init__(self, *args, **kwargs):...
+        # Placeholder for any post-initialization logic.
+        # The implementation for this method is not provided in the code.
 
 
 class GenericData(DataFactory, dtype=DTypes.GENERIC):
-	def __init__(self, **kwargs):
-		kwargs.pop("dtype", None)
-		for k, v in kwargs.items():
-			setattr(self, k, v)
+    # A dataclass representing generic data objects with no specific dtype.
+
+    def __init__(self, **kwargs):
+        # Initialize a GenericData object.
+
+        kwargs.pop("dtype", None)  # Remove the dtype from the kwargs, if provided.
+
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+            # Set the attributes of the object based on the provided kwargs.
 
 
 @dataclass(kw_only=True)
 class File(_Data, dtype=DTypes.FILE):
-	metadata_id: str
-	updated_at: str
-	size: int
-	url: str
-	type : FileTypes = field(default=None) # type: ignore
-	EXISTS: bool = False
+    # A dataclass representing File data objects.
 
-	def __post_init__(self, *args, **kwargs):
-		self.type = FileTypes(self.type.get("name")) # type: ignore
+    metadata_id: str
+    updated_at: str
+    size: int
+    url: str
+    type: FileTypes = field(default=None)  # type: ignore
+    EXISTS: bool = False
+
+    def __post_init__(self, *args, **kwargs):
+        # Post-initialization method for File objects.
+
+        self.type = FileTypes(self.type.get("name"))  # Convert the type to a FileTypes enum. # type: ignore
 
 
 @dataclass(kw_only=True)
 class License(_Data, dtype=DTypes.LICENSE):
+    # A dataclass representing License data objects.
+
     identifier: str
     fullname: str
     license_page: str
@@ -45,34 +61,41 @@ class License(_Data, dtype=DTypes.LICENSE):
 
 @dataclass(kw_only=True)
 class Metadata(_Data, dtype=DTypes.METADATA):
-	license_id: str
-	name: str
-	author: str
-	maintainer: str
-	description: str
-	rating: float
-	thumbnail: str
-	version: str
+    # A dataclass representing Metadata data objects.
+
+    license_id: str
+    name: str
+    author: str
+    maintainer: str
+    description: str
+    rating: float
+    thumbnail: str
+    version: str
 
 
 @dataclass(kw_only=True)
 class Tag(_Data, dtype=DTypes.TAG):
-	label: str = ""
+    # A dataclass representing Tag data objects.
+
+    label: str = ""
 
 
 @dataclass(kw_only=True)
 class Component(DataFactory, dtype=DTypes.COMPONENT):
-	dtype : InitVar[DTypes|None] = None
-	id: str
-	metadata: Metadata
-	files: dict[FileTypes, File]
-	license: License
-	tags: list[Tag]
+    # A dataclass representing Component data objects.
 
-	def __post_init__(self, *args, **kwargs):
-		self.metadata = DataFactory(dtype=DTypes.METADATA, **self.metadata) # type: ignore
-		self.files = {file.type : file for file in # type: ignore
-			DataFactory.load_many(data_list=self.files, dtype=DTypes.FILE) # type: ignore
-		}
-		self.license = DataFactory(dtype=DTypes.LICENSE, **self.license) # type: ignore
-		self.tags = DataFactory.load_many(data_list=self.tags, dtype=DTypes.TAG) # type: ignore
+    dtype: InitVar[DTypes|None] = None
+    id: str
+    metadata: Metadata
+    files: dict[FileTypes, File]
+    license: License
+    tags: list[Tag]
+
+    def __post_init__(self, *args, **kwargs):
+        # Post-initialization method for Component objects.
+
+        self.metadata = DataFactory(dtype=DTypes.METADATA, **self.metadata)  # Create a Metadata object. # type: ignore
+        self.files = {file.type: file for file in
+                      DataFactory.load_many(data_list=self.files, dtype=DTypes.FILE)}  # Create File objects. # type: ignore
+        self.license = DataFactory(dtype=DTypes.LICENSE, **self.license)  # Create a License object. # type: ignore
+        self.tags = DataFactory.load_many(data_list=self.tags, dtype=DTypes.TAG)  # Create Tag objects. # type: ignore

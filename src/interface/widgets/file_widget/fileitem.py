@@ -1,75 +1,110 @@
-import sys
 from pathlib import Path
 
-from PySide6.QtWidgets import (QApplication, QFileDialog, QFrame, QHBoxLayout,
-                               QLabel, QListWidget, QListWidgetItem,
-                               QPushButton, QSizePolicy, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QFileDialog, QFrame, QHBoxLayout, QLabel,
+                               QListWidget, QListWidgetItem, QPushButton,
+                               QSizePolicy, QVBoxLayout, QWidget)
 
 
 class FileItem(QFrame):
-	def __init__(self, parent=None) -> None:
-		super().__init__(parent)
+    # Custom QFrame class to represent an item for a file in the list.
 
-		self.filepath = ""
+    def __init__(self, parent=None) -> None:
+        # Constructor to initialize the FileItem.
 
-		layout = QHBoxLayout()
-		self.choose_file_btn = QPushButton("Choose File")
-		self.choose_file_btn.clicked.connect(self.open_file_dialog)
-		self.label = QLabel()
-		self.label.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Maximum)
-		layout.addWidget(self.choose_file_btn)
-		layout.addWidget(self.label)
-		self.setLayout(layout)
+        super().__init__(parent)
 
-	def open_file_dialog(self):
-		self.filepath, _ = QFileDialog.getOpenFileName(
-			self,
-			"Select Files",
-		)
-		if self.filepath: self.label.setText(Path(self.filepath).name)
+        # Initialize the filepath to an empty string.
+        self.filepath = ""
+
+        # Create a horizontal layout for the FileItem.
+        layout = QHBoxLayout()
+
+        # Create a "Choose File" button and connect it to the open_file_dialog method.
+        self.choose_file_btn = QPushButton("Choose File")
+        self.choose_file_btn.clicked.connect(self.open_file_dialog)
+
+        # Create a QLabel to display the filename of the chosen file.
+        self.label = QLabel()
+        self.label.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Maximum)
+
+        # Add the buttons and label to the layout.
+        layout.addWidget(self.choose_file_btn)
+        layout.addWidget(self.label)
+
+        # Set the layout for the FileItem.
+        self.setLayout(layout)
+
+    def open_file_dialog(self):
+        # Method to open a file dialog and set the filepath.
+
+        self.filepath, _ = QFileDialog.getOpenFileName(
+            self,
+            "Select Files",
+        )
+        if self.filepath:
+            # Display the filename (without the path) in the label.
+            self.label.setText(Path(self.filepath).name)
 
 
 class FileList(QWidget):
-	def __init__(self, parent=None) -> None:
-		super().__init__(parent)
+    # Custom QWidget class to represent a list of files.
 
-		layout = QVBoxLayout()
+    def __init__(self, parent=None) -> None:
+        # Constructor to initialize the FileList.
 
-		self.list_widget = QListWidget()
-		self.add_file_btn = QPushButton("Add File")
-		self.add_file_btn.clicked.connect(self.add_file)
+        super().__init__(parent)
 
-		layout.addWidget(self.list_widget)
-		layout.addWidget(self.add_file_btn)
+        # Create a vertical layout for the FileList.
+        layout = QVBoxLayout()
 
-		self.setLayout(layout)
+        # Create a QListWidget to display the list of files.
+        self.list_widget = QListWidget()
 
-	def add_file(self):
-		file_widget = FileItem()
+        # Create an "Add File" button and connect it to the add_file method.
+        self.add_file_btn = QPushButton("Add File")
+        self.add_file_btn.clicked.connect(self.add_file)
 
-		cb = QPushButton("X")
-		cb.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
-		file_widget.layout().addWidget(cb)
+        # Add the QListWidget and "Add File" button to the layout.
+        layout.addWidget(self.list_widget)
+        layout.addWidget(self.add_file_btn)
 
-		itemN = QListWidgetItem()
-		itemN.setSizeHint(file_widget.sizeHint())
-		file_widget.choose_file_btn.click()
+        # Set the layout for the FileList.
+        self.setLayout(layout)
 
-		cb.clicked.connect(lambda: self.remove_item(itemN))
+    def add_file(self):
+        # Method to add a new file to the list.
 
-		self.list_widget.addItem(itemN)
-		self.list_widget.setItemWidget(itemN, file_widget)
+        # Create a new FileItem widget representing the file.
+        file_widget = FileItem()
 
-	def remove_item(self, item: QListWidgetItem):
-		self.list_widget.takeItem(self.list_widget.row(item))
+        # Create a "Remove" button (denoted by "X") to remove the file from the list.
+        cb = QPushButton("X")
+        cb.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+        file_widget.layout().addWidget(cb)
 
-	@property
-	def filepaths(self) -> list[str]:
-		return [self.list_widget.itemWidget(self.list_widget.item(i)).filepath for i in range(self.list_widget.count())] # type: ignore
+        # Create a QListWidgetItem to hold the FileItem widget.
+        itemN = QListWidgetItem()
 
+        # Set the size hint for the QListWidgetItem to match the size of the FileItem.
+        itemN.setSizeHint(file_widget.sizeHint())
 
-if __name__ == '__main__':
-	app = QApplication(sys.argv)
-	window = FileList()
-	window.show()
-	sys.exit(app.exec())
+        # Simulate a click on the "Choose File" button to open the file dialog.
+        file_widget.choose_file_btn.click()
+
+        # Connect the "Remove" button's click event to the remove_item method.
+        cb.clicked.connect(lambda: self.remove_item(itemN))
+
+        # Add the QListWidgetItem to the QListWidget and set the FileItem widget as its associated widget.
+        self.list_widget.addItem(itemN)
+        self.list_widget.setItemWidget(itemN, file_widget)
+
+    def remove_item(self, item: QListWidgetItem):
+        # Method to remove a file from the list.
+
+        # Take the QListWidgetItem (and its associated widget) from the QListWidget.
+        self.list_widget.takeItem(self.list_widget.row(item))
+
+    @property
+    def filepaths(self) -> list[str]:
+        # Property to get the list of filepaths currently in the list.
+        return [self.list_widget.itemWidget(self.list_widget.item(i)).filepath for i in range(self.list_widget.count())]  # type: ignore

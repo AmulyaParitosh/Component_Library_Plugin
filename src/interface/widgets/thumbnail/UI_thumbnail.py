@@ -8,26 +8,42 @@ from ....manager.downloader import ImageLoader
 
 
 class Thumbnail(QLabel):
-	def __init__(self, parent: QWidget, url: str|None=None) -> None:
-		super().__init__(parent)
-		self.setScaledContents(True)
-		self.setPixmap(QPixmap(ImageLoader.LOADING_THUMBNAIL_PATH))
+    # Custom QLabel class for displaying image thumbnails.
 
-		self.downloader = ImageLoader()
-		self.downloader.finished.connect(self.loadImage)
+    def __init__(self, parent: QWidget, url: str | None = None) -> None:
+        # Constructor to initialize the Thumbnail.
 
-		if url:
-			self.setupThumbnail(url)
+        super().__init__(parent)
 
-	def setupThumbnail(self, url_str: str):
-		self.downloader.start_download(QUrl.fromUserInput(url_str))
+        # Set the scaled contents property to ensure the image is scaled to fit the label.
+        self.setScaledContents(True)
 
-	def loadImage(self, image: QImage):
-		pixmap = QPixmap(image)
-		self.setPixmap(pixmap)
+        # Set the pixmap to a loading thumbnail image.
+        self.setPixmap(QPixmap(ImageLoader.LOADING_THUMBNAIL_PATH))
 
-	@staticmethod
-	def from_existing(parent, thumbnail: Thumbnail):
-		new_thumbnail = Thumbnail(parent)
-		new_thumbnail.setPixmap(thumbnail.pixmap())
-		return new_thumbnail
+        # Create an ImageLoader to handle image downloads.
+        self.downloader = ImageLoader()
+        self.downloader.finished.connect(self.loadImage)
+
+        # If a URL is provided during initialization, setup the thumbnail with the image from the URL.
+        if url:
+            self.setupThumbnail(url)
+
+    def setupThumbnail(self, url_str: str):
+        # Method to start downloading the image from the provided URL.
+
+        self.downloader.start_download(QUrl.fromUserInput(url_str))
+
+    def loadImage(self, image: QImage):
+        # Method to display the downloaded image as the thumbnail.
+
+        pixmap = QPixmap(image)
+        self.setPixmap(pixmap)
+
+    @staticmethod
+    def from_existing(parent, thumbnail: Thumbnail):
+        # Static method to create a new Thumbnail from an existing Thumbnail's pixmap.
+
+        new_thumbnail = Thumbnail(parent)
+        new_thumbnail.setPixmap(thumbnail.pixmap())
+        return new_thumbnail

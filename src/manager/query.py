@@ -4,141 +4,162 @@ from typing import Any, Union
 QueryParam = Union[Any, str]
 
 class ComponentQueryInterface(ABC):
-	# TODO introduce abstraction here
-	@abstractproperty
-	def page(self) -> QueryParam:...
+    # Abstract Base Class for component query interface.
 
-	@abstractproperty
-	def page_size(self) -> QueryParam:...
+    @abstractproperty
+    def page(self) -> QueryParam:
+        """Abstract property representing the page number or query parameter for pagination."""
+        ...
 
-	@abstractproperty
-	def search_key(self) -> QueryParam:...
+    @abstractproperty
+    def page_size(self) -> QueryParam:
+        """Abstract property representing the page size or query parameter for pagination."""
+        ...
 
-	@abstractproperty
-	def sort_by(self) -> QueryParam:...
+    @abstractproperty
+    def search_key(self) -> QueryParam:
+        """Abstract property representing the search key or query parameter for searching components."""
+        ...
 
-	@abstractproperty
-	def sort_ord(self) -> QueryParam:...
+    @abstractproperty
+    def sort_by(self) -> QueryParam:
+        """Abstract property representing the sort key or query parameter for sorting components."""
+        ...
 
-	@abstractproperty
-	def file_types(self) -> QueryParam:...
+    @abstractproperty
+    def sort_ord(self) -> QueryParam:
+        """Abstract property representing the sort order or query parameter for sorting components."""
+        ...
 
-	@abstractproperty
-	def tags(self) -> QueryParam:...
+    @abstractproperty
+    def file_types(self) -> QueryParam:
+        """Abstract property representing the file types or query parameter for filtering components by file types."""
+        ...
 
-	@abstractproperty
-	def columns(self) -> QueryParam:...
+    @abstractproperty
+    def tags(self) -> QueryParam:
+        """Abstract property representing the tags or query parameter for filtering components by tags."""
+        ...
 
+    @abstractproperty
+    def columns(self) -> QueryParam:
+        """Abstract property representing the columns or query parameter for selecting specific columns in the result."""
+        ...
 
 
 class RepoComponentQuery(ComponentQueryInterface):
+    # Implementation of the ComponentQueryInterface for querying components in a repository.
 
-	def __init__(self) -> None:
-		self.__page: int | None = 1
-		self.__page_size: int | None = 18
-		self.__search_key: str | None = None
-		self.__sort_by: str | None = "name"
-		self.__sort_ord: str  | None = "asc"
-		self.__file_types: list[str] | None = None
-		self.__tags: list[str] | None = None
-		self.__columns: list[str] | None = None
+    def __init__(self) -> None:
+        # Initialize the query parameters with default values or None.
+        self.__page: int | None = 1
+        self.__page_size: int | None = 18
+        self.__search_key: str | None = None
+        self.__sort_by: str | None = "name"
+        self.__sort_ord: str | None = "asc"
+        self.__file_types: list[str] | None = None
+        self.__tags: list[str] | None = None
+        self.__columns: list[str] | None = None
 
-	@property
-	def page(self) -> str:
-		return '' if self.__page is None else f"page={self.__page}"
+    # Implementing the abstract properties using property decorators.
 
-	@page.setter
-	def page(self, value: int|None) -> None:
-		self.__page = value
+    @property
+    def page(self) -> str:
+        return '' if self.__page is None else f"page={self.__page}"
 
-	@property
-	def page_size(self) -> str:
-		return "" if self.__page_size is None else f"page_size={self.__page_size}"
+    @page.setter
+    def page(self, value: int | None) -> None:
+        self.__page = value
 
-	@page_size.setter
-	def page_size(self, value: int|None) -> None:
-		self.__page_size = value
+    @property
+    def page_size(self) -> str:
+        return "" if self.__page_size is None else f"page_size={self.__page_size}"
 
-	@property
-	def search_key(self) -> str:
-		return "" if self.__search_key is None else f"search_key={self.__search_key}"
+    @page_size.setter
+    def page_size(self, value: int | None) -> None:
+        self.__page_size = value
 
-	@search_key.setter
-	def search_key(self, value: str|None) -> None:
-		self.__search_key = value
+    @property
+    def search_key(self) -> str:
+        return "" if self.__search_key is None else f"search_key={self.__search_key}"
 
-	@property
-	def sort_by(self) -> str:
-		return "" if self.__sort_by is None else f"sort_by={self.__sort_by}"
+    @search_key.setter
+    def search_key(self, value: str | None) -> None:
+        self.__search_key = value
 
-	@sort_by.setter
-	def sort_by(self, value: str|None) -> None:
-		if value in ("Name", "Rating"):
-			value = value.lower()
-		elif value == "Created":
-			value = "created_at"
-		elif value == "Updated":
-			value = "updated_at"
-		else:
-			raise ValueError()
+    @property
+    def sort_by(self) -> str:
+        return "" if self.__sort_by is None else f"sort_by={self.__sort_by}"
 
-		self.__sort_by = value
+    @sort_by.setter
+    def sort_by(self, value: str | None) -> None:
+        # Converting values to be compatible with the API
+        if value in ("Name", "Rating"):
+            value = value.lower()
+        elif value == "Created":
+            value = "created_at"
+        elif value == "Updated":
+            value = "updated_at"
+        else:
+            raise ValueError("Invalid value for sort_by property.")
+        self.__sort_by = value
 
-	@property
-	def sort_ord(self) -> str:
-		return "" if self.__sort_ord is None else f"sort_ord={self.__sort_ord}"
+    @property
+    def sort_ord(self) -> str:
+        return "" if self.__sort_ord is None else f"sort_ord={self.__sort_ord}"
 
-	@sort_ord.setter
-	def sort_ord(self, value: str|None) -> None:
-		if value is None:
-			pass
-		elif value.lower() == "ascending":
-			value = "asc"
-		elif value.lower() == "descending":
-			value = "desc"
-		else:
-			raise ValueError()
+    @sort_ord.setter
+    def sort_ord(self, value: str | None) -> None:
+        # Converting values to be compatible with the API
+        if value is None:
+            pass
+        elif value.lower() == "ascending":
+            value = "asc"
+        elif value.lower() == "descending":
+            value = "desc"
+        else:
+            raise ValueError("Invalid value for sort_ord property.")
+        self.__sort_ord = value
 
-		self.__sort_ord = value
+    @property
+    def file_types(self) -> str:
+        if self.__file_types is None or len(self.__file_types) == 0:
+            return ""
+        return "&".join(f"file_types%5B%5D={ft.replace(' ', '%20')}" for ft in self.__file_types)
 
-	@property
-	def file_types(self) -> str:
-		if self.__file_types is None or len(self.__file_types) == 0:
-			return ""
+    @file_types.setter
+    def file_types(self, value: list[str] | None) -> None:
+        if value is not None:
+            value = [v.strip() for v in value if v]
+        self.__file_types = value
 
-		return "&".join(f"file_types%5B%5D={ft.replace(' ', '%20')}" for ft in self.__file_types)
+    @property
+    def tags(self) -> str:
+        if self.__tags is None or len(self.__tags) == 0:
+            return ""
+        return "&".join(f"tags%5B%5D={t.replace(' ', '%20')}" for t in self.__tags)
 
-	@file_types.setter
-	def file_types(self, value: list[str]|None) -> None:
-		if value != None:
-			value = [v.strip() for v in value if v]
-		self.__file_types = value
+    @tags.setter
+    def tags(self, value: list[str] | None) -> None:
+        if value is not None:
+            value = [v.strip() for v in value if v]
+        self.__tags = value
 
-	@property
-	def tags(self):
-		if self.__tags is None or len(self.__tags) == 0:
-			return ""
+    @property
+    def columns(self) -> str:
+        if self.__columns is None or len(self.__columns) == 0:
+            return ""
+        return "&".join(f"columns%5B%5D={t.replace(' ', '%20')}" for t in self.__columns)
 
-		return "&".join(f"tags%5B%5D={t.replace(' ', '%20')}" for t in self.__tags)
-
-	@tags.setter
-	def tags(self, value: list[str]|None) -> None:
-		if value != None:
-			value = [v.strip() for v in value if v]
-		self.__tags = value
-
-	@property
-	def columns(self) -> str:
-		if self.__columns is None or len(self.__columns) == 0:
-			return ""
-
-		return "&".join(f"columns%5B%5D={t.replace(' ', '%20')}" for t in self.__columns)
-
-	@columns.setter
-	def columns(self, value: list[str]|None) -> None:
-		if value != None:
-			value = [v.strip() for v in value if v]
-		self.__columns = value
-
+    @columns.setter
+    def columns(self, value: list[str] | None) -> None:
+        if value is not None:
+            value = [v.strip() for v in value if v]
+        self.__columns = value
 
 class LocalComponentQuery(ComponentQueryInterface):...
+    # Implementation of the ComponentQueryInterface for querying components locally.
+
+    # TODO: Implement the query interface for local component query.
+    # It will have similar properties and setters as the RepoComponentQuery class, but with different logic
+    # for querying components locally instead of from a remote repository.

@@ -1,49 +1,67 @@
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QColor, QFont, QPainter
+from PySide6.QtGui import QFont, QPainter
 from PySide6.QtWidgets import QGraphicsBlurEffect, QWidget
 
 
 class Overlay(QWidget):
-	overlay_text: str = ""
+    # Custom widget class representing a popup-style overlay with centered text.
 
-	def paintEvent(self, event):
-		popup_width, popup_height = 300, 120
-		ow = int(self.size().width()/2-popup_width/2)
-		oh = int(self.size().height()/2-popup_height/2)
+    overlay_text: str = ""  # Text to be displayed on the overlay.
 
-		tolw, tolh = 80, -5
+    def paintEvent(self, event):
+        # Paint event for drawing the overlay on the widget.
 
-		qp = self.create_painter()
-		qp.drawText(
-			ow + popup_width // 2 - tolw,
-			oh + popup_height // 2 - tolh,
-			self.overlay_text,
-		)
+        popup_width, popup_height = 300, 120
+        ow = int(self.size().width()/2-popup_width/2)  # Calculate the x-coordinate to center the overlay.
+        oh = int(self.size().height()/2-popup_height/2)  # Calculate the y-coordinate to center the overlay.
 
-		qp.end()
+        # Offset to center the text within the overlay.
+        tolw, tolh = 80, -5
 
-	def create_painter(self):
-		font = QFont()
-		font.setPixelSize(20)
-		font.setItalic(True)
+        qp = self.create_painter()
+        qp.drawText(
+            ow + popup_width // 2 - tolw,
+            oh + popup_height // 2 - tolh,
+            self.overlay_text,
+        )
 
-		qp = QPainter()
-		qp.begin(self)
+        qp.end()
 
-		qp.setRenderHint(QPainter.RenderHint.Antialiasing, True)
-		qp.setFont(font)
-		qp.setPen(Qt.GlobalColor.white)
-		return qp
+    def create_painter(self):
+        # Create a QPainter object with specified font and settings for drawing on the widget.
 
-	def show(self):
-		self.move(0, 0)
-		self.resize(self.parent().size()) # type: ignore
-		self.blur_effect = QGraphicsBlurEffect()
-		self.blur_effect.setBlurRadius(30)
-		self.parent().widget().setGraphicsEffect(self.blur_effect) # type: ignore
+        font = QFont()
+        font.setPixelSize(20)
+        font.setItalic(True)
 
-		return super().show()
+        qp = QPainter()
+        qp.begin(self)
 
-	def hide(self) -> None:
-		self.parent().widget().setGraphicsEffect(None) # type: ignore
-		return super().hide()
+        # Enable antialiasing for smoother text rendering.
+        qp.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        qp.setFont(font)
+        # Set the text color to white.
+        qp.setPen(Qt.GlobalColor.white)
+        return qp
+
+    def show(self):
+        # Show the overlay with a blurred background.
+
+        # Move the overlay to the top-left corner of the parent widget.
+        self.move(0, 0)
+        # Resize the overlay to match the size of the parent widget.
+        self.resize(self.parent().size()) # type: ignore
+        self.blur_effect = QGraphicsBlurEffect()
+        # Set the blur radius for the background effect.
+        self.blur_effect.setBlurRadius(30)
+        # Apply the blur effect to the parent widget.
+        self.parent().widget().setGraphicsEffect(self.blur_effect) # type: ignore
+
+        return super().show()
+
+    def hide(self) -> None:
+        # Hide the overlay and remove the blur effect from the parent widget.
+
+        # Remove the blur effect from the parent widget.
+        self.parent().widget().setGraphicsEffect(None) # type: ignore
+        return super().hide()

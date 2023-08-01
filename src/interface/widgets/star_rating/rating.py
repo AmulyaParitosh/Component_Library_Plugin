@@ -8,64 +8,87 @@ from PySide6.QtWidgets import QHBoxLayout, QLabel, QWidget
 
 
 class Star(QLabel):
+    # Custom QLabel representing a star.
 
-	class State(Enum):
-		Empty = "src/interface/resources/emptystar.png"
-		Filled = "src/interface/resources/filledstar.png"
+    class State(Enum):
+        # Enum class to represent star states (filled or empty).
+        Empty = "src/interface/resources/emptystar.png"
+        Filled = "src/interface/resources/filledstar.png"
 
+    def __init__(self, parent):
+        # Constructor to initialize the Star.
 
-	def __init__(self, parent):
-		super().__init__(parent)
-		self.setFixedSize(QSize(25, 25))
-		self.setScaledContents(True)
+        super().__init__(parent)
 
-		self.state = None
+        # Set the fixed size of the star.
+        self.setFixedSize(QSize(25, 25))
 
-		self.setState(self.State.Empty)
+        # Enable scaled contents to resize the star while maintaining its aspect ratio.
+        self.setScaledContents(True)
 
+        # Initialize the state of the star.
+        self.state = None
 
-	def setState(self, state: Star.State):
+        # Set the default state of the star to empty.
+        self.setState(self.State.Empty)
 
-		if self.state == state:
-			return
+    def setState(self, state: Star.State):
+        # Method to set the state of the star.
 
-		self.state = state
-		self.setPixmap(QPixmap(state.value))
+        if self.state == state:
+            return
+
+        # Set the state of the star and update its pixmap accordingly.
+        self.state = state
+        self.setPixmap(QPixmap(state.value))
 
 
 class StarRating(QWidget):
+    # Custom QWidget class to represent a star rating system.
 
-	def __init__(self, parent: QWidget | None=None, default_value: float=0, max_value: int=5) -> None:
-		super().__init__(parent)
+    def __init__(self, parent: QWidget | None = None, default_value: float = 0, max_value: int = 5) -> None:
+        # Constructor to initialize the StarRating.
 
-		self.value: float = default_value
-		self.max_value: int = max_value
-		self.setupUi()
+        super().__init__(parent)
 
+        # Initialize the current value and the maximum value for the star rating.
+        self.value: float = default_value
+        self.max_value: int = max_value
 
-	def setupUi(self):
-		self.hbox_layout = QHBoxLayout()
-		self.setLayout(self.hbox_layout)
+        # Setup the user interface.
+        self.setupUi()
 
-		self.value_label = QLabel()
-		self.value_label.setFont(QFont('Arial', 14))
-		self.hbox_layout.addWidget(self.value_label)
+    def setupUi(self):
+        # Method to setup the user interface elements.
 
-		for i in range(1, self.max_value+1):
-			star = Star(self)
-			if i <= self.value:
-				star.setState(Star.State.Filled)
-			self.hbox_layout.addWidget(star)
+        # Create a horizontal layout for the star rating.
+        self.hbox_layout = QHBoxLayout()
+        self.setLayout(self.hbox_layout)
 
+        # Create a label to display the current value of the star rating.
+        self.value_label = QLabel()
+        self.value_label.setFont(QFont('Arial', 14))
+        self.hbox_layout.addWidget(self.value_label)
 
-	def setRating(self, rating: float):
-		self.value = rating
-		self.value_label.setNum(self.value)
+        # Create stars and add them to the layout based on the maximum value.
+        for i in range(1, self.max_value + 1):
+            star = Star(self)
+            if i <= self.value:
+                star.setState(Star.State.Filled)
+            self.hbox_layout.addWidget(star)
 
-		for i in range(1, self.hbox_layout.count()):
-			star: Star = self.hbox_layout.itemAt(i).widget() # type: ignore
+    def setRating(self, rating: float):
+        # Method to set the star rating value.
 
-			if i <= self.value:
-				star.setState(Star.State.Filled)
-			else:
-				star.setState(Star.State.Empty)
+        # Update the value and display it on the value label.
+        self.value = rating
+        self.value_label.setNum(self.value)
+
+        # Update the state of each star based on the current value.
+        for i in range(1, self.hbox_layout.count()):
+            star: Star = self.hbox_layout.itemAt(i).widget()  # type: ignore
+
+            if i <= self.value:
+                star.setState(Star.State.Filled)
+            else:
+                star.setState(Star.State.Empty)
