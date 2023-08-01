@@ -5,7 +5,7 @@ from PySide6.QtCore import Slot
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QProgressBar, QWidget
 
-from .....data import FileTypes, File
+from .....data import File, FileTypes
 from .....manager import ManagerInterface, OnlineRepoManager
 from ....widgets import ComponentItem, StatefullPushButton, Thumbnail
 from ..base_detail_view import BaseDetailedView
@@ -15,6 +15,7 @@ class DownloadStates(Enum):
 	DOWNLOAD = auto()
 	IN_PROGRESS = auto()
 	FINISHED = auto()
+
 
 class OnlineDetailedView(BaseDetailedView):
 	manager: OnlineRepoManager
@@ -159,7 +160,8 @@ class OnlineDetailedView(BaseDetailedView):
 	def update_download_button_state(self):
 		if self.is_file_on_download():
 			self.downloadPushButton.setState(DownloadStates.IN_PROGRESS)
-		elif self.current_file().EXISTS:
-			self.downloadPushButton.setState(DownloadStates.FINISHED)
+		elif file := self.current_file():
+			if file is not None and file.EXISTS:
+				self.downloadPushButton.setState(DownloadStates.FINISHED)
 		else:
 			self.downloadPushButton.setState(DownloadStates.DOWNLOAD)

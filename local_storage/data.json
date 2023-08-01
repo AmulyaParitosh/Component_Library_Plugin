@@ -1,20 +1,20 @@
 {
     "components": [
-        "lcd-4x20-backlight",
-        "3.5_rpi_tft_display_spi_480x320",
-        "14soic-n",
-        "2020_corner_bracket",
         "3pin-female-2.54mm-connector",
+        "2020_corner_bracket",
         "2020x50_v_slot_profile",
-        "2-4_tft_spi_240x320"
+        "2-4_tft_spi_240x320",
+        "14soic-n",
+        "3.5_rpi_tft_display_spi_480x320",
+        "lcd-4x20-backlight"
     ],
     "tags": {
         "electronics parts": [
-            "lcd-4x20-backlight",
-            "3.5_rpi_tft_display_spi_480x320",
-            "14soic-n",
             "3pin-female-2.54mm-connector",
-            "2-4_tft_spi_240x320"
+            "2-4_tft_spi_240x320",
+            "14soic-n",
+            "3.5_rpi_tft_display_spi_480x320",
+            "lcd-4x20-backlight"
         ],
         "displays": [
             "lcd-4x20-backlight",
@@ -29,12 +29,12 @@
             "lcd-4x20-backlight"
         ],
         "mechanical parts": [
-            "2020x50_v_slot_profile",
-            "2020_corner_bracket"
+            "2020_corner_bracket",
+            "2020x50_v_slot_profile"
         ],
         "mountings": [
-            "2020x50_v_slot_profile",
-            "2020_corner_bracket"
+            "2020_corner_bracket",
+            "2020x50_v_slot_profile"
         ],
         "2020_v-slot_al_extrusion": [
             "2020x50_v_slot_profile"
@@ -62,11 +62,11 @@
             "2-4_tft_spi_240x320"
         ],
         "fcstd": [
-            "lcd-4x20-backlight",
-            "3.5_rpi_tft_display_spi_480x320",
             "2020_corner_bracket",
+            "2020x50_v_slot_profile",
             "14soic-n",
-            "2020x50_v_slot_profile"
+            "3.5_rpi_tft_display_spi_480x320",
+            "lcd-4x20-backlight"
         ],
         "step": [
             "lcd-4x20-backlight",

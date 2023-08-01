@@ -1,12 +1,12 @@
+from functools import wraps
 from typing import Callable
 
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QWidget
 
+from ....data import DTypes
 from ....manager import ManagerInterface, OnlineRepoManager
 from ....manager.page import PageStates
-from ....data import DataFactory, DTypes
-# from ....manager.data_loader import load_tags
 from ...widgets.overlay import LoadingOverlay
 from ..base_view import BaseView
 from .Ui_grid_view import Ui_gridView
@@ -58,11 +58,12 @@ class GridView(BaseView):
 
 	@staticmethod
 	def loading(func: Callable):
-		def wraper(self, *args, **kwargs):
+		@wraps(func)
+		def wrapper(self, *args, **kwargs):
 			self.loading_overlay.loading = True
 			self.ui.scrollArea.verticalScrollBar().setValue(0)
 			return func(self, *args, **kwargs)
-		return wraper
+		return wrapper
 
 	@Slot()
 	def components_response_handler(self):

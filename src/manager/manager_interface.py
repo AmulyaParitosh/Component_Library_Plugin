@@ -1,19 +1,19 @@
+from functools import cache
 from pathlib import Path
 from typing import Any
-from functools import cache
 
-from PySide6.QtCore import Signal, Slot
+from PySide6.QtCore import QEventLoop, Signal, Slot
+from PySide6.QtNetwork import QNetworkRequest
 
-from ..api import (ApiInterface, CMSApi, CMSReply, ComponentRequest,
-                   construct_multipart, getApi, LocalApi)
+from ..api import (ApiInterface, CMSApi, CMSReply, ComponentRequest, LocalApi,
+                   construct_multipart, getApi)
 from ..config import Config
-from ..data import Component, FileTypes, DTypes, DataFactory
+from ..data import Component, DataFactory, DTypes, FileTypes
 from ..utils import ABCQObject
 from .downloader import FileDownloader
 from .page import PageStates
 from .query import ComponentQueryInterface, RepoComponentQuery
-from PySide6.QtCore import QEventLoop
-from PySide6.QtNetwork import QNetworkRequest
+
 
 class ManagerInterface(ABCQObject):
 	component_loaded: Signal
