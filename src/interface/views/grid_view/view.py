@@ -59,7 +59,8 @@ class GridView(BaseView):
 	@staticmethod
 	def loading(func: Callable):
 		@wraps(func)
-		def wrapper(self, *args, **kwargs):
+		def wrapper(*args, **kwargs):
+			self, *args = args
 			self.loading_overlay.loading = True
 			self.ui.scrollArea.verticalScrollBar().setValue(0)
 			return func(self, *args, **kwargs)
