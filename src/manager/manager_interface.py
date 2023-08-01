@@ -131,7 +131,7 @@ class LocalStorageManager(ManagerInterface):...
 class DbDataLoader:
 	def __init__(self, dtype: DTypes) -> None:
 		reply: CMSReply = getApi().read(QNetworkRequest(self.get_route(dtype)))
-		loop = QEventLoop()
+		loop = QEventLoop(parent=reply)
 		reply.finished.connect(loop.quit)
 		loop.exec()
 		self.data: list = reply.data.get("items", [])

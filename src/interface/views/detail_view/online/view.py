@@ -160,8 +160,7 @@ class OnlineDetailedView(BaseDetailedView):
 	def update_download_button_state(self):
 		if self.is_file_on_download():
 			self.downloadPushButton.setState(DownloadStates.IN_PROGRESS)
-		elif file := self.current_file():
-			if file is not None and file.EXISTS:
-				self.downloadPushButton.setState(DownloadStates.FINISHED)
+		elif self.current_file().EXISTS:
+			self.downloadPushButton.setState(DownloadStates.FINISHED)
 		else:
 			self.downloadPushButton.setState(DownloadStates.DOWNLOAD)
