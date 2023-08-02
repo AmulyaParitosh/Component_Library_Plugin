@@ -50,12 +50,12 @@ class Overlay(QWidget):
         # Move the overlay to the top-left corner of the parent widget.
         self.move(0, 0)
         # Resize the overlay to match the size of the parent widget.
-        self.resize(self.parent().size()) # type: ignore
+        self.resize(self.parent().size())
         self.blur_effect = QGraphicsBlurEffect()
         # Set the blur radius for the background effect.
         self.blur_effect.setBlurRadius(30)
         # Apply the blur effect to the parent widget.
-        self.parent().widget().setGraphicsEffect(self.blur_effect) # type: ignore
+        self.parent().widget().setGraphicsEffect(self.blur_effect)
 
         return super().show()
 
@@ -63,5 +63,5 @@ class Overlay(QWidget):
         # Hide the overlay and remove the blur effect from the parent widget.
 
         # Remove the blur effect from the parent widget.
-        self.parent().widget().setGraphicsEffect(None) # type: ignore
+        self.parent().widget().setGraphicsEffect(None)
         return super().hide()

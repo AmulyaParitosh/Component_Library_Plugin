@@ -87,7 +87,7 @@ class GridView(BaseView):
     def initial_load(self):
         # Reload the page data and set tag suggestions for the tagBar from the database
         self.manager.reload_page()
-        self.ui.tagBar.set_suggestions(self.manager.load_from_db(DTypes.TAG)) # type: ignore
+        self.ui.tagBar.set_suggestions(self.manager.load_from_db(DTypes.TAG))
 
     @loading
     @Slot()

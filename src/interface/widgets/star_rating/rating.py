@@ -86,7 +86,7 @@ class StarRating(QWidget):
 
         # Update the state of each star based on the current value.
         for i in range(1, self.hbox_layout.count()):
-            star: Star = self.hbox_layout.itemAt(i).widget()  # type: ignore
+            star: Star = self.hbox_layout.itemAt(i).widget()
 
             if i <= self.value:
                 star.setState(Star.State.Filled)

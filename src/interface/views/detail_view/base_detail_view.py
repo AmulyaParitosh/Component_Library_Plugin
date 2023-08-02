@@ -13,9 +13,9 @@ class BaseDetailedView(BaseView):
     # Class attribute to store files being downloaded with their corresponding progress bars
     files_on_download = {}
     # Class attribute to store the thumbnail widget
-    thumbnail: Thumbnail = None  # type: ignore
+    thumbnail: Thumbnail = None
     # Class attribute to store the component being displayed in the detailed view
-    component: Component = None  # type: ignore
+    component: Component = None
 
     # Constructor for the BaseDetailedView class
     def __init__(self, parent: QWidget | None = None) -> None:

@@ -36,8 +36,8 @@ class PageStates(QObject):
 
     def load_page_data(self, json_response: dict[str, Any]) -> None:
         """Load the component data for the current page from the JSON response."""
-        self.data: list[Component] = DataFactory.load_many(data_list=json_response.get("items", []), dtype=DTypes.COMPONENT) # type: ignore
-        self.update_existing_comps(self.data) # type: ignore
+        self.data: list[Component] = DataFactory.load_many(data_list=json_response.get("items", []), dtype=DTypes.COMPONENT)
+        self.update_existing_comps(self.data)
 
         self.total_items = json_response.get("total", 0)
         self.page_no = json_response.get("page", 1)

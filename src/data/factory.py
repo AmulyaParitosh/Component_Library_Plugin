@@ -22,7 +22,7 @@ class DataFactory:
         # A method that returns an instance of the appropriate subclass based on the dtype provided.
 
         subclass: type = cls._registry.get(dtype, DataFactory)
-        return super().__new__(subclass)  # type: ignore
+        return super().__new__(subclass)
 
     def __is_field(self, attr):
         # A method to check if the attribute should be considered as a field for serialization.

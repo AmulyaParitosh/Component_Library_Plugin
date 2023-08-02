@@ -79,7 +79,7 @@ class TagBar(QWidget):
 
         # Remove all existing widgets from the tag bar.
         for i in reversed(range(self.h_layout.count())):
-            self.h_layout.itemAt(i).widget().setParent(None) # type: ignore
+            self.h_layout.itemAt(i).widget().setParent(None)
 
         # Add each tag to the tag bar.
         for tag in self.tags:

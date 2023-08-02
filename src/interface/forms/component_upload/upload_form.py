@@ -38,8 +38,8 @@ class ComponetUploadDialog(QDialog):
         self.ui.bottomWidget.layout().addWidget(self.discard_button)
 
         # Set suggestions for tags and licenses using the OnlineRepoManager.
-        self.ui.tagsWidget.set_suggestions(self.manager.load_from_db(DTypes.TAG)) # type: ignore
-        self.ui.licenseInput.addItems((license.fullname for license in self.manager.load_from_db(DTypes.LICENSE))) # type: ignore
+        self.ui.tagsWidget.set_suggestions(self.manager.load_from_db(DTypes.TAG))
+        self.ui.licenseInput.addItems((license.fullname for license in self.manager.load_from_db(DTypes.LICENSE)))
 
     def pack_data(self):
         # Method to pack the data entered in the form.
@@ -48,9 +48,9 @@ class ComponetUploadDialog(QDialog):
             "author": self.ui.authorInput.text(),
             "description": self.ui.descriptionInput.toPlainText(),
             "license_id": next((
-                lis.id for # type: ignore
+                lis.id for
                 lis in self.manager.load_from_db(DTypes.LICENSE)
-                if lis.fullname == self.ui.licenseInput.currentText() # type: ignore
+                if lis.fullname == self.ui.licenseInput.currentText()
             )),
             "maintainer": self.ui.maintainerInput.text(),
             "name": self.ui.componentNameInput.text(),

@@ -39,13 +39,13 @@ class File(_Data, dtype=DTypes.FILE):
     updated_at: str
     size: int
     url: str
-    type: FileTypes = field(default=None)  # type: ignore
+    type: FileTypes = field(default=None)
     EXISTS: bool = False
 
     def __post_init__(self, *args, **kwargs):
         # Post-initialization method for File objects.
 
-        self.type = FileTypes(self.type.get("name"))  # Convert the type to a FileTypes enum. # type: ignore
+        self.type = FileTypes(self.type.get("name"))  # Convert the type to a FileTypes enum.
 
 
 @dataclass(kw_only=True)
@@ -94,8 +94,8 @@ class Component(DataFactory, dtype=DTypes.COMPONENT):
     def __post_init__(self, *args, **kwargs):
         # Post-initialization method for Component objects.
 
-        self.metadata = DataFactory(dtype=DTypes.METADATA, **self.metadata)  # Create a Metadata object. # type: ignore
+        self.metadata = DataFactory(dtype=DTypes.METADATA, **self.metadata)  # Create a Metadata object.
         self.files = {file.type: file for file in
-                      DataFactory.load_many(data_list=self.files, dtype=DTypes.FILE)}  # Create File objects. # type: ignore
-        self.license = DataFactory(dtype=DTypes.LICENSE, **self.license)  # Create a License object. # type: ignore
-        self.tags = DataFactory.load_many(data_list=self.tags, dtype=DTypes.TAG)  # Create Tag objects. # type: ignore
+                      DataFactory.load_many(data_list=self.files, dtype=DTypes.FILE)}  # Create File objects.
+        self.license = DataFactory(dtype=DTypes.LICENSE, **self.license)  # Create a License object.
+        self.tags = DataFactory.load_many(data_list=self.tags, dtype=DTypes.TAG)  # Create Tag objects.

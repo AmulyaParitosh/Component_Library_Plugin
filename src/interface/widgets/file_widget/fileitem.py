@@ -107,4 +107,4 @@ class FileList(QWidget):
     @property
     def filepaths(self) -> list[str]:
         # Property to get the list of filepaths currently in the list.
-        return [self.list_widget.itemWidget(self.list_widget.item(i)).filepath for i in range(self.list_widget.count())]  # type: ignore
+        return [self.list_widget.itemWidget(self.list_widget.item(i)).filepath for i in range(self.list_widget.count())]

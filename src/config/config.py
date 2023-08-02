@@ -16,4 +16,4 @@ class Config:
     GITHUB_ACCESS_TOKEN = os.getenv("ACCESS_TOKEN", "")
 
     # Define the LOCAL_COMPONENT_PATH constant as a Path object representing the "test/local_storage" path
-    LOCAL_COMPONENT_PATH = Path("test/local_storage")
+    LOCAL_COMPONENT_PATH = Path("local_storage")
