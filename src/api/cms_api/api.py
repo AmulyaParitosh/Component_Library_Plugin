@@ -17,7 +17,6 @@ class CMSApi(ApiInterface):
     network_access_manager, sslConfig = get_network_access_manager()
 
     BASEURL: str = Config.API_URL + '/api'
-    # TODO check if local api takes path as init argument or is defined. both should be same.
 
     def __init__(self) -> None:
         super().__init__()

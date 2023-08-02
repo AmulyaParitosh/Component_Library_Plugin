@@ -157,6 +157,7 @@ class RepoComponentQuery(ComponentQueryInterface):
             value = [v.strip() for v in value if v]
         self.__columns = value
 
+
 class LocalComponentQuery(ComponentQueryInterface):...
     # Implementation of the ComponentQueryInterface for querying components locally.
 
