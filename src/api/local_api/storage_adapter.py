@@ -2,6 +2,8 @@ import json
 from pathlib import Path
 from typing import TypedDict
 
+from ...utils import singleton
+
 # Type alias for a set of strings representing components in local data
 LocalDataComp = set[str]
 
@@ -33,8 +35,8 @@ class SetJSONDecoder(json.JSONDecoder):
         return f
 
 # Class for managing and interacting with local data stored in a JSON file
+@singleton
 class LocalData:
-    # TODO make it singleton
 
     def __init__(self, storage_path: Path) -> None:
         # If the folder does not exixt, create it.

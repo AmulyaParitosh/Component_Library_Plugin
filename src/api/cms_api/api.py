@@ -1,4 +1,3 @@
-from functools import cache
 from typing import Any
 
 from PySide6.QtCore import QUrl
@@ -7,15 +6,18 @@ from PySide6.QtNetwork import QNetworkRequest
 from src.config.config import Config
 
 from ...network import get_network_access_manager
+from ...utils import singleton
 from ..base_api import ApiInterface
 from .replies import CMSReply
 
 
 # API interface class that implements CRUD operations using QNetworkAccessManager
+@singleton
 class CMSApi(ApiInterface):
     network_access_manager, sslConfig = get_network_access_manager()
 
     BASEURL: str = Config.API_URL + '/api'
+    # TODO check if local api takes path as init argument or is defined. both should be same.
 
     def __init__(self) -> None:
         super().__init__()
@@ -45,16 +47,3 @@ class CMSApi(ApiInterface):
     def delete(self, request: QNetworkRequest) -> CMSReply:
         self.prepare_api_request(request)
         return CMSReply(self.network_access_manager.deleteResource(request), self)
-
-
-# Cache decorator ensures that the function result is cached for subsequent calls with the same arguments
-@cache
-def getApi() -> CMSApi:
-    # This function returns an instance of CMSApi, using caching to store the result
-    return CMSApi()
-    # TODO apply singleton with
-    # _instance = None
-    # def __new__(cls, *args, **kwargs):
-    #     if cls._instance is None:
-    #         cls._instance = super().__new__(cls)
-    #     return cls._instance

@@ -6,7 +6,7 @@ from PySide6.QtCore import QEventLoop, Signal, Slot
 from PySide6.QtNetwork import QNetworkRequest
 
 from ..api import (ApiInterface, CMSApi, CMSReply, ComponentRequest, LocalApi,
-                   construct_multipart, getApi)
+                   construct_multipart)
 from ..config import Config
 from ..data import Component, DataFactory, DTypes, FileTypes
 from ..utils import ABCQObject
@@ -17,9 +17,12 @@ from .query import ComponentQueryInterface, RepoComponentQuery
 
 class ManagerInterface(ABCQObject):
     # A base abstract class representing the interface of a manager.
+
+    # TODO make it a Protocol
     component_loaded: Signal
 
     api: ApiInterface
+    # TODO remove api if protocol thing doesnot work
     page_states: PageStates
     query: ComponentQueryInterface
 
@@ -52,7 +55,7 @@ class OnlineRepoManager(ManagerInterface):
 
     def __init__(self) -> None:
         super().__init__()
-        self.api: CMSApi = getApi()
+        self.api = CMSApi()
         self.local = LocalApi()
 
     def request_components(self) -> CMSReply:
@@ -170,7 +173,7 @@ class DbDataLoader:
     # A class to load data from the database.
 
     def __init__(self, dtype: DTypes) -> None:
-        reply: CMSReply = getApi().read(QNetworkRequest(self.get_route(dtype)))
+        reply: CMSReply = CMSApi().read(QNetworkRequest(self.get_route(dtype)))
         loop = QEventLoop(parent=reply)
         reply.finished.connect(loop.quit)
         loop.exec()
