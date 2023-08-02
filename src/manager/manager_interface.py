@@ -18,11 +18,9 @@ from .query import ComponentQueryInterface, RepoComponentQuery
 class ManagerInterface(ABCQObject):
     # A base abstract class representing the interface of a manager.
 
-    # TODO make it a Protocol
     component_loaded: Signal
 
     api: ApiInterface
-    # TODO remove api if protocol thing doesnot work
     page_states: PageStates
     query: ComponentQueryInterface
 
