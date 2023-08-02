@@ -40,12 +40,12 @@ class GridView(BaseView):
     # Connect signals to their respective slots
     def setupSignals(self):
         self.ui.searchLineEdit.returnPressed.connect(self.search_enter_pressed)
-        self.ui.nextButton.clicked.connect(self.on_nextButton_clicked)
-        self.ui.prevButton.clicked.connect(self.on_prevButton_clicked)
-        self.ui.sortComboBox.currentTextChanged.connect(self.on_sortComboBox_change)
-        self.ui.orderComboBox.currentTextChanged.connect(self.on_ordCombBox_change)
-        self.ui.fileTypeComboBox.selectionUpdated.connect(self.on_fileTypeComboBox_change)
-        self.ui.tagBar.tags_edited.connect(self.on_tagBar_tag_edited)
+        self.ui.nextButton.clicked.connect(self.nextButtclicked)
+        self.ui.prevButton.clicked.connect(self.prevButtclicked)
+        self.ui.sortComboBox.currentTextChanged.connect(self.sortComboBox_change)
+        self.ui.orderComboBox.currentTextChanged.connect(self.ordCombBox_change)
+        self.ui.fileTypeComboBox.selectionUpdated.connect(self.fileTypeComboBox_change)
+        self.ui.tagBar.tags_edited.connect(self.tagBar_tag_edited)
 
     # Set up the manager for the GridView
     def setupManager(self, manager: ManagerInterface):
@@ -91,13 +91,13 @@ class GridView(BaseView):
 
     @loading
     @Slot()
-    def on_nextButton_clicked(self):
+    def nextButtclicked(self):
         # Request loading the next page of data
         self.manager.next_page()
 
     @loading
     @Slot()
-    def on_prevButton_clicked(self):
+    def prevButtclicked(self):
         # Request loading the previous page of data
         self.manager.prev_page()
 
@@ -109,7 +109,7 @@ class GridView(BaseView):
 
     @loading
     @Slot(str)
-    def on_sortComboBox_change(self, value: str):
+    def sortComboBox_change(self, value: str):
         # Perform sorting based on the selected value and the orderComboBox's current text
         self.manager.sort(
             by=value,
@@ -118,7 +118,7 @@ class GridView(BaseView):
 
     @loading
     @Slot(str)
-    def on_ordCombBox_change(self, value: str):
+    def ordCombBox_change(self, value: str):
         # Perform sorting based on the sortComboBox's current text and the selected value
         self.manager.sort(
             by=self.ui.sortComboBox.currentText(),
@@ -127,7 +127,7 @@ class GridView(BaseView):
 
     @loading
     @Slot(list)
-    def on_fileTypeComboBox_change(self, checked_items: list[str]):
+    def fileTypeComboBox_change(self, checked_items: list[str]):
         # Perform filtering based on checked filetypes and tags from tagBar
         self.manager.filter(
             filetypes=checked_items,
@@ -136,7 +136,7 @@ class GridView(BaseView):
 
     @loading
     @Slot()
-    def on_tagBar_tag_edited(self, tags: list[str]):
+    def tagBar_tag_edited(self, tags: list[str]):
         # Update the manager's query tags and perform filtering based on filetypes and tags
         self.manager.query.tags = tags
         self.manager.filter(

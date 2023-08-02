@@ -25,7 +25,7 @@ class BaseDetailedView(BaseView):
 
     # Abstract method that must be implemented in derived classes
     @abstractmethod
-    def on_backPushButton_click(self):...
+    def backPushButton_click(self):...
         # This method should handle the backPushButton click in the detailed view
         # Its implementation will vary in the derived classes.
         # The 'abstractmethod' decorator makes it mandatory to implement this method in the derived classes.

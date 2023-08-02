@@ -32,7 +32,7 @@ class OnlineDetailedView(BaseDetailedView):
     # Initialize the user interface elements
     def setupUi(self):
         self.ui.setupUi(self)
-        self.ui.backPushButton.clicked.connect(self.on_backPushButton_click)
+        self.ui.backPushButton.clicked.connect(self.backPushButton_click)
         self.ui.contentLabel.setFont(QFont('Arial', 28))
         font_14 = QFont('Arial', 14)
         self.ui.descriptionTextBrowser.setFont(font_14)
@@ -49,7 +49,7 @@ class OnlineDetailedView(BaseDetailedView):
     def setupSignals(self):
         self.downloadPushButton.register_state(
             DownloadStates.DOWNLOAD,
-            self.on_downloadButton_click,
+            self.downloadButton_click,
             "Download",
             True
         )
@@ -106,13 +106,13 @@ class OnlineDetailedView(BaseDetailedView):
 
     # Slot method to handle backPushButton click
     @Slot()
-    def on_backPushButton_click(self):
+    def backPushButton_click(self):
         # Switch back to the grid view when the back button is clicked
         self.topLevelWidget().switch_to_grid_view() # type: ignore
 
     # Slot method to handle downloadButton click
     @Slot()
-    def on_downloadButton_click(self):
+    def downloadButton_click(self):
         file = self.current_file()
         if file is None:
             return
@@ -128,7 +128,7 @@ class OnlineDetailedView(BaseDetailedView):
             file.type,
         )
         downloader.downloadProgress.connect(self.__update_download_progress)
-        downloader.finished.connect(self.on_component_downloaded)
+        downloader.finished.connect(self.component_downloaded)
         print("Download started...")
 
     # Slot method to update the download progress
@@ -143,7 +143,7 @@ class OnlineDetailedView(BaseDetailedView):
 
     # Slot method to handle component download completion
     @Slot(Path)
-    def on_component_downloaded(self, filepath: Path):
+    def component_downloaded(self, filepath: Path):
         file = self.current_file()
         if file is None:
             return
