@@ -44,8 +44,7 @@ class Window(QMainWindow):
     def setupSignals(self):
         # Connect the 'clicked' signal of the browseButton to the 'switch_to_grid_view' method
         self.ui.browseButton.clicked.connect(self.switch_to_grid_view)
-
-        # The uploadButton is connected automatically through QMetaObject.connectSlotsByName()
+        self.ui.uploadButton.clicked.connect(self.uploadButton_clicked)
 
     # Method to set up the network and connect views to the OnlineRepoManager
     def setupNetwork(self):
@@ -68,7 +67,7 @@ class Window(QMainWindow):
 
     # Slot method to handle the uploadButton click
     @Slot()
-    def on_uploadButton_clicked(self):
+    def uploadButton_clicked(self):
         # Create a component using the ComponetUploadDialog and the OnlineRepoManager
         data = ComponetUploadDialog.create_component(self, self.repo_manager)
         print(data)
