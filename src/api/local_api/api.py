@@ -1,12 +1,13 @@
 import json
-from functools import cache
 
 from ...config import Config
 from ...data import Component, DataFactory, FileTypes
+from ...utils import singleton
 from ..base_api import ApiInterface
 from .storage_adapter import LocalData, LocalDataComp
 
 
+@singleton
 class LocalApi(ApiInterface):
     # A class representing a local API interface for CRUD operations on components.
 
@@ -53,18 +54,3 @@ class LocalApi(ApiInterface):
     def metadata_path(cls, component_name: str):
         # Get the path of the metadata file for a component based on its name.
         return cls.component_path(component_name)/"metadata.json"
-
-
-@cache
-def getApi() -> LocalApi:
-    # Function to get a singleton instance of LocalApi.
-
-    return LocalApi()
-    # Return an instance of LocalApi class (the same instance if it already exists).
-
-    # TODO apply singleton with
-    # _instance = None
-    # def __new__(cls, *args, **kwargs):
-    #     if cls._instance is None:
-    #         cls._instance = super().__new__(cls)
-    #     return cls._instance
