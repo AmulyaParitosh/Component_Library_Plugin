@@ -3,9 +3,9 @@ from typing import Any
 
 from PySide6.QtCore import QObject, Signal
 
-from ..api.local_api.storage_adapter import LocalData
-from ..config import Config
-from ..data import Component, DataFactory, DTypes
+from ...api.local_api.storage_adapter import LocalData
+from ...config import Config
+from ...data import Component, DataFactory, DTypes
 
 
 @dataclass

@@ -1,7 +1,7 @@
 from PySide6.QtCore import QFile, QIODevice, QUrl, QUrlQuery
 from PySide6.QtNetwork import QHttpMultiPart, QHttpPart, QNetworkRequest
 
-from ...manager.query import RepoComponentQuery
+from .query import RepoComponentQuery
 
 
 # Custom class for constructing network requests for components

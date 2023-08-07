@@ -5,48 +5,21 @@ from typing import Any
 from PySide6.QtCore import QEventLoop, Signal, Slot
 from PySide6.QtNetwork import QNetworkRequest
 
-from ..api import (ApiInterface, CMSApi, CMSReply, ComponentRequest, LocalApi,
-                   construct_multipart)
-from ..config import Config
-from ..data import Component, DataFactory, DTypes, FileTypes
-from ..utils import ABCQObject
-from .downloader import FileDownloader
-from .page import PageStates
-from .query import ComponentQueryInterface, RepoComponentQuery
-
-
-class ManagerInterface(ABCQObject):
-    # A base abstract class representing the interface of a manager.
-
-    component_loaded: Signal
-
-    api: ApiInterface
-    page_states: PageStates
-    query: ComponentQueryInterface
-
-    def reload_page(self):
-        """Method to reload the current page."""
-
-    def next_page(self):
-        """Method to load the next page of data."""
-
-    def prev_page(self):
-        """Method to load the previous page of data."""
-
-    def search(self, search_key: str):
-        """Method to search for components using the given search_key."""
-
-    def sort(self, /, by: str, order: str):
-        """Method to sort components based on the given criteria."""
-
-    def filter(self, /, filetypes: list[str], tags: list[str]):
-        """Method to filter components based on filetypes and tags."""
+from ...api.cms_api import (CMSApi, CMSReply, ComponentRequest,
+                            RepoComponentQuery, construct_multipart)
+from ...api.local_api import LocalApi
+from ...config import Config
+from ...data import Component, DataFactory, DTypes, FileTypes
+from ..download_manager import FileDownloader
+from ..page_manager import PageStates
+from .base import ManagerInterface
 
 
 class OnlineRepoManager(ManagerInterface):
     # A manager class for an online repository.
 
     component_loaded = Signal()
+    api : CMSApi
 
     query: RepoComponentQuery = RepoComponentQuery()
     page_states = PageStates()
@@ -160,11 +133,6 @@ class OnlineRepoManager(ManagerInterface):
 
         # Emit the component_loaded signal to notify other parts of the application that components are loaded
         self.component_loaded.emit()
-
-
-class LocalStorageManager(ManagerInterface):
-    # A manager class for local storage.
-    pass
 
 
 class DbDataLoader:

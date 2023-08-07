@@ -1,50 +1,4 @@
-from abc import ABC, abstractproperty
-from typing import Any, Union
-
-QueryParam = Union[Any, str]
-
-class ComponentQueryInterface(ABC):
-    # Abstract Base Class for component query interface.
-
-    @abstractproperty
-    def page(self) -> QueryParam:
-        """Abstract property representing the page number or query parameter for pagination."""
-        ...
-
-    @abstractproperty
-    def page_size(self) -> QueryParam:
-        """Abstract property representing the page size or query parameter for pagination."""
-        ...
-
-    @abstractproperty
-    def search_key(self) -> QueryParam:
-        """Abstract property representing the search key or query parameter for searching components."""
-        ...
-
-    @abstractproperty
-    def sort_by(self) -> QueryParam:
-        """Abstract property representing the sort key or query parameter for sorting components."""
-        ...
-
-    @abstractproperty
-    def sort_ord(self) -> QueryParam:
-        """Abstract property representing the sort order or query parameter for sorting components."""
-        ...
-
-    @abstractproperty
-    def file_types(self) -> QueryParam:
-        """Abstract property representing the file types or query parameter for filtering components by file types."""
-        ...
-
-    @abstractproperty
-    def tags(self) -> QueryParam:
-        """Abstract property representing the tags or query parameter for filtering components by tags."""
-        ...
-
-    @abstractproperty
-    def columns(self) -> QueryParam:
-        """Abstract property representing the columns or query parameter for selecting specific columns in the result."""
-        ...
+from ..base_query import ComponentQueryInterface
 
 
 class RepoComponentQuery(ComponentQueryInterface):
@@ -156,10 +110,3 @@ class RepoComponentQuery(ComponentQueryInterface):
         if value is not None:
             value = [v.strip() for v in value if v]
         self.__columns = value
-
-
-class LocalComponentQuery(ComponentQueryInterface):...
-    # Implementation of the ComponentQueryInterface for querying components locally.
-
-    # It will have similar properties and setters as the RepoComponentQuery class, but with different logic
-    # for querying components locally instead of from a remote repository.

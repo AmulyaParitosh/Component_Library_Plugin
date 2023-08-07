@@ -42,8 +42,8 @@ class Window(QMainWindow):
 
     # Method to set up signal-slot connections for UI elements
     def setupSignals(self):
-        # Connect the 'clicked' signal of the browseButton to the 'switch_to_grid_view' method
-        self.ui.browseButton.clicked.connect(self.switch_to_grid_view)
+        # Connect the 'clicked' signal of the browseButton to the 'display_grid_view' method
+        self.ui.browseButton.clicked.connect(self.display_grid_view)
         self.ui.uploadButton.clicked.connect(self.uploadButton_clicked)
 
     # Method to set up the network and connect views to the OnlineRepoManager
@@ -61,7 +61,7 @@ class Window(QMainWindow):
 
     # Slot method to switch to the grid view
     @Slot()
-    def switch_to_grid_view(self):
+    def display_grid_view(self):
         # Set the GridView as the current widget in the stacked widget
         self.ui.stackedWidget.setCurrentWidget(self.gridView)
 
@@ -73,5 +73,5 @@ class Window(QMainWindow):
         print(data)
 
     # Method to add a notification widget to the notification area in the main window
-    def add_notification(self, notification: QWidget):
+    def add_notification_widget(self, notification: QWidget):
         self.ui.notificationArea.addWidget(notification)

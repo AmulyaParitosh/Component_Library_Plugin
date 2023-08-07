@@ -108,7 +108,7 @@ class OnlineDetailedView(BaseDetailedView):
     @Slot()
     def backPushButton_click(self):
         # Switch back to the grid view when the back button is clicked
-        self.topLevelWidget().switch_to_grid_view()
+        self.topLevelWidget().display_grid_view()
 
     # Slot method to handle downloadButton click
     @Slot()
@@ -119,7 +119,7 @@ class OnlineDetailedView(BaseDetailedView):
 
         # Add a progress bar for the file being downloaded
         self.files_on_download[file.id] = QProgressBar()
-        self.topLevelWidget().add_notification(self.files_on_download[file.id])
+        self.topLevelWidget().add_notification_widget(self.files_on_download[file.id])
         self.downloadPushButton.setState(DownloadStates.IN_PROGRESS)
 
         # Start the component download process

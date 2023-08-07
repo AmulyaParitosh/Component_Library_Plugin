@@ -1,1 +1,2 @@
-from .manager_interface import ManagerInterface, OnlineRepoManager
+from .interface_manager import (LocalStorageManager, ManagerInterface,
+                                OnlineRepoManager)
