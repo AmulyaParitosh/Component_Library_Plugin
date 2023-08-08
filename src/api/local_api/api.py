@@ -28,14 +28,18 @@ class LocalApi(ApiInterface):
                 data["tags"].setdefault(tag.label, LocalDataComp()).add(comp_name)
                 # Add the component name to the corresponding tag set in the data.
 
-        with self.metadata_path(comp_name).open('w') as file:
-            metadata = DataFactory.serialize(component.metadata)
-            metadata.pop("thumbnail")  # Remove the 'thumbnail' field from the metadata.
-            json.dump(metadata, file, indent=4)
-            # Write the serialized metadata to the metadata file in JSON format with indentation.
+        with self.metadata_path(comp_name).open('w+') as file:
+            try:
+                prev_data = json.load(file)
+            except json.JSONDecodeError:
+                prev_data = {}
+            prev_data |= component.serialize()
+            json.dump(prev_data, file, indent=4)
 
 
-    def read(self):...
+    def read(self):
+        # TODO need list of component json with paginated data
+        pass
 
 
     def update(self):...

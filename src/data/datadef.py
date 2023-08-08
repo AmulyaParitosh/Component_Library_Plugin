@@ -99,3 +99,15 @@ class Component(DataFactory, dtype=DTypes.COMPONENT):
                       DataFactory.load_many(data_list=self.files, dtype=DTypes.FILE)}  # Create File objects.
         self.license = DataFactory(dtype=DTypes.LICENSE, **self.license)  # Create a License object.
         self.tags = DataFactory.load_many(data_list=self.tags, dtype=DTypes.TAG)  # Create Tag objects.
+
+    def serialize(self, base_info: bool = False):
+        data = super().serialize(base_info)
+        # return {filetype.value : value for filetype, value in data["files"].items()}
+        new_dict = {}
+        for key, value in data["files"].items():
+            value["type"] = value["type"].value
+            new_dict[key.value] = value
+
+        data["files"] = new_dict
+
+        return data

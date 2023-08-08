@@ -1,3 +1,4 @@
+import contextlib
 from dataclasses import asdict, is_dataclass
 from typing import Any, Callable
 
@@ -44,8 +45,9 @@ class DataFactory:
 
         if not base_info:
             for key in ("id", "created_at", "updated_at"):
-                data.pop(key)
-                # If base_info is False, remove "id", "created_at", and "updated_at" fields from the dictionary.
+                with contextlib.suppress(KeyError):
+                    data.pop(key)
+                        # If base_info is False, remove "id", "created_at", and "updated_at" fields from the dictionary.
 
         return data
 
