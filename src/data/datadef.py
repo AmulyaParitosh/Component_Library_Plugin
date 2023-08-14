@@ -41,7 +41,7 @@ class File(_Data, dtype=DTypes.FILE):
     size: int = 0
     url: str = None
     type: FileTypes = field(default=None)
-    EXISTS: bool = False
+    exists: bool = False
 
     def __post_init__(self, *args, **kwargs):
         # the data from api has type as dict but in local it is string

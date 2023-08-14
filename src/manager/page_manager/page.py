@@ -53,7 +53,7 @@ class PageStates(QObject):
         for file in component.files:
             existing_comps = local_data["filetypes"].get(file.value, set())
             # Set the existence status of the file based on whether the component name is in the existing_comps set.
-            component.files[file].EXISTS = component.metadata.name in existing_comps
+            component.files[file].exists = component.metadata.name in existing_comps
 
     def calculate_pagination(self) -> None:
         """Calculate the pagination and emit signals to enable/disable next and previous buttons."""

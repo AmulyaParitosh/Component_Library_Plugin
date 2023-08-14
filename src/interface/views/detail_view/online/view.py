@@ -107,7 +107,7 @@ class OnlineDetailedView(BaseDetailedView):
             return
         self.downloadPushButton.setState(DownloadStates.FINISHED)
         # Mark the file as existing (downloaded successfully)
-        file.EXISTS = True
+        file.exists = True
         # Remove the file id and progress bar from the files_on_download dictionary
         self.files_on_download.pop(file.id)
         print("Download Successful!")
@@ -130,7 +130,7 @@ class OnlineDetailedView(BaseDetailedView):
             self.downloadPushButton.setState(DownloadStates.IN_PROGRESS)
 
         # Check if the current file exists (downloaded successfully)
-        elif self.current_file().EXISTS:
+        elif self.current_file().exists:
             # ! This produces an error when current_file() returns None
             self.downloadPushButton.setState(DownloadStates.FINISHED)
         else:
