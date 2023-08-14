@@ -2,7 +2,7 @@ from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QMainWindow, QWidget
 
 from ..interface.forms import ComponetUploadDialog
-from ..interface.views import GridView, OnlineDetailedView, LocalDetailedView
+from ..interface.views import GridView, LocalDetailedView, OnlineDetailedView
 from ..interface.widgets import ComponentItem
 from ..manager import LocalStorageManager, OnlineRepoManager
 from .Ui_window import Ui_MainWindow
@@ -34,9 +34,6 @@ class Window(QMainWindow):
     def setupUi(self):
         self.ui.setupUi(self)
 
-        # TODO add self.localDetailView once it's defined
-
-        # Create an instance of the OnlineDetailedView class and insert it into the stacked widget
         self.onlineGridView = GridView(self)
         self.ui.stackedWidget.insertWidget(0, self.onlineGridView)
 
@@ -52,8 +49,6 @@ class Window(QMainWindow):
         self.ui.stackedWidget.insertWidget(3, self.localDetailView)
         self.localGridView.detailView = self.localDetailView
 
-
-        # Create an instance of the onlineGridView class and insert it into the stacked widget
 
     # Method to set up signal-slot connections for UI elements
     def setupSignals(self):
@@ -82,7 +77,6 @@ class Window(QMainWindow):
     # Slot method to switch to the grid view
     @Slot()
     def display_grid_view(self):
-        # TODO make it a partial funcation with the main function accepting a view
         # Set the onlineGridView as the current widget in the stacked widget
         self.ui.stackedWidget.setCurrentWidget(self.onlineGridView)
 

@@ -53,7 +53,6 @@ class LocalApi(ApiInterface):
 
 
     def read(self):
-        # TODO need list of component json with paginated data
         data = {
             "items" : [],
             "page": 0,
@@ -63,7 +62,7 @@ class LocalApi(ApiInterface):
         for path in Config.LOCAL_COMPONENT_PATH.iterdir():
             if not path.is_dir():
                 continue
-            with open(path/"metadata.json", 'r') as metadata:
+            with open(path/"metadata.json", 'r', encoding="utf-8") as metadata:
                 data["items"].append(json.load(metadata))
             data["total"] += 1
             data["page"] = data["total"] // data["per_page"] +1
