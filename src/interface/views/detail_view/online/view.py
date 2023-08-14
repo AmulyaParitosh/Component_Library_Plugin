@@ -2,17 +2,16 @@ from enum import Enum, auto
 from pathlib import Path
 
 from PySide6.QtCore import Slot
-from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QProgressBar, QWidget
 
-from .....data import File, FileTypes
 from .....manager import ManagerInterface, OnlineRepoManager
-from ....widgets import ComponentItem, StatefullPushButton, Thumbnail
+from ....widgets import ComponentItem, StatefullPushButton
 from ..base_detail_view import BaseDetailedView
+
 
 # Enum to represent different download states
 class DownloadStates(Enum):
-    DOWNLOAD = auto()
+    AVAILABLE = auto()
     IN_PROGRESS = auto()
     FINISHED = auto()
 
@@ -31,16 +30,7 @@ class OnlineDetailedView(BaseDetailedView):
 
     # Initialize the user interface elements
     def setupUi(self):
-        self.ui.setupUi(self)
-        self.ui.backPushButton.clicked.connect(self.backPushButton_click)
-        self.ui.contentLabel.setFont(QFont('Arial', 28))
-        font_14 = QFont('Arial', 14)
-        self.ui.descriptionTextBrowser.setFont(font_14)
-        self.ui.authorValue.setFont(font_14)
-        self.ui.licenseValue.setFont(font_14)
-        self.ui.maintainerValue.setFont(font_14)
-        self.ui.createdValue.setFont(font_14)
-        self.ui.updatedValue.setFont(font_14)
+        super().setupUi()
 
         self.downloadPushButton = StatefullPushButton(self)
         self.addControlWidget(self.downloadPushButton)
@@ -48,7 +38,7 @@ class OnlineDetailedView(BaseDetailedView):
     # Connect signals to their respective slots
     def setupSignals(self):
         self.downloadPushButton.register_state(
-            DownloadStates.DOWNLOAD,
+            DownloadStates.AVAILABLE,
             self.downloadButton_click,
             "Download",
             True
@@ -61,7 +51,7 @@ class OnlineDetailedView(BaseDetailedView):
         )
         self.downloadPushButton.register_state(
             DownloadStates.FINISHED,
-            None,
+            self.removeButton_click,
             "Remove",
             True
         )
@@ -74,41 +64,9 @@ class OnlineDetailedView(BaseDetailedView):
 
     # Update the content based on the given ComponentItem
     def updateContent(self, comp_item: ComponentItem):
-        self.component = comp_item.component
-
-        self._update_thumbnail(comp_item.ui.thumbnail)
-        self._update_filetype_combobox()
+        super().updateContent(comp_item)
         self.update_download_button_state()
 
-        self.ui.contentLabel.setText(self.component.metadata.name)
-        self.ui.descriptionTextBrowser.setText(self.component.metadata.description)
-        self.ui.authorValue.setText(self.component.metadata.author)
-        self.ui.maintainerValue.setText(self.component.metadata.maintainer)
-        self.ui.createdValue.setText(self.component.metadata.created_at)
-        self.ui.updatedValue.setText(self.component.metadata.updated_at)
-        self.ui.ratingwidget.setRating(self.component.metadata.rating)
-        self.ui.licenseValue.setText(self.component.license.fullname)
-
-    # Update the thumbnail widget
-    def _update_thumbnail(self, thumbnail_widget):
-        if self.thumbnail is not None:
-            self.ui.thumbnailAreaHorizontalLayout.removeWidget(self.thumbnail)
-
-        self.thumbnail = Thumbnail.from_existing(self, thumbnail_widget)
-        self.ui.thumbnailAreaHorizontalLayout.addWidget(self.thumbnail)
-
-    # Update the filetype combobox based on the component files
-    def _update_filetype_combobox(self):
-        self.ui.filetypeComboBox.clear()
-        for file in self.component.files:
-            self.ui.filetypeComboBox.addItem(file.value)
-        self.ui.filetypeComboBox.setCurrentIndex(0)
-
-    # Slot method to handle backPushButton click
-    @Slot()
-    def backPushButton_click(self):
-        # Switch back to the grid view when the back button is clicked
-        self.topLevelWidget().display_grid_view()
 
     # Slot method to handle downloadButton click
     @Slot()
@@ -162,13 +120,7 @@ class OnlineDetailedView(BaseDetailedView):
         return (file is not None) and (file.id in self.files_on_download)
 
     # Get the current file selected in the filetypeComboBox
-    def current_file(self) -> File | None:
-		# Return the corresponding File object based on the current file type in the combobox
-        txt = self.ui.filetypeComboBox.currentText()
-        # TODO Check why txt produces empty string
-        if txt and FileTypes(txt):
-            return self.component.files.get(FileTypes(txt))
-        # ! should not return None. Investigate
+
 
     # Slot method to update the download button state based on the selected file type
     @Slot(str)
@@ -182,5 +134,11 @@ class OnlineDetailedView(BaseDetailedView):
             # ! This produces an error when current_file() returns None
             self.downloadPushButton.setState(DownloadStates.FINISHED)
         else:
-            # Set the download button state to 'DOWNLOAD' (not downloaded)
-            self.downloadPushButton.setState(DownloadStates.DOWNLOAD)
+            # Set the download button state to 'AVAILABLE' (not downloaded)
+            self.downloadPushButton.setState(DownloadStates.AVAILABLE)
+
+    @Slot()
+    def removeButton_click(self):
+        self.manager.remove_file(self.component, self.current_file().type)
+        self.downloadPushButton.setState(DownloadStates.AVAILABLE)
+        # ! SOME errors are occuring

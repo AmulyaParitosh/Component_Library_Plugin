@@ -1,4 +1,3 @@
-import contextlib
 from dataclasses import asdict, is_dataclass
 from typing import Any, Callable
 
@@ -19,11 +18,10 @@ class DataFactory:
         if dtype:
             cls._registry[dtype] = cls
 
-    def __new__(cls, dtype: DTypes = DTypes.GENERIC, **kwargs: dict[str, Any]):
-        # A method that returns an instance of the appropriate subclass based on the dtype provided.
-
+    @classmethod
+    def create(cls, dtype: DTypes = DTypes.GENERIC, **kwargs: dict[str, Any]):
         subclass: type = cls._registry.get(dtype, DataFactory)
-        return super().__new__(subclass)
+        return subclass(**kwargs)
 
     def __is_field(self, attr):
         # A method to check if the attribute should be considered as a field for serialization.
@@ -40,20 +38,11 @@ class DataFactory:
             return {attr: getattr(self, attr) for attr in dir(self) if self.__is_field(attr)}
             # Serialize non-dataclass objects by including only non-private, non-method attributes.
 
-        data = asdict(self)
-        # Convert the dataclass object to a dictionary.
-
-        if not base_info:
-            for key in ("id", "created_at", "updated_at"):
-                with contextlib.suppress(KeyError):
-                    data.pop(key)
-                        # If base_info is False, remove "id", "created_at", and "updated_at" fields from the dictionary.
-
-        return data
+        return asdict(self)
 
     @staticmethod
-    def load_many(data_list: list, dtype: DTypes = DTypes.GENERIC):
+    def load_many(data_list: list, dtype: DTypes):
         # A static method to create and load multiple data objects from a list of dictionaries.
 
-        return [DataFactory(dtype=dtype, **data) for data in data_list]
+        return [DataFactory.create(dtype=dtype, **data) for data in data_list]
         # Create and load data objects using the provided dtype and data from the list.

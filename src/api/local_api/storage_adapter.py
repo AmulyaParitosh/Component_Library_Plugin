@@ -1,8 +1,12 @@
 import json
 from pathlib import Path
-from typing import TypedDict
+from typing import TypedDict, Any
+
+from src.data.datadef import DataJsonEncoder
 
 from ...utils import singleton
+from ...data import Component, DataFactory, DTypes
+from ...config import Config
 
 # Type alias for a set of strings representing components in local data
 LocalDataComp = set[str]
@@ -71,3 +75,37 @@ class LocalData:
                 },
                 file, indent=4,
             )
+
+class ComponentDataDict(TypedDict):
+    files : dict[str, dict[str, Any]]
+    id : str
+    license : dict[str, Any]
+    metadata : dict[str, Any]
+    tags : list[dict[str, Any]]
+
+class ComponentData:
+
+    def __init__(self, component_data_path: Path):
+        self.data_path = component_data_path
+        self.data_path.touch(exist_ok=True)
+
+    def __enter__(self) -> Component:
+        with self.data_path.open('r') as file:
+            try:
+                self.existing_data: Component = DataFactory.create(dtype=DTypes.COMPONENT, **json.load(file))
+            except json.JSONDecodeError:
+                self.existing_data: Component = DataFactory.create(dtype=DTypes.COMPONENT, **self._default_dict())
+        return self.existing_data
+
+    def __exit__(self, exc_type, exc_value, exc_tb):
+        with self.data_path.open('w') as file:
+            json.dump(self.existing_data, file, indent=4, cls=DataJsonEncoder)
+
+    def _default_dict(self):
+        return {
+                    "files": {},
+                    "id": "",
+                    "license": {},
+                    "metadata": {},
+                    "tags": [],
+                }

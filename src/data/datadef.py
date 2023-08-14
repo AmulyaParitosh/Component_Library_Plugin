@@ -1,3 +1,4 @@
+import json
 from dataclasses import InitVar, dataclass, field
 
 from .data_types import DTypes, FileTypes
@@ -9,9 +10,9 @@ class _Data(DataFactory, dtype=None):
     # A base dataclass representing generic data objects.
 
     dtype: InitVar[DTypes|None] = None
-    id: str
-    created_at: str
-    updated_at: str
+    id: str = None
+    created_at: str = None
+    updated_at: str = None
 
     def __post_init__(self, *args, **kwargs):...
         # Placeholder for any post-initialization logic.
@@ -35,48 +36,49 @@ class GenericData(DataFactory, dtype=DTypes.GENERIC):
 class File(_Data, dtype=DTypes.FILE):
     # A dataclass representing File data objects.
 
-    metadata_id: str
-    updated_at: str
-    size: int
-    url: str
+    metadata_id: str = None
+    updated_at: str = None
+    size: int = 0
+    url: str = None
     type: FileTypes = field(default=None)
     EXISTS: bool = False
 
     def __post_init__(self, *args, **kwargs):
-        # Post-initialization method for File objects.
-
-        self.type = FileTypes(self.type.get("name"))  # Convert the type to a FileTypes enum.
+        # the data from api has type as dict but in local it is string
+        try:
+            self.type = FileTypes(self.type.get("name"))
+        except AttributeError:
+            self.type = FileTypes(self.type)
 
 
 @dataclass(kw_only=True)
 class License(_Data, dtype=DTypes.LICENSE):
     # A dataclass representing License data objects.
 
-    identifier: str
-    fullname: str
-    license_page: str
-    fsf_free: bool
-    osi_approved: bool
+    identifier: str = None
+    fullname: str = None
+    license_page: str = None
+    fsf_free: bool = False
+    osi_approved: bool = False
 
 
 @dataclass(kw_only=True)
 class Metadata(_Data, dtype=DTypes.METADATA):
     # A dataclass representing Metadata data objects.
 
-    license_id: str
-    name: str
-    author: str
-    maintainer: str
-    description: str
-    rating: float
-    thumbnail: str
-    version: str
+    license_id: str = None
+    name: str = None
+    author: str = None
+    maintainer: str = None
+    description: str = None
+    rating: float = 0
+    thumbnail: str = None
+    version: str = None
 
 
 @dataclass(kw_only=True)
 class Tag(_Data, dtype=DTypes.TAG):
     # A dataclass representing Tag data objects.
-
     label: str = ""
 
 
@@ -85,29 +87,39 @@ class Component(DataFactory, dtype=DTypes.COMPONENT):
     # A dataclass representing Component data objects.
 
     dtype: InitVar[DTypes|None] = None
-    id: str
-    metadata: Metadata
-    files: dict[FileTypes, File]
-    license: License
-    tags: list[Tag]
+    id: str = ''
+    metadata: Metadata = None
+    files: dict[FileTypes, File] = field(default_factory=dict)
+    license: License = None
+    tags: list[Tag] = field(default_factory=list)
 
     def __post_init__(self, *args, **kwargs):
         # Post-initialization method for Component objects.
 
-        self.metadata = DataFactory(dtype=DTypes.METADATA, **self.metadata)  # Create a Metadata object.
-        self.files = {file.type: file for file in
-                      DataFactory.load_many(data_list=self.files, dtype=DTypes.FILE)}  # Create File objects.
-        self.license = DataFactory(dtype=DTypes.LICENSE, **self.license)  # Create a License object.
-        self.tags = DataFactory.load_many(data_list=self.tags, dtype=DTypes.TAG)  # Create Tag objects.
+        self.metadata = DataFactory.create(dtype=DTypes.METADATA, **self.metadata)
+
+        # files object from api is a list and in local it is a dict
+        if isinstance(self.files, list):
+            self.files = {file.type: file for file in
+                        DataFactory.load_many(data_list=self.files, dtype=DTypes.FILE)}
+        elif isinstance(self.files, dict):
+            self.files = {file.type: file for file in
+                        DataFactory.load_many(data_list=list(self.files.values()), dtype=DTypes.FILE)}
+        self.license = DataFactory.create(dtype=DTypes.LICENSE, **self.license)
+        self.tags = DataFactory.load_many(data_list=self.tags, dtype=DTypes.TAG)
 
     def serialize(self, base_info: bool = False):
-        data = super().serialize(base_info)
-        # return {filetype.value : value for filetype, value in data["files"].items()}
-        new_dict = {}
-        for key, value in data["files"].items():
-            value["type"] = value["type"].value
-            new_dict[key.value] = value
-
-        data["files"] = new_dict
-
+        original_files = self.files
+        self.files = {key.value: value for key, value in self.files.items()}
+        data = super().serialize()
+        self.files = original_files
         return data
+
+
+class DataJsonEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (Component, Metadata, File, License, Tag)):
+            return obj.serialize()
+        if isinstance(obj, FileTypes):
+            return obj.value
+        return json.JSONEncoder.default(self, obj)

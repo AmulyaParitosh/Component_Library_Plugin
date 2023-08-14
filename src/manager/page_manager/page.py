@@ -32,7 +32,6 @@ class PageStates(QObject):
         """Load the page data from the JSON response and calculate pagination."""
         self.load_page_data(json_response)
         self.calculate_pagination()
-        return self
 
     def load_page_data(self, json_response: dict[str, Any]) -> None:
         """Load the component data for the current page from the JSON response."""

@@ -125,14 +125,17 @@ class OnlineRepoManager(ManagerInterface):
     def __component_response_handler(self, json_data: dict[str, Any]):
         """Slot to handle the response from the API when components are loaded."""
         # Load the received JSON data into the PageStates object to update the page information
-        page: PageStates = self.page_states.load_page(json_data)
+        self.page_states.load_page(json_data)
 
         # Update the query's page and page_size based on the received page information
-        self.query.page = page.page_no
-        self.query.page_size = page.size
+        self.query.page = self.page_states.page_no
+        self.query.page_size = self.page_states.size
 
         # Emit the component_loaded signal to notify other parts of the application that components are loaded
         self.component_loaded.emit()
+
+    def remove_file(self, component: Component, filetype: FileTypes):
+        self.local.delete(component, filetype)
 
 
 class DbDataLoader:

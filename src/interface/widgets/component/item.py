@@ -1,3 +1,4 @@
+import PySide6.QtGui
 from PySide6.QtWidgets import QWidget
 
 # Import the necessary components from the application.
@@ -32,11 +33,15 @@ class ComponentItem(QWidget):
         # Set up the thumbnail using the Thumbnail widget.
         self.ui.thumbnail.setupThumbnail(self.component.metadata.thumbnail)
 
+    def parentGrigView(self):
+        return self.parent().parent().parent().parent()
+
+
+    def mousePressEvent(self, event) -> None:
+        self.topLevelWidget().widgetStack.append(self.parentGrigView())
+        return super().mousePressEvent(event)
+
+
     def mouseReleaseEvent(self, event) -> None:
-        # Override the mouseReleaseEvent to display the detail view of the component.
-
-        # Call the top-level widget's display_detail_view method with this item.
-        self.topLevelWidget().display_detail_view(self)
-
-        # Call the base class's mouseReleaseEvent.
+        self.topLevelWidget().display_detail_view(self, self.parentGrigView())
         return super().mouseReleaseEvent(event)

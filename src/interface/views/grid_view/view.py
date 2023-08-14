@@ -9,6 +9,7 @@ from ....manager import ManagerInterface, OnlineRepoManager
 from ....manager.page_manager import PageStates
 from ...widgets.overlay import LoadingOverlay
 from ..base_view import BaseView
+from ..detail_view.base_detail_view import BaseDetailedView
 from .Ui_grid_view import Ui_gridView
 
 
@@ -22,6 +23,7 @@ class GridView(BaseView):
 
         # Create an instance of the UI class for the GridView
         self.ui = Ui_gridView()
+        self.detailView : BaseDetailedView = None
 
         # Call the setupUi and setupSignals methods
         self.setupUi()
