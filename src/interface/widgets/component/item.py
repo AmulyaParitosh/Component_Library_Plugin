@@ -43,5 +43,7 @@ class ComponentItem(QWidget):
 
 
     def mouseReleaseEvent(self, event) -> None:
-        self.topLevelWidget().display_detail_view(self, self.parentGrigView())
-        return super().mouseReleaseEvent(event)
+        posMouse =  event.pos()
+        if self.rect().contains(posMouse):
+            self.topLevelWidget().display_detail_view(self, self.parentGrigView())
+            return super().mouseReleaseEvent(event)

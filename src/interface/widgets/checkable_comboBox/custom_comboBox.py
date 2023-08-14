@@ -1,6 +1,6 @@
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import QComboBox
-
+from PySide6.QtGui import QStandardItem
 
 class CheckableComboBox(QComboBox):
     # Custom QComboBox that supports checkable items.
@@ -24,7 +24,7 @@ class CheckableComboBox(QComboBox):
     def handleItemPressed(self, index):
         # Method to handle item presses and toggle the check state.
 
-        item = self.model().itemFromIndex(index)  # Get the model item from index.
+        item: QStandardItem = self.model().itemFromIndex(index)  # Get the model item from index.
 
         # Toggle the check state when an item is pressed.
         if item.checkState() == Qt.CheckState.Checked:
@@ -53,13 +53,13 @@ class CheckableComboBox(QComboBox):
     def itemChecked(self, index):
         # Method to check if a specific item is checked.
 
-        item = self.model().item(index, self.modelColumn())
+        item: QStandardItem = self.model().item(index, self.modelColumn())
         return item.checkState() == Qt.CheckState.Checked
 
     def setItemChecked(self, index, checked=True):
         # Method to set the check state of a specific item.
 
-        item = self.model().item(index, self.modelColumn())
+        item: QStandardItem = self.model().item(index, self.modelColumn())
         if checked:
             item.setCheckState(Qt.CheckState.Checked)
         else:
@@ -71,7 +71,7 @@ class CheckableComboBox(QComboBox):
         checkedItems: list[str] = []
 
         for i in range(self.count()):
-            item = self.model().item(i, 0)
+            item: QStandardItem = self.model().item(i, 0)
             if item.checkState() == Qt.CheckState.Checked:
                 checkedItems.append(item.text())
 
@@ -80,14 +80,14 @@ class CheckableComboBox(QComboBox):
     def index_is_checked(self, index):
         # Method to check if a specific index is checked.
 
-        item = self.model().item(index, 0)
+        item: QStandardItem = self.model().item(index, 0)
         return item.checkState() == Qt.CheckState.Checked
 
     def make_pre_checked(self):
         # Method to set all items as checked initially.
 
         for i in range(self.count()):
-            item = self.model().item(i, 0)
+            item: QStandardItem = self.model().item(i, 0)
             if item.checkState() == Qt.CheckState.Checked:
                 continue
             item.setCheckState(Qt.CheckState.Checked)

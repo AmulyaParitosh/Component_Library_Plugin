@@ -42,8 +42,8 @@ class GridView(BaseView):
     # Connect signals to their respective slots
     def setupSignals(self):
         self.ui.searchLineEdit.returnPressed.connect(self.search_enter_pressed)
-        self.ui.nextButton.clicked.connect(self.nextButtclicked)
-        self.ui.prevButton.clicked.connect(self.prevButtclicked)
+        self.ui.nextButton.clicked.connect(self.nextButtonclicked)
+        self.ui.prevButton.clicked.connect(self.prevButtonclicked)
         self.ui.sortComboBox.currentTextChanged.connect(self.sortComboBox_change)
         self.ui.orderComboBox.currentTextChanged.connect(self.ordCombBox_change)
         self.ui.fileTypeComboBox.selectionUpdated.connect(self.fileTypeComboBox_change)
@@ -93,13 +93,13 @@ class GridView(BaseView):
 
     @loading
     @Slot()
-    def nextButtclicked(self):
+    def nextButtonclicked(self):
         # Request loading the next page of data
         self.manager.next_page()
 
     @loading
     @Slot()
-    def prevButtclicked(self):
+    def prevButtonclicked(self):
         # Request loading the previous page of data
         self.manager.prev_page()
 
