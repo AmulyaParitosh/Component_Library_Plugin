@@ -8,7 +8,10 @@ from ...network.network_manager import get_network_access_manager
 
 
 class FileDownloader(QObject):
-    # A class for downloading files from the network.
+    """
+    FileDownloader Handles downloading of files/components (any resource) ans saves it locally.
+    """
+    # TODO: Add explanation of the class purpose and functionality.
 
     finished = Signal(Path)  # Signal emitted when the download is finished.
     error = Signal(QNetworkReply.NetworkError)  # Signal emitted when there's an error during download.
@@ -16,15 +19,21 @@ class FileDownloader(QObject):
     network_access_manager, sslConfig = get_network_access_manager()
 
     def __init__(self, url: str, save_path: Path, filename: str) -> None:
+        """
+        __init__ FileDownloader initializer
+
+        Args:
+            url (str): url of the resource to be downloaded
+            save_path (Path): the destination of the the file to be saved
+            filename (str): name by which the resource will be saved
+        """
         super().__init__()
 
-        # Store the URL, save_path, and filename for the file to be downloaded
         self.url = QUrl(url)
         save_path.mkdir(exist_ok=True)
         self.filename: str = filename
         self.filepath = save_path / self.filename
 
-        # Create a network request to download the file
         request = QNetworkRequest(self.url)
         self.reply: QNetworkReply = self.network_access_manager.get(request)
         self.reply.finished.connect(lambda: self.__downloaded(self.reply))
@@ -33,30 +42,28 @@ class FileDownloader(QObject):
     @Slot(QNetworkReply)
     def __downloaded(self, reply: QNetworkReply):
         """Slot to handle the download completion and saving the downloaded file."""
-
         if reply.error() != QNetworkReply.NetworkError.NoError:
-            # If there was an error during the download, emit the error signal with the error code
             print(f"Error: {reply.error()}")
             self.error.emit(reply.error())
 
         file = QFile(self.filepath)
 
         if file.open(QIODevice.OpenModeFlag.WriteOnly):
-            # Write the downloaded data to the file
             file.write(reply.readAll())
 
         file.close()
 
-        # Emit the finished signal with the path of the downloaded file
         self.finished.emit(self.filepath)
 
-        # Clean up resources
         reply.deleteLater()
         self.deleteLater()
 
 
 class ImageLoader(QObject):
-    # A class for loading images from the network.
+    """
+    ImageLoader Downloads the image but does not save it at some location but serialises it as QImage.
+    """
+    # TODO: Add explanation of the class purpose and functionality.
 
     LOADING_THUMBNAIL_PATH = "src/interface/resources/loading.jpeg"
     DEFAULT_THUMBNAIL_PATH = "src/interface/resources/default.png"
@@ -69,34 +76,45 @@ class ImageLoader(QObject):
         super().__init__(parent)
 
     def start_download(self, url: QUrl):
-        """Method to start downloading the image from the given URL."""
+        """
+        start_download makes the request for downloading the image.
 
-        # Create a network request to download the image
+        Args:
+            url (QUrl): url of the image.
+        """
         reply: QNetworkReply = self.network_access_manager.get(QNetworkRequest(url))
         reply.finished.connect(lambda: self.handle_finished(reply))
 
     def handle_finished(self, reply: QNetworkReply):
-        """Method to handle the finished download and emit the loaded image."""
+        """
+        handle_finished Method to handle the finished download and emit the loaded image.
 
-        # Load the image from the network reply and emit the finished signal with the loaded image
+        Args:
+            reply (QNetworkReply): the reply object of the request.
+        """
         image = self.load_image_from_reply(reply)
 
         if image.isNull():
-            # If the image loading failed, print an error message and return
             print("Error: Unable to load image from the reply.")
             return
 
         self.finished.emit(image)
 
-        # Clean up resources
         reply.deleteLater()
 
     def load_image_from_reply(self, reply: QNetworkReply) -> QImage:
-        """Method to load an image from the network reply."""
+        """
+        load_image_from_reply Method to load an image from the network reply.
+
+        Args:
+            reply (QNetworkReply): the reply from which the image is to be loaded.
+
+        Returns:
+            QImage: serialised QImage.
+        """
         image = QImage()
 
         if reply.error() == QNetworkReply.NetworkError.ProtocolUnknownError:
-            # If the network protocol is unknown, load a default thumbnail image
             default_thumbnail_file = QFile(self.DEFAULT_THUMBNAIL_PATH)
 
             if default_thumbnail_file.open(QIODevice.OpenModeFlag.ReadOnly):
@@ -105,7 +123,6 @@ class ImageLoader(QObject):
                 image.loadFromData(content)
 
         elif reply.error() == QNetworkReply.NetworkError.NoError:
-            # Load the image from the reply data if there was no error
             image.loadFromData(reply.readAll())
 
         return image

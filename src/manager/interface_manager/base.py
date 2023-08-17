@@ -6,28 +6,56 @@ from ..page_manager import PageStates
 
 
 class ManagerInterface(ABCQObject):
-    # A base abstract class representing the interface of a manager.
-
     component_loaded: Signal
-
     api: ApiInterface
     page_states: PageStates
     query: ComponentQueryInterface
 
     def reload_page(self):
-        """Method to reload the current page."""
+        """
+        Method to reload the current page.
+        """
 
     def next_page(self):
-        """Method to load the next page of data."""
+        """
+        Method to load the next page of data.
+        """
 
     def prev_page(self):
-        """Method to load the previous page of data."""
+        """
+        Method to load the previous page of data.
+        """
 
     def search(self, search_key: str):
-        """Method to search for components using the given search_key."""
+        """
+        Method to search for components using the given search_key.
+
+        Parameters
+        ----------
+        search_key : str
+            the component name to search
+        """
 
     def sort(self, /, by: str, order: str):
-        """Method to sort components based on the given criteria."""
+        """
+        Method to sort components based on the given criteria.
+
+        Parameters
+        ----------
+        by : str
+            the value by which to sort
+        order : str
+            sorting order
+        """
 
     def filter(self, /, filetypes: list[str], tags: list[str]):
-        """Method to filter components based on filetypes and tags."""
+        """
+        Method to filter components based on filetypes and tags.
+
+        Parameters
+        ----------
+        filetypes : list[str]
+            filetypes to filter
+        tags : list[str]
+            tags to filter
+        """

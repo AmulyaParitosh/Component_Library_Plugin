@@ -12,9 +12,8 @@ from .base import ManagerInterface
 
 class LocalStorageManager(ManagerInterface):
     component_loaded = Signal()
-    api : LocalApi
+    api: LocalApi
 
-    # query : LocalComponentQuery = LocalComponentQuery()
     page_states = PageStates()
 
     def __init__(self) -> None:
@@ -25,15 +24,17 @@ class LocalStorageManager(ManagerInterface):
         """Method to request components from the API using the current query."""
         components = self.api.read()
         self.page_states.load_page(components)
-        self.component_loaded.emit()
+        self.component_loaded.emit()  # Emit signal after components are loaded.
 
     def reload_page(self):
         return self.request_components()
 
     def load_from_db(self, dtype: DTypes):
+        # Load data from the database based on the data type.
         match dtype:
             case DTypes.TAG:
                 return DataFactory.load_many(self.api.get_tags(), dtype)
 
     def remove_file(self, component: Component, filetype: FileTypes):
+        # Remove a file associated with a component.
         self.api.delete(component, filetype)

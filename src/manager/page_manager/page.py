@@ -10,31 +10,46 @@ from ...data import Component, DataFactory, DTypes
 
 @dataclass
 class PageStates(QObject):
-    # Class representing the state of pagination for a list of components.
-
+    """
+    PageStates This class manages the page states and the data of the page.
+    Including pagination and signals for next/prev page buttons.
+    """
     enable_next = Signal(bool)  # Signal to enable or disable the next page button.
     enable_prev = Signal(bool)  # Signal to enable or disable the previous page button.
 
-    data: list[Component] = field(default_factory=list)  # List of components for the current page.
-    total_items: int = 0  # Total number of items (components) available.
-    page_no: int = 0  # Current page number.
-    total_pages = 0  # Total number of pages.
-    size: int = 18  # Number of items (components) per page.
-    next_page: int | None = None  # Page number for the next page, or None if there's no next page.
-    prev_page: int | None = None  # Page number for the previous page, or None if there's no previous page.
+    data: list[Component] = field(default_factory=list)
+    total_items: int = 0
+    page_no: int = 0
+    total_pages = 0
+    size: int = 18
+    next_page: int | None = None
+    prev_page: int | None = None
 
     def __init__(self, *args, **kwargs):
-        # Initialize the QObject and the dataclass.
         super(QObject, self).__init__()
         super().__init__(*args, **kwargs)
 
     def load_page(self, json_response: dict[str, Any]):
-        """Load the page data from the JSON response and calculate pagination."""
+        """
+        Load page data from JSON response and calculate pagination.
+
+        Parameters
+        ----------
+        json_response : dict[str, Any]
+            the response forn the API.
+        """
         self.load_page_data(json_response)
-        self.calculate_pagination()
+        self.calculate_pagination()  # TODO: Calculate pagination and emit signals.
 
     def load_page_data(self, json_response: dict[str, Any]) -> None:
-        """Load the component data for the current page from the JSON response."""
+        """
+        Loads the page data and states
+
+        Parameters
+        ----------
+        json_response : dict[str, Any]
+            the response from API
+        """
         self.data: list[Component] = DataFactory.load_many(data_list=json_response.get("items", []), dtype=DTypes.COMPONENT)
         self.update_existing_comps(self.data)
 
@@ -43,41 +58,49 @@ class PageStates(QObject):
         self.size = json_response.get("per_page", 18)
 
     def update_existing_comps(self, components: list[Component]) -> None:
-        """Update the existing components with file existence information."""
+        """
+        Update the existing components with file existence information.
+
+        Parameters
+        ----------
+        components : list[Component]
+            list of the serialised components recieved from he API
+        """
         with LocalData(Config.LOCAL_COMPONENT_PATH) as local_data:
             for component in components:
                 self.update_existing_files_for_component(component, local_data)
 
     def update_existing_files_for_component(self, component: Component, local_data) -> None:
-        """Update the existing files for a component with their existence status."""
+        """
+        Update the existing files for a component with their existence status.
+
+        It checks if the file already exists in the local system or not and updates its status.
+
+        Parameters
+        ----------
+        component : Component
+            a component object to be updates
+        local_data : dict
+            an object that contains the local data information.(present in the LocalAPI)
+        """
         for file in component.files:
             existing_comps = local_data["filetypes"].get(file.value, set())
-            # Set the existence status of the file based on whether the component name is in the existing_comps set.
             component.files[file].exists = component.metadata.name in existing_comps
 
     def calculate_pagination(self) -> None:
         """Calculate the pagination and emit signals to enable/disable next and previous buttons."""
-        # Calculate the total number of pages needed to display all items based on the page size.
         self.total_pages = (self.total_items + self.size - 1) // self.size
 
         if self.page_no == 1:
-            # If the current page is the first page, there's no previous page.
             self.prev_page = None
-            # Emit a signal to disable the previous page button.
-            self.enable_prev.emit(False)
+            self.enable_prev.emit(False)  # Disable previous page button.
         else:
-            # If the current page is not the first page, calculate the previous page number.
             self.prev_page = self.page_no - 1
-            # Emit a signal to enable the previous page button.
-            self.enable_prev.emit(True)
+            self.enable_prev.emit(True)  # Enable previous page button.
 
         if (self.total_items - (self.page_no * self.size)) < 0:
-            # If there are no more items beyond the current page, there's no next page.
             self.next_page = None
-            # Emit a signal to disable the next page button.
-            self.enable_next.emit(False)
+            self.enable_next.emit(False)  # Disable next page button.
         else:
-            # If there are more items beyond the current page, calculate the next page number.
             self.next_page = self.page_no + 1
-            # Emit a signal to enable the next page button.
-            self.enable_next.emit(True)
+            self.enable_next.emit(True)  # Enable next page button.
