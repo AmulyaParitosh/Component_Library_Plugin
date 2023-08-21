@@ -11,4 +11,4 @@
 #|																|
 # --------------------------------------------------------------
 
-from .UI_thumbnail import Thumbnail
+from .thumbnail import Thumbnail

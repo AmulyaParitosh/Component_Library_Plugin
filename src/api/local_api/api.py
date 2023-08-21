@@ -15,7 +15,7 @@ import contextlib
 from copy import deepcopy
 import json
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable
 import shutil
 
 from ...config import Config
@@ -27,16 +27,47 @@ from .storage_adapter import LocalData, LocalDataComp, ComponentData, ComponentD
 
 @singleton
 class LocalApi(ApiInterface):
-    # A class representing a local API interface for CRUD operations on components.
+    """
+    A class representing a local API interface for CRUD operations on components.
+    """
 
-    def create(self, component: Component, filetype: FileTypes):
-        # Create a new component in the local storage.
+    def create(self, component: Component, filetype: FileTypes) -> None:
+        """
+        Create a new component in the local storage.
+
+        Args
+        ----
+        component : Component
+            The component to be created.
+        filetype : FileTypes
+            The type of file associated with the component.
+
+        Returns
+        -------
+        None
+        """
+
         self._handle_component_data_creation(component, filetype)
         self._handle_local_data_creation(component, filetype)
 
 
-    def _handle_component_data_creation(self, component: Component, filetype: FileTypes):
-        comp_name = component.metadata.name
+    def _handle_component_data_creation(self, component: Component, filetype: FileTypes) -> None:
+        """
+        Handle the creation of component data.
+
+        Args
+        ----
+        component : Component
+            The component to be created.
+        filetype : FileTypes
+            The type of file associated with the component.
+
+        Returns
+        -------
+        None
+        """
+
+        comp_name: str = component.metadata.name
 
         with ComponentData(self.metadata_path(comp_name)) as existing_data:
 
@@ -52,12 +83,25 @@ class LocalApi(ApiInterface):
             if component.metadata.thumbnail is not None:
                 existing_data.metadata.thumbnail = (self.component_path(comp_name)/f"thumbnail{Path(component.metadata.thumbnail).suffix}").absolute().as_uri()
 
-    def _handle_local_data_creation(self, component: Component, filetype: FileTypes):
-        comp_name = component.metadata.name  # Extract the name of the component.
+    def _handle_local_data_creation(self, component: Component, filetype: FileTypes) -> None:
+        """
+        Handle the creation of local data.
+
+        Args
+        ----
+        component : Component
+            The component for which local data is being created.
+        filetype : FileTypes
+            The type of file associated with the component.
+
+        Returns
+        -------
+        None
+        """
+
+        comp_name: str = component.metadata.name
 
         with LocalData(Config.LOCAL_COMPONENT_PATH) as local_data:
-            # Open the LocalData storage adapter with the LOCAL_COMPONENT_PATH as the root path.
-
             local_data["components"].add(comp_name)
             local_data["filetypes"].setdefault(filetype.value, LocalDataComp()).add(comp_name)
 
@@ -65,7 +109,21 @@ class LocalApi(ApiInterface):
                 local_data["tags"].setdefault(tag.label, LocalDataComp()).add(comp_name)
 
 
-    def read(self):
+    def read(self) -> dict[str, Any]:
+        """
+        Read the component data from the local storage.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the component data.
+
+        Example
+        -------
+        api = LocalApi()
+        data = api.read()
+        print(data)
+        """
         data = {
             "items" : [],
             "page": 0,
@@ -85,7 +143,22 @@ class LocalApi(ApiInterface):
     def update(self):...
 
 
-    def delete(self, component: Component, filetypes: Iterable[FileTypes]|FileTypes):
+    def delete(self, component: Component, filetypes: Iterable[FileTypes]|FileTypes) -> None:
+        """
+        Delete the component and associated files from the local storage.
+
+        Args
+        ----
+        component : Component
+            The component to be deleted.
+        filetypes : Iterable[FileTypes]|FileTypes
+            The type(s) of files associated with the component.
+
+        Returns
+        -------
+        None
+        """
+
         comp_name = component.metadata.name
         component_path = self.component_path(comp_name)
         remove_component = False
@@ -109,15 +182,50 @@ class LocalApi(ApiInterface):
 
 
     @classmethod
-    def component_path(cls, component_name: str):
+    def component_path(cls, component_name: str) -> Path:
+        """
+        Get the path to the component directory.
+
+        Args
+        ----
+        component_name : str
+            The name of the component.
+
+        Returns
+        -------
+        Path
+            The path to the component directory.
+        """
+
         return Config.LOCAL_COMPONENT_PATH/component_name
 
 
     @classmethod
-    def metadata_path(cls, component_name: str):
+    def metadata_path(cls, component_name: str) -> Path:
+        """
+        Get the path to the metadata file for a component.
+
+        Args
+        ----
+        component_name : str
+            The name of the component.
+
+        Returns
+        -------
+        Path
+            The path to the metadata file.
+        """
         return cls.component_path(component_name)/"metadata.json"
 
 
-    def get_tags(self):
+    def get_tags(self) -> list[dict[str, str]]:
+        """
+        Get the tags from the local data.
+
+        Returns
+        -------
+        list[dict[str, str]]
+            A list of dictionaries containing the tags.
+        """
         with LocalData(Config.LOCAL_COMPONENT_PATH) as local_data:
             return [{"label" : tag} for tag in local_data["tags"].keys()]

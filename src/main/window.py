@@ -21,89 +21,133 @@ from ..manager import LocalStorageManager, OnlineRepoManager
 from .Ui_window import Ui_MainWindow
 
 
-# Main application window class
 class Window(QMainWindow):
 
-    # Constructor for the Window class
     def __init__(self, parent=None) -> None:
+        """
+        Initialize the widget. This is the entry point for the class. You can override this if you want to do something other than setup the GUI and set up some things that are specific to the widget
+
+        Args:
+            parent: The parent of the widget
+        """
         super().__init__(parent=parent)
 
-        # Initialize the OnlineRepoManager
         self.repo_manager = OnlineRepoManager()
         self.local_manager = LocalStorageManager()
         self.widgetStack = []
 
-        # Show the main window
         self.show()
 
-        # Create an instance of the Ui_MainWindow class and assign it to the 'ui' attribute
         self.ui = Ui_MainWindow()
         self.setupUi()
         self.setupSignals()
-        self.setupManagers()
+        self.setupManagers(self.repo_manager, self.local_manager)
         self.display_grid_view()
 
-    # Method to set up the user interface (UI) for the main window
+
     def setupUi(self):
+        """
+        Setup the UI to work with the data. Called by __init__.
+        """
         self.ui.setupUi(self)
 
         self.onlineGridView = GridView(self)
-        self.ui.stackedWidget.insertWidget(0, self.onlineGridView)
-
         self.onlineDetailView = OnlineDetailedView(self)
-        self.ui.stackedWidget.insertWidget(1, self.onlineDetailView)
-        self.onlineGridView.detailView = self.onlineDetailView
-
-
         self.localGridView = GridView(self)
-        self.ui.stackedWidget.insertWidget(2, self.localGridView)
-
         self.localDetailView = LocalDetailedView(self)
+
+        self.ui.stackedWidget.insertWidget(0, self.onlineGridView)
+        self.ui.stackedWidget.insertWidget(1, self.onlineDetailView)
+        self.ui.stackedWidget.insertWidget(2, self.localGridView)
         self.ui.stackedWidget.insertWidget(3, self.localDetailView)
+
+        self.onlineGridView.detailView = self.onlineDetailView
         self.localGridView.detailView = self.localDetailView
 
 
-    # Method to set up signal-slot connections for UI elements
     def setupSignals(self):
-        # Connect the 'clicked' signal of the browseButton to the 'display_grid_view' method
+        """
+        Setup the signals that need to be connected to the UI. Called by __init__.
+        """
         self.ui.browseButton.clicked.connect(self.display_grid_view)
         self.ui.uploadButton.clicked.connect(self.uploadButton_clicked)
         self.ui.LocalButton.clicked.connect(self.display_local_components)
 
-    def setupManagers(self):
-        # Set up the manager for the onlineGridView and the OnlineDetailedView
-        self.onlineGridView.setupManager(self.repo_manager)
-        self.onlineDetailView.setupManager(self.repo_manager)
 
-        self.localGridView.setupManager(self.local_manager)
-        self.localDetailView.setupManager(self.local_manager)
+    def setupManagers(self, repo_manager: OnlineRepoManager, local_manager: LocalStorageManager):
+        """
+        Sets up the managers for the online and offline views.
 
-    # Method to display the detailed view of a selected item in the grid view
+        Parameters
+        ----------
+        repo_manager : OnlineRepoManager
+            The manager for the online views.
+        local_manager : LocalStorageManager
+            The manager for the offline views.
+        """
+        self.onlineGridView.setupManager(repo_manager)
+        self.onlineDetailView.setupManager(repo_manager)
+
+        self.localGridView.setupManager(local_manager)
+        self.localDetailView.setupManager(local_manager)
+
+
     def display_detail_view(self, item: ComponentItem, grid_view: GridView):
+        """
+        Display the detail view.
+
+        Parameters
+        ----------
+        item : ComponentItem
+            The ComponentItem that has to be displayed
+        grid_view : GridView
+            The GridView that contains the component
+        """
         grid_view.detailView.updateContent(item)
         self.ui.stackedWidget.setCurrentWidget(grid_view.detailView)
 
+
     def display_local_components(self):
+        """
+        Display locally installed components to the user.
+        """
         self.local_manager.request_components()
         self.ui.stackedWidget.setCurrentWidget(self.localGridView)
 
-    # Slot method to switch to the grid view
+
     @Slot()
     def display_grid_view(self):
-        # Set the onlineGridView as the current widget in the stacked widget
+        """
+        Display the grid view in the stacked widget. This is called when the user clicks on the back button from any detailed view.
+        """
         self.ui.stackedWidget.setCurrentWidget(self.onlineGridView)
+
 
     @Slot()
     def toLastWidget(self):
+        """
+        Switch to the last widget in the stack. This is useful when you want to switch back to a grid view from any detailed view.
+        """
         self.ui.stackedWidget.setCurrentWidget(self.widgetStack.pop())
 
-    # Slot method to handle the uploadButton click
+
     @Slot()
     def uploadButton_clicked(self):
-        # Create a component using the ComponetUploadDialog and the OnlineRepoManager
+        """
+        Create a component using the ComponetUploadDialog and OnlineRepoManager.
+        """
         data = ComponetUploadDialog.create_component(self, self.repo_manager)
         print(data)
 
-    # Method to add a notification widget to the notification area in the main window
+
     def add_notification_widget(self, notification: QWidget):
+        """
+        Add a widget to the notification area. This is a convenience method for adding widgets to the notification area.
+        This is mainly used for the download progress bar.
+
+        Parameters
+        ----------
+        notification : QWidget
+            The QWidget to add to the notification area
+        """
         self.ui.notificationArea.addWidget(notification)

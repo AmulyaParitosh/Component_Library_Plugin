@@ -18,33 +18,54 @@ from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QPushButton
 
 
-class StatefullPushButton(QPushButton):
-    # Custom QPushButton class that manages different button states.
+class StatefulPushButton(QPushButton):
+    """
+    Custom QPushButton class that manages different button states.
+    """
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
+        """
+        Constructor to initialize the StatefulPushButton.
+        """
         super().__init__(parent)
-        self.states = {}  # Dictionary to store different button states and their corresponding data.
+        self.states = {}
 
     def register_state(self, state: Enum, slot: Slot | None, text: str, enable: bool):
-        # Register a button state along with its properties.
+        """
+        Register a button state along with its properties.
 
+        Parameters
+        ----------
+        state : Enum
+            The state to register.
+        slot : Slot or None
+            Slot (function) to be connected when this state is active. Can be None.
+        text : str
+            Text to be displayed on the button when this state is active.
+        enable : bool
+            Enable or disable the button when this state is active.
+        """
         self.states[state] = {
-            "slot": slot,       # Slot (function) to be connected when this state is active. Can be None.
-            "text": text,       # Text to be displayed on the button when this state is active.
-            "enable": enable,   # Enable or disable the button when this state is active.
+            "slot": slot,
+            "text": text,
+            "enable": enable,
         }
 
-    def setState(self, state: Enum):
-        # Set the button state based on the provided Enum value.
+    def setState(self, state: Enum) -> None:
+        """
+        Set the button state based on the provided Enum value.
 
+        Parameters
+        ----------
+        state : Enum
+            The state to set for the button.
+        """
         if state not in self.states:
             raise ValueError(f"{state} not registered!")
 
         state_data = self.states[state]
 
-        self.setText(state_data["text"])  # Set the button text based on the state.
-
-        # Disconnect slots of other states, leaving only the slot for the current state connected.
+        self.setText(state_data["text"])
         for key, value in self.states.items():
             if key == state:
                 continue
@@ -52,7 +73,6 @@ class StatefullPushButton(QPushButton):
                 self.clicked.disconnect(value["slot"])
 
         if state_data["slot"]:
-            # If the current state has a slot, connect it to the clicked signal of the button.
             self.clicked.connect(state_data["slot"])
 
-        self.setEnabled(state_data["enable"])  # Set the enabled state of the button based on the state.
+        self.setEnabled(state_data["enable"])

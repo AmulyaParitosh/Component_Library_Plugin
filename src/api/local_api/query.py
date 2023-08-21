@@ -13,6 +13,7 @@
 
 from ..base_query import ComponentQueryInterface
 
+
 class LocalComponentQuery(ComponentQueryInterface):...
     # Implementation of the ComponentQueryInterface for querying components locally.
 

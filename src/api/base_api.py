@@ -19,20 +19,52 @@ from ..utils import ABCQObject
 
 
 class ApiInterface(ABCQObject):
-    # An abstract base class representing the interface for API operations.
+    """
+    An abstract base class representing the interface for API operations.
+    """
 
     @abstractmethod
-    def create(self, *args, **kwargs) -> QNetworkReply:...
-        # Abstract method for creating a new resource.
+    def create(self, *args, **kwargs) -> QNetworkReply:
+        """
+        Abstract method for creating a new resource.
+
+        Returns
+        -------
+        QNetworkReply
+            The network reply object.
+        """
+
 
     @abstractmethod
-    def read(self, *args, **kwargs) -> QNetworkReply:...
-        # Abstract method for reading a resource.
+    def read(self, *args, **kwargs) -> QNetworkReply:
+        """
+        Abstract method for reading a resource.
+
+        Returns
+        -------
+        QNetworkReply
+            The network reply object.
+        """
+
 
     @abstractmethod
-    def update(self, *args, **kwargs) -> QNetworkReply:...
-        # Abstract method for updating a resource.
+    def update(self, *args, **kwargs) -> QNetworkReply:
+        """
+        Abstract method for updating a resource.
+
+        Returns
+        -------
+        QNetworkReply
+            The network reply object.
+        """
 
     @abstractmethod
-    def delete(self, *args, **kwargs) -> QNetworkReply:...
-        # Abstract method for deleteing a resource.
+    def delete(self, *args, **kwargs) -> QNetworkReply:
+        """
+        Abstract method for deleting a resource.
+
+        Returns
+        -------
+        QNetworkReply
+            The network reply object.
+        """

@@ -13,14 +13,17 @@
 
 import json
 from dataclasses import InitVar, dataclass, field
-
+from typing import Any, Literal
 from .data_types import DTypes, FileTypes
 from .factory import DataFactory
 
 
 @dataclass(kw_only=True)
 class _Data(DataFactory, dtype=None):
-    # A base dataclass representing generic data objects.
+    """
+    Represents a data object with optional attributes.
+    This Class is not suposed to be initialized directly, but is a base for the main DataClases.
+    """
 
     dtype: InitVar[DTypes|None] = None
     id: str = None
@@ -28,26 +31,47 @@ class _Data(DataFactory, dtype=None):
     updated_at: str = None
 
     def __post_init__(self, *args, **kwargs):...
-        # Placeholder for any post-initialization logic.
-        # The implementation for this method is not provided in the code.
-
-
-class GenericData(DataFactory, dtype=DTypes.GENERIC):
-    # A dataclass representing generic data objects with no specific dtype.
-
-    def __init__(self, **kwargs):
-        # Initialize a GenericData object.
-
-        kwargs.pop("dtype", None)  # Remove the dtype from the kwargs, if provided.
-
-        for k, v in kwargs.items():
-            setattr(self, k, v)
-            # Set the attributes of the object based on the provided kwargs.
 
 
 @dataclass(kw_only=True)
 class File(_Data, dtype=DTypes.FILE):
-    # A dataclass representing File data objects.
+    """
+    File class represents a file with metadata.
+
+    Parameters
+    ----------
+    _Data : class
+        The base class for data objects.
+    dtype : DTypes
+        The data type of the file.
+    metadata_id : str, optional
+        The ID of the metadata.
+    updated_at : str, optional
+        The timestamp of when the file was last updated.
+    size : int, optional
+        The size of the file.
+    url : str, optional
+        The URL of the file.
+    type : FileTypes, optional
+        The type of the file.
+    exists : bool, optional
+        Indicates whether the file exists.
+
+    Raises
+    ------
+    AttributeError
+        If the type attribute is not in the expected format.
+
+    Examples
+    --------
+    file = File()
+    file.metadata_id = "123"
+    file.updated_at = "2022-01-01"
+    file.size = 1024
+    file.url = "https://example.com/file.txt"
+    file.type = FileTypes.IMAGE
+    file.exists = True
+    """
 
     metadata_id: str = None
     updated_at: str = None
@@ -66,7 +90,36 @@ class File(_Data, dtype=DTypes.FILE):
 
 @dataclass(kw_only=True)
 class License(_Data, dtype=DTypes.LICENSE):
-    # A dataclass representing License data objects.
+    """
+    License class represents a license with metadata.
+
+    Parameters
+    ----------
+    _Data : class
+        The base class for data objects.
+    dtype : DTypes
+        The data type of the license.
+    identifier : str, optional
+        The identifier of the license.
+    fullname : str, optional
+        The full name of the license.
+    license_page : str, optional
+        The URL of the license page.
+    fsf_free : bool, optional
+        Indicates whether the license is FSF free.
+    osi_approved : bool, optional
+        Indicates whether the license is OSI approved.
+
+    Examples
+    --------
+    license = License()
+    license.identifier = "MIT"
+    license.fullname = "MIT License"
+    license.license_page = "https://opensource.org/licenses/MIT"
+    license.fsf_free = True
+    license.osi_approved = True
+    """
+
 
     identifier: str = None
     fullname: str = None
@@ -77,7 +130,45 @@ class License(_Data, dtype=DTypes.LICENSE):
 
 @dataclass(kw_only=True)
 class Metadata(_Data, dtype=DTypes.METADATA):
-    # A dataclass representing Metadata data objects.
+    """
+    Metadata class represents metadata information.
+
+    Parameters
+    ----------
+    _Data : class
+        The base class for data objects.
+    dtype : DTypes
+        The data type of the metadata.
+    license_id : str, optional
+        The ID of the license.
+    name : str, optional
+        The name of the metadata.
+    author : str, optional
+        The author of the metadata.
+    maintainer : str, optional
+        The maintainer of the metadata.
+    description : str, optional
+        The description of the metadata.
+    rating : float, optional
+        The rating of the metadata.
+    thumbnail : str, optional
+        The URL of the thumbnail.
+    version : str, optional
+        The version of the metadata.
+
+    Examples
+    --------
+    metadata = Metadata()
+    metadata.license_id = "MIT"
+    metadata.name = "Component Library"
+    metadata.author = "John Doe"
+    metadata.maintainer = "Jane Smith"
+    metadata.description = "A library for managing components."
+    metadata.rating = 4.5
+    metadata.thumbnail = "https://example.com/thumbnail.png"
+    metadata.version = "1.0.0"
+    """
+
 
     license_id: str = None
     name: str = None
@@ -91,13 +182,73 @@ class Metadata(_Data, dtype=DTypes.METADATA):
 
 @dataclass(kw_only=True)
 class Tag(_Data, dtype=DTypes.TAG):
-    # A dataclass representing Tag data objects.
+    """
+    Tag class represents a tag.
+
+    Parameters
+    ----------
+    _Data : class
+        The base class for data objects.
+    dtype : DTypes
+        The data type of the tag.
+    label : str, optional
+        The label of the tag.
+
+    Examples
+    --------
+    tag = Tag()
+    tag.label = "Python"
+    """
+
     label: str = ""
 
 
 @dataclass(kw_only=True)
 class Component(DataFactory, dtype=DTypes.COMPONENT):
-    # A dataclass representing Component data objects.
+    """
+    Component class represents a component.
+
+    Parameters
+    ----------
+    DataFactory : class
+        The factory class for creating data objects.
+    dtype : DTypes
+        The data type of the component.
+    id : str, optional
+        The ID of the component.
+    metadata : Metadata, optional
+        The metadata of the component.
+    files : dict[FileTypes, File], optional
+        The files associated with the component.
+    license : License, optional
+        The license of the component.
+    tags : list[Tag], optional
+        The tags associated with the component.
+
+    Methods
+    -------
+    __post_init__(*args, **kwargs)
+        Post-initialization method for Component objects.
+    serialize(base_info=False)
+        Serializes the component.
+
+    Returns
+    -------
+    dict
+        The serialized component.
+
+    Examples
+    --------
+    component = Component()
+    component.id = "123"
+    component.metadata = Metadata()
+    component.metadata.name = "Component Library"
+    component.files = {FileTypes.CODE: File()}
+    component.license = License()
+    component.license.identifier = "MIT"
+    component.tags = [Tag(label="Python")]
+    component.serialize()
+    """
 
     dtype: InitVar[DTypes|None] = None
     id: str = ''
@@ -107,8 +258,26 @@ class Component(DataFactory, dtype=DTypes.COMPONENT):
     tags: list[Tag] = field(default_factory=list)
 
     def __post_init__(self, *args, **kwargs):
-        # Post-initialization method for Component objects.
+        """
+        Post-initialization method for Component objects.
 
+        This method is called after the initialization of a Component object. It performs additional setup and data processing.
+        It initialize the files, license & tags from JSON-dict to Corresponding dataclasses.
+
+        Parameters
+        ----------
+        self : Component
+            The Component object.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        component = Component()
+        component.__post_init__()
+        """
         self.metadata = DataFactory.create(dtype=DTypes.METADATA, **self.metadata)
 
         # files object from api is a list and in local it is a dict
@@ -121,7 +290,28 @@ class Component(DataFactory, dtype=DTypes.COMPONENT):
         self.license = DataFactory.create(dtype=DTypes.LICENSE, **self.license)
         self.tags = DataFactory.load_many(data_list=self.tags, dtype=DTypes.TAG)
 
-    def serialize(self, base_info: bool = False):
+    def serialize(self) -> dict[str, Any]:
+        """
+        Post-initialization method for Component objects.
+
+        This method is called after the initialization of a Component object. It performs additional setup and data processing. It serializes the files, license, and tags from a JSON dictionary to corresponding dataclasses.
+        It serialises the files, license & tags objects to JSON-dict.
+
+        Parameters
+        ----------
+        self : Component
+            The Component object.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        component = Component()
+        component.__post_init__()
+        """
+
         original_files = self.files
         self.files = {key.value: value for key, value in self.files.items()}
         data = super().serialize()
@@ -130,9 +320,41 @@ class Component(DataFactory, dtype=DTypes.COMPONENT):
 
 
 class DataJsonEncoder(json.JSONEncoder):
-    def default(self, obj):
+    """
+    DataJsonEncoder class is a custom JSON encoder that handles serialization of specific data objects.
+
+    Parameters
+    ----------
+    obj : Any
+        The object to be serialized.
+
+    Returns
+    -------
+    Union[dict[str, Any], Any, Literal['stl', 'fcstd', 'fcstd1', 'step', 'stp']]
+        The serialized object.
+    """
+
+    def default(self, obj: Any) -> dict[str, Any] | Any | Literal['stl', 'fcstd', 'fcstd1', 'step', 'stp']:
+        """
+        Serializes the given object based on its type.
+
+        Parameters
+        ----------
+        obj : Any
+            The object to be serialized.
+
+        Returns
+        -------
+        Union[dict[str, Any], Any, Literal['stl', 'fcstd', 'fcstd1', 'step', 'stp']]
+            The serialized object.
+
+        """
+
         if isinstance(obj, (Component, Metadata, File, License, Tag)):
             return obj.serialize()
         if isinstance(obj, FileTypes):
             return obj.value
         return json.JSONEncoder.default(self, obj)
+
+
+SerialisedDataType = Component|Tag|Metadata|License|File

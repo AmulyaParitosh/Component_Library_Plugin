@@ -11,4 +11,4 @@
 #|																|
 # --------------------------------------------------------------
 
-from .state_push_button import StatefullPushButton
+from .state_push_button import StatefulPushButton

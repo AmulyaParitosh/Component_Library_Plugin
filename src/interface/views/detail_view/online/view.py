@@ -18,38 +18,58 @@ from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QProgressBar, QWidget
 
 from .....manager import ManagerInterface, OnlineRepoManager
-from ....widgets import ComponentItem, StatefullPushButton
+from ....widgets import ComponentItem, StatefulPushButton
 from ..base_detail_view import BaseDetailedView
 
 
-# Enum to represent different download states
 class DownloadStates(Enum):
+    """
+    Represents the different states of a download.
+
+    Attributes:
+        AVAILABLE: The download is available.
+        IN_PROGRESS: The download is in progress.
+        FINISHED: The download has finished.
+    """
     AVAILABLE = auto()
     IN_PROGRESS = auto()
     FINISHED = auto()
 
-# Class for the online detailed view of a component
 class OnlineDetailedView(BaseDetailedView):
-    # Declare a class attribute 'manager' of type OnlineRepoManager
+    """
+    Detailed view Widget of an online component.
+    """
     manager: OnlineRepoManager
 
-    # Constructor for the OnlineDetailedView class
     def __init__(self, parent: QWidget) -> None:
+        """
+        Initialises the OnlineDetailedView.
+
+        Parameters
+        ----------
+        parent : QWidget
+            parent widget of OnlineDetailedView.
+        """
         super().__init__(parent)
 
-        # Call the setupUi and setupSignals methods
         self.setupUi()
         self.setupSignals()
 
-    # Initialize the user interface elements
-    def setupUi(self):
+    def setupUi(self) -> None:
+        """
+        Setup all the ui elements.
+        Called in __init__
+        """
         super().setupUi()
 
-        self.downloadPushButton = StatefullPushButton(self)
+        self.downloadPushButton = StatefulPushButton(self)
         self.addControlWidget(self.downloadPushButton)
 
-    # Connect signals to their respective slots
-    def setupSignals(self):
+    def setupSignals(self) -> None:
+        """
+        Setup all the signal connections.
+        Called in __init__
+        """
         self.downloadPushButton.register_state(
             DownloadStates.AVAILABLE,
             self.downloadButton_click,
@@ -71,19 +91,40 @@ class OnlineDetailedView(BaseDetailedView):
 
         self.ui.filetypeComboBox.currentTextChanged.connect(self.update_download_button_state)
 
-    # Set up the manager for the OnlineDetailedView
-    def setupManager(self, manager: ManagerInterface):
+    def setupManager(self, manager: ManagerInterface) -> None:
+        """
+        Sets up the manager for the OnlineDetailedView.
+
+        Parameters
+        ----------
+        manager : ManagerInterface
+            An instance of the manager interface.
+
+        Returns
+        -------
+        None
+        """
         super().setupManager(manager)
 
-    # Update the content based on the given ComponentItem
-    def updateContent(self, comp_item: ComponentItem):
+    def updateContent(self, comp_item: ComponentItem) -> None:
+        """
+        Updates the component data with the new component item.
+
+        Parameters
+        ----------
+        comp_item : ComponentItem
+            component to display.
+        """
         super().updateContent(comp_item)
         self.update_download_button_state()
 
 
-    # Slot method to handle downloadButton click
     @Slot()
-    def downloadButton_click(self):
+    def downloadButton_click(self) -> None:
+        """
+        Slot for download button click.
+        Starts the file download and add a progressbar for it.
+        """
         file = self.current_file()
         if file is None:
             return
@@ -102,56 +143,97 @@ class OnlineDetailedView(BaseDetailedView):
         downloader.finished.connect(self.component_downloaded)
         print("Download started...")
 
-    # Slot method to update the download progress
+
     @Slot(int, int)
-    def __update_download_progress(self, bytes_received, total_bytes):
+    def __update_download_progress(self, bytes_received: bytes, total_bytes: bytes) -> None:
+        """
+        Slot method to update the download progress
+
+        Parameters
+        ----------
+        bytes_received : bytes
+            bytes downloaded
+        total_bytes : bytes
+            total bytes to download
+        """
         file = self.current_file()
         if file is None:
             return
+
         # Update the progress bar's maximum and current values based on the download progress
         self.files_on_download[file.id].setMaximum(total_bytes)
         self.files_on_download[file.id].setValue(bytes_received)
 
-    # Slot method to handle component download completion
+
     @Slot(Path)
-    def component_downloaded(self, filepath: Path):
+    def component_downloaded(self, filepath: Path) -> None:
+        """
+        Slot method to handle component download completion.
+        Removes the file from files_on_download dictionary and updates the file state.
+
+        Parameters
+        ----------
+        filepath : Path
+            Path of file that got downloaded
+
+        Returns
+        -------
+        None
+        """
         file = self.current_file()
         if file is None:
             return
+
         self.downloadPushButton.setState(DownloadStates.FINISHED)
-        # Mark the file as existing (downloaded successfully)
-        file.exists = True
-        # Remove the file id and progress bar from the files_on_download dictionary
-        self.files_on_download.pop(file.id)
+        file.exists = True                  # Mark the file as existing (downloaded successfully)
+        self.files_on_download.pop(file.id) # Remove the file id and progress bar from the files_on_download dictionary
+
         print("Download Successful!")
         print("file at", filepath)
 
-    # Check if a file is currently being downloaded
-    def is_file_on_download(self):
+
+    def is_file_on_download(self) -> bool:
+        """
+        Check if a file is currently being downloaded
+
+        Returns
+        -------
+        bool
+            Return True if the file is currently being downloaded (exists in files_on_download)
+        """
         file = self.current_file()
-        # Return True if the file is currently being downloaded (exists in files_on_download)
         return (file is not None) and (file.id in self.files_on_download)
 
-    # Get the current file selected in the filetypeComboBox
 
-
-    # Slot method to update the download button state based on the selected file type
     @Slot(str)
-    def update_download_button_state(self):
-        # Check if the selected file is currently being downloaded
+    def update_download_button_state(self) -> None:
+        """
+        Updates the download button state based on the selected file type.
+        File will be made available for downloaded if it is not present in the Local storage.
+        File will be made removeable if it is present in Local storage.
+
+        Returns
+        -------
+        None
+        """
         if self.is_file_on_download():
             self.downloadPushButton.setState(DownloadStates.IN_PROGRESS)
 
-        # Check if the current file exists (downloaded successfully)
         elif self.current_file().exists:
             # ! This produces an error when current_file() returns None
             self.downloadPushButton.setState(DownloadStates.FINISHED)
         else:
-            # Set the download button state to 'AVAILABLE' (not downloaded)
             self.downloadPushButton.setState(DownloadStates.AVAILABLE)
 
     @Slot()
-    def removeButton_click(self):
+    def removeButton_click(self) -> None:
+        """
+        Slot for remove button. Removes file from Local storage.
+
+        Returns
+        -------
+        None
+        """
         self.manager.remove_file(self.component, self.current_file().type)
         self.downloadPushButton.setState(DownloadStates.AVAILABLE)
         # ! SOME errors are occuring

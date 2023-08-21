@@ -19,6 +19,9 @@ from ..page_manager import PageStates
 
 
 class ManagerInterface(ABCQObject):
+    """
+    Abstract class for managenent of APIs. It abstracts the interactions with the API.
+    """
     component_loaded: Signal
     api: ApiInterface
     page_states: PageStates

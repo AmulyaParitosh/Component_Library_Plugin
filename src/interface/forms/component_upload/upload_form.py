@@ -11,32 +11,55 @@
 #|																|
 # --------------------------------------------------------------
 
+from typing import Any
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QDialog, QPushButton
 
-# Import the necessary components from the application.
 from ....data import DTypes
 from ....manager import OnlineRepoManager
 from ..Ui_component_form import Ui_ComponentCreationForm
 
 
 class ComponetUploadDialog(QDialog):
-    # Custom QDialog for creating and uploading new components.
-
+    """
+    Dialog for input fields of data for creating a Component.
+    """
     def __init__(self, parent, manager: OnlineRepoManager) -> None:
-        # Constructor to initialize the ComponentUploadDialog.
+        """
+        Initialize the ComponentUploadDialog.
 
+        Args
+        ----
+        parent : QWidget
+            The parent widget.
+        manager : OnlineRepoManager
+            The manager for online repository operations.
+
+        Returns
+        -------
+        None
+
+        Example
+        -------
+        parent_widget = QWidget()
+        manager = OnlineRepoManager()
+        dialog = ComponentUploadDialog(parent_widget, manager)
+        """
         super().__init__(parent)
 
-        # Initialize the user interface from the Ui_ComponentCreationForm.
         self.ui = Ui_ComponentCreationForm()
         self.manager = manager
 
-        # Set up the dialog.
         self.setupUi()
 
-    def setupUi(self):
-        # Method to set up the user interface of the dialog.
+    def setupUi(self) -> None:
+        """
+        Set up the user interface of the dialog.
+
+        Returns
+        -------
+        None
+        """
 
         self.ui.setupUi(self)
 
@@ -54,9 +77,21 @@ class ComponetUploadDialog(QDialog):
         self.ui.tagsWidget.set_suggestions(self.manager.load_from_db(DTypes.TAG))
         self.ui.licenseInput.addItems((license.fullname for license in self.manager.load_from_db(DTypes.LICENSE)))
 
-    def pack_data(self):
-        # Method to pack the data entered in the form.
+    def pack_data(self) -> dict[str, Any]:
+        """
+        Pack the data entered in the form.
 
+        Returns
+        -------
+        dict[str, Any]
+            A dictionary containing the packed data with the following keys:
+
+        Example
+        -------
+        dialog = ComponentUploadDialog()
+        data = dialog.pack_data()
+        print(data)
+        """
         return {
             "author": self.ui.authorInput.text(),
             "description": self.ui.descriptionInput.toPlainText(),
@@ -78,15 +113,44 @@ class ComponetUploadDialog(QDialog):
         }
 
     @Slot()
-    def on_create_button_clicked(self):
-        # Slot to handle the "Create" button click event.
+    def on_create_button_clicked(self) -> None:
+        """
+        Handle the "Create" button click event.
+        Slot to handle the "Create" button click event.
+
+        Returns
+        -------
+        None
+        """
 
         # Pack the data and create the component using the OnlineRepoManager.
         self.manager.create_component(self.pack_data())
 
     @classmethod
-    def create_component(cls, parent, manager: OnlineRepoManager):
-        # Class method to create and execute the ComponentUploadDialog.
+    def create_component(cls, parent, manager: OnlineRepoManager) -> int:
+        """
+        Create and execute the ComponentUploadDialog.
+        Class method to create and execute the ComponentUploadDialog.
+
+        Args
+        ----
+        parent : QWidget
+            The parent widget.
+        manager : OnlineRepoManager
+            The manager for online repository operations.
+
+        Returns
+        -------
+        int
+            The result of executing the dialog.
+
+        Example
+        -------
+        parent_widget = QWidget()
+        manager = OnlineRepoManager()
+        result = ComponentUploadDialog.create_component(parent_widget, manager)
+        print(result)
+        """
 
         instance = cls(parent, manager)
         return instance.exec()

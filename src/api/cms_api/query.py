@@ -15,10 +15,16 @@ from ..base_query import ComponentQueryInterface
 
 
 class RepoComponentQuery(ComponentQueryInterface):
-    # Implementation of the ComponentQueryInterface for querying components in a repository.
+    """
+    Implementation of the ComponentQueryInterface for querying components in a repository.
+
+    Stores all the Query states for CMS API
+    """
 
     def __init__(self) -> None:
-        # Initialize the query parameters with default values or None.
+        """
+        Initializes the query parameters with default values or None.
+        """
         self.__page: int | None = 1
         self.__page_size: int | None = 18
         self.__search_key: str | None = None
@@ -28,7 +34,6 @@ class RepoComponentQuery(ComponentQueryInterface):
         self.__tags: list[str] | None = None
         self.__columns: list[str] | None = None
 
-    # Implementing the abstract properties using property decorators.
 
     @property
     def page(self) -> str:

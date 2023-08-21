@@ -15,20 +15,35 @@ from .overlay import Overlay
 
 
 class LoadingOverlay(Overlay):
-    # Custom subclass of the Overlay class representing a loading overlay.
+    """
+    Custom subclass of the Overlay class representing a loading overlay.
+    """
 
-    overlay_text = "loading..."  # Text to be displayed on the loading overlay.
+    overlay_text = "loading..."
 
     @property
     def loading(self) -> bool:
-        # Property getter method to check if the loading overlay is currently visible.
+        """
+        Get the visibility status of the loading overlay.
+
+        Returns
+        -------
+        bool
+            True if the loading overlay is currently visible, False otherwise.
+        """
         return self.isVisible()
 
     @loading.setter
     def loading(self, load: bool):
-        # Property setter method to show or hide the loading overlay based on the 'load' parameter.
+        """
+        Set the visibility of the loading overlay.
 
+        Parameters
+        ----------
+        load : bool
+            True to show the loading overlay, False to hide it.
+        """
         if load:
-            self.show()  # Show the loading overlay.
+            self.show()
         else:
-            self.hide()  # Hide the loading overlay.
+            self.hide()

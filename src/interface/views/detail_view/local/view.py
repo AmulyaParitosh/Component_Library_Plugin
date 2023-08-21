@@ -19,35 +19,69 @@ from ..base_detail_view import BaseDetailedView
 
 
 class LocalDetailedView(BaseDetailedView):
-
+	"""
+    Detailed view Widget of an localy present component.
+    """
 	manager: LocalStorageManager
 
-	# Constructor for the OnlineDetailedView class
 	def __init__(self, parent: QWidget) -> None:
+		"""
+        Initialises the OnlineDetailedView.
+
+        Parameters
+        ----------
+        parent : QWidget
+            parent widget of OnlineDetailedView.
+        """
 		super().__init__(parent)
 
-		# Call the setupUi and setupSignals methods
 		self.setupUi()
 		self.setupSignals()
 
-	# Initialize the user interface elements
-	def setupUi(self):
+	def setupUi(self) -> None:
+		"""
+        Setup all the ui elements.
+        Called in __init__
+        """
 		super().setupUi()
 
 		self.removePushButton = QPushButton(self)
 		self.removePushButton.setText("Remove")
 		self.addControlWidget(self.removePushButton)
 
-	def setupSignals(self):
-		self.removePushButton.clicked.connect(self.removed)
+	def setupSignals(self) -> None:
+		"""
+        Setup all the signal connections.
+        Called in __init__
+        """
+		self.removePushButton.clicked.connect(self.remove)
 
 
-	def setupManager(self, manager: ManagerInterface):
+	def setupManager(self, manager: ManagerInterface) -> None:
+		"""
+        Sets up the manager for the OnlineDetailedView.
+
+        Parameters
+        ----------
+        manager : ManagerInterface
+            An instance of the manager interface.
+
+        Returns
+        -------
+        None
+        """
 		super().setupManager(manager)
 
 
 	@Slot()
-	def removed(self):
+	def remove(self) -> None:
+		"""
+		Remove the file fromt he locak storage.
+
+        Returns
+        -------
+        None
+		"""
 		self.manager.remove_file(self.component, self.current_file().type)
 		self.ui.filetypeComboBox.removeItem(self.ui.filetypeComboBox.currentIndex())
 		if self.ui.filetypeComboBox.count() == 0:

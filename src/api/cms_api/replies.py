@@ -11,25 +11,42 @@
 #|																|
 # --------------------------------------------------------------
 
+
 import json
+from typing import Any
 
 from PySide6.QtCore import QObject, Signal, Slot
 from PySide6.QtNetwork import QNetworkReply
 
 
-# Custom QObject class to handle network replies and emit signals with parsed data
 class CMSReply(QObject):
-    # Signal to be emitted when the reply is finished, with the parsed data as an argument
-    finished = Signal(dict)
+    """
+    Represents a CMS reply object.
+    Custom QObject class to handle network replies and emit signals with parsed data.
+    """
+
+    finished = Signal(dict) # Signal to be emitted when the reply is finished, with the parsed data as an argument
 
     def __init__(self, reply: QNetworkReply, parent) -> None:
         super().__init__(parent)
         self.reply: QNetworkReply = reply
         self.reply.finished.connect(self.response_serializer)
 
-    # Slot method to handle the network reply and parse the JSON data
     @Slot()
     def response_serializer(self) -> None:
+        """
+        Slot method to handle the network reply and parse the JSON data.
+
+        This method checks if there was an error in the network reply.
+        If there is no error, it reads the raw data from the network reply, decodes it as UTF-8, and parses it as JSON.
+        If the parsed data is a list, it converts it to a dictionary using the 'id' field as the key.
+        Finally, it emits the 'finished' signal with the parsed data and deletes the network reply.
+
+        Returns
+        -------
+        None
+        """
+
         # Check if there was an error in the network reply
         if self.reply.error() != QNetworkReply.NetworkError.NoError:
             print(f"Error: {self.reply.errorString()}")
@@ -45,9 +62,22 @@ class CMSReply(QObject):
         self.finished.emit(self.data)
         self.reply.deleteLater()
 
-    # Static method to parse JSON data, handling potential JSONDecodeError
     @staticmethod
-    def parse_json(data: str):
+    def parse_json(data: str) -> dict[Any, Any]:
+        """
+        Parses JSON data.
+
+        Args
+        ----
+        data : str
+            The JSON data to be parsed.
+
+        Returns
+        -------
+        dict
+            The parsed JSON data as a dictionary. If the JSON data cannot be decoded, an empty dictionary is returned.
+        """
+
         try:
             parsed_json: dict = json.loads(data)
         except json.decoder.JSONDecodeError:

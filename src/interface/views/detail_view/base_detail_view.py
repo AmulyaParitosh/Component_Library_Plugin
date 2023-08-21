@@ -11,10 +11,9 @@
 #|																|
 # --------------------------------------------------------------
 
-from abc import abstractmethod
-
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QWidget
+from PySide6.QtCore import Slot
 
 from ....data import Component, File, FileTypes
 from ...widgets import DetailedWidget, Thumbnail
@@ -22,23 +21,42 @@ from ..base_view import BaseView
 from ...widgets import ComponentItem, Thumbnail
 
 
-# Base class for detailed views of components
 class BaseDetailedView(BaseView):
-
-    # Class attribute to store files being downloaded with their corresponding progress bars
+    """
+    Base class for the detailed view of a component
+    """
     files_on_download = {}
-    # Class attribute to store the thumbnail widget
     thumbnail: Thumbnail = None
-    # Class attribute to store the component being displayed in the detailed view
     component: Component = None
 
-    # Constructor for the BaseDetailedView class
     def __init__(self, parent: QWidget | None = None) -> None:
+        """
+        Constructor for the BaseDetailedView class.
+
+        Args
+        ----
+        parent : QWidget | None, optional
+            The parent widget. Defaults to None.
+
+        Returns
+        -------
+        None
+
+        Example
+        -------
+        view = BaseDetailedView(parent_widget)
+        """
         super().__init__(parent)
-        # Create an instance of DetailedWidget and assign it to the 'ui' attribute
         self.ui = DetailedWidget()
 
-    def setupUi(self):
+    def setupUi(self) -> None:
+        """
+        Constructor for the BaseDetailedView class.
+
+        Returns
+        -------
+        None
+        """
         self.ui.setupUi(self)
         self.ui.backPushButton.clicked.connect(self.backPushButton_click)
         self.ui.contentLabel.setFont(QFont('Arial', 28))
@@ -50,33 +68,97 @@ class BaseDetailedView(BaseView):
         self.ui.createdValue.setFont(font_14)
         self.ui.updatedValue.setFont(font_14)
 
-    # Abstract method that must be implemented in derived classes
-    # @abstractmethod
-    def backPushButton_click(self):
+    @Slot()
+    def backPushButton_click(self) -> None:
+        """
+        Handle the click event of the back button.
+
+        Returns
+        -------
+        None
+        """
+
         self.manager.reload_page()
         self.topLevelWidget().toLastWidget()
 
-    # Method to add a control widget to the control area in the detailed view
-    def addControlWidget(self, widget: QWidget):
+    def addControlWidget(self, widget: QWidget) -> None:
+        """
+        Add a control widget to the control area in the detailed view.
+
+        Args
+        ----
+        widget : QWidget
+            The widget to be added.
+
+        Returns
+        -------
+        None
+        """
+
         self.ui.controlArea.addWidget(widget)
 
-    # Method to remove a control widget from the control area in the detailed view
-    def removeControlWidget(self, widget: QWidget):
+    def removeControlWidget(self, widget: QWidget) -> None:
+        """
+        Remove a control widget from the control area in the detailed view.
+
+        Args
+        ----
+        widget : QWidget
+            The widget to be removed.
+
+        Returns
+        -------
+        None
+        """
+
         self.ui.controlArea.removeWidget(widget)
 
-    # Method to add a progress widget to the processes area in the detailed view
-    def addProgressWidget(self, widget: QWidget):
+    def addProgressWidget(self, widget: QWidget) -> None:
+        """
+        Add a progress widget to the processes area in the detailed view.
+
+        Args
+        ----
+        widget : QWidget
+            The widget to be added.
+
+        Returns
+        -------
+        None
+        """
+
         self.ui.processesArea.addWidget(widget)
 
     def current_file(self) -> File | None:
-		# Return the corresponding File object based on the current file type in the combobox
+        """
+        Get the current file selected in the filetypeComboBox.
+
+        Returns
+        -------
+        File or None
+            The current file selected, or None if no file is selected.
+        """
+
         txt = self.ui.filetypeComboBox.currentText()
         # TODO Check why txt produces empty string
         if txt and FileTypes(txt):
             return self.component.files.get(FileTypes(txt))
         # ! should not return None. Investigate
 
-    def updateContent(self, comp_item: ComponentItem):
+    def updateContent(self, comp_item: ComponentItem) -> None:
+        """
+        Update the content of the detailed view with the information from the given ComponentItem.
+
+        Args
+        ----
+        comp_item : ComponentItem
+            The ComponentItem containing the component information.
+
+        Returns
+        -------
+        None
+        """
+
         self.component = comp_item.component
 
         self._update_thumbnail(comp_item.ui.thumbnail)
@@ -91,16 +173,35 @@ class BaseDetailedView(BaseView):
         self.ui.ratingwidget.setRating(self.component.metadata.rating)
         self.ui.licenseValue.setText(self.component.license.fullname)
 
-    # Update the thumbnail widget
-    def _update_thumbnail(self, thumbnail_widget):
+    def _update_thumbnail(self, thumbnail_widget) -> None:
+        """
+        Update the thumbnail widget in the detailed view.
+
+        Args
+        ----
+        thumbnail_widget : QWidget
+            The widget to be used as the new thumbnail.
+
+        Returns
+        -------
+        None
+        """
+
         if self.thumbnail is not None:
             self.ui.thumbnailAreaHorizontalLayout.removeWidget(self.thumbnail)
 
         self.thumbnail = Thumbnail.from_existing(self, thumbnail_widget)
         self.ui.thumbnailAreaHorizontalLayout.addWidget(self.thumbnail)
 
-    # Update the filetype combobox based on the component files
-    def _update_filetype_combobox(self):
+    def _update_filetype_combobox(self) -> None:
+        """
+        Update the filetype combobox in the detailed view.
+
+        Returns
+        -------
+        None
+        """
+
         self.ui.filetypeComboBox.clear()
         for file in self.component.files:
             self.ui.filetypeComboBox.addItem(file.value)

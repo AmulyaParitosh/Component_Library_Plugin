@@ -24,7 +24,6 @@ class FileDownloader(QObject):
     """
     FileDownloader Handles downloading of files/components (any resource) ans saves it locally.
     """
-    # TODO: Add explanation of the class purpose and functionality.
 
     finished = Signal(Path)  # Signal emitted when the download is finished.
     error = Signal(QNetworkReply.NetworkError)  # Signal emitted when there's an error during download.
@@ -76,7 +75,6 @@ class ImageLoader(QObject):
     """
     ImageLoader Downloads the image but does not save it at some location but serialises it as QImage.
     """
-    # TODO: Add explanation of the class purpose and functionality.
 
     LOADING_THUMBNAIL_PATH = "src/interface/resources/loading.jpeg"
     DEFAULT_THUMBNAIL_PATH = "src/interface/resources/default.png"
