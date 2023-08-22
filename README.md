@@ -11,7 +11,7 @@ The Component Library Plugin is a PySide6 application designed to enhance FreeCA
 2. Download and manage individual components for local use.
 3. Add and manage user-specific models in the local library.
 4. Insert downloaded components directly into FreeCAD documents.(yet to implement)
-5. Upload components to **Component Management System** for public access.
+5. Upload components to **[Component Management System](https://github.com/AmulyaParitosh/Component-Management-System)** for public access.
 
 ## Setup
 1. Clone the repository: `git clone [repository URL]`
