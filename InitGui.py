@@ -10,7 +10,9 @@ class ComponetLibraryWorkbench(Workbench):
 		self.__class__.MenuText = "ComponentLibrary"
 		self.__class__.ToolTip = "ComponentLibrary workbench"
 
-    def Initialize(self):...
+    def Initialize(self):
+		from src import Window
+		plugin = Window()
 
     def Activated(self):...
 
