@@ -12,10 +12,10 @@ class ComponetLibraryWorkbench(Workbench):
 		self.__class__.ToolTip = "ComponentLibrary workbench"
 
     def Initialize(self):
-
-    def Activated(self):...
 		from src import Window
 		plugin = Window()
+
+    def Activated(self):...
 
     def GetClassName(self):...
 
