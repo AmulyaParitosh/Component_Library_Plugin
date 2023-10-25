@@ -3,6 +3,7 @@
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 import FreeCAD
+import FreeCADGui
 
 class ComponetLibraryWorkbench(Workbench):
 	def __init__(self):
@@ -11,14 +12,14 @@ class ComponetLibraryWorkbench(Workbench):
 		self.__class__.ToolTip = "ComponentLibrary workbench"
 
     def Initialize(self):
+
+    def Activated(self):...
 		from src import Window
 		plugin = Window()
 
-    def Activated(self):...
-
     def GetClassName(self):...
 
-Gui.addWorkbench(ComponetLibraryWorkbench())
+FreeCADGui.addWorkbench(ComponetLibraryWorkbench())
 
 # FreeCAD.addImportType()
 # FreeCAD.addExportType()
