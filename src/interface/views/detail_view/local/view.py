@@ -11,8 +11,8 @@
 #|																|
 # --------------------------------------------------------------
 
-from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QPushButton, QWidget
+from PySide.QtCore import Slot
+from PySide.QtWidgets import QPushButton, QWidget
 
 from .....manager import LocalStorageManager, ManagerInterface
 from ..base_detail_view import BaseDetailedView

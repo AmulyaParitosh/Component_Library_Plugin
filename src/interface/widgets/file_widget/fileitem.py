@@ -13,7 +13,7 @@
 
 from pathlib import Path
 
-from PySide6.QtWidgets import (QFileDialog, QFrame, QHBoxLayout, QLabel,
+from PySide.QtWidgets import (QFileDialog, QFrame, QHBoxLayout, QLabel,
                                QListWidget, QListWidgetItem, QPushButton,
                                QSizePolicy, QVBoxLayout, QWidget)
 

@@ -11,7 +11,7 @@
 #|																|
 # --------------------------------------------------------------
 
-from PySide6.QtWidgets import QGridLayout, QWidget
+from PySide.QtWidgets import QGridLayout, QWidget
 
 from .....data import Component
 from ...component import ComponentItem

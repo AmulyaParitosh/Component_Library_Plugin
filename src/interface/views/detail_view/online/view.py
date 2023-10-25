@@ -14,8 +14,8 @@
 from enum import Enum, auto
 from pathlib import Path
 
-from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QProgressBar, QWidget
+from PySide.QtCore import Slot
+from PySide.QtWidgets import QProgressBar, QWidget
 
 from .....manager import ManagerInterface, OnlineRepoManager
 from ....widgets import ComponentItem, StatefulPushButton

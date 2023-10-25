@@ -21,14 +21,14 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+from PySide.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+from PySide.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QGridLayout,
+from PySide.QtWidgets import (QApplication, QComboBox, QDialog, QGridLayout,
     QHBoxLayout, QLabel, QLineEdit, QPlainTextEdit,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 
@@ -230,4 +230,3 @@ class Ui_ComponentCreationForm(object):
         self.descriptionLabel.setText(QCoreApplication.translate("ComponentCreationForm", u"<html><head/><body><p><span style=\" font-size:12pt;\">Description</span></p></body></html>", None))
         self.descriptionInput.setPlaceholderText(QCoreApplication.translate("ComponentCreationForm", u"a short description about the component", None))
     # retranslateUi
-

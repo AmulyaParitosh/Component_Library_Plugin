@@ -14,8 +14,8 @@
 from functools import cache
 
 import certifi
-from PySide6.QtCore import Slot
-from PySide6.QtNetwork import (QNetworkAccessManager, QNetworkReply,
+from PySide.QtCore import Slot
+from PySide.QtNetwork import (QNetworkAccessManager, QNetworkReply,
                                QNetworkRequest, QSsl, QSslCertificate,
                                QSslConfiguration, QSslSocket)
 

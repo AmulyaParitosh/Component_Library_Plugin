@@ -14,7 +14,7 @@
 from dataclasses import dataclass, field
 from typing import Any
 
-from PySide6.QtCore import QObject, Signal
+from PySide.QtCore import QObject, Signal
 
 from ...api.local_api.storage_adapter import LocalData
 from ...config import Config

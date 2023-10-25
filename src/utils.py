@@ -14,8 +14,8 @@
 from abc import ABC, ABCMeta
 from typing import Type
 
-from PySide6.QtCore import QObject
-from PySide6.QtWidgets import QWidget
+from PySide.QtCore import QObject
+from PySide.QtWidgets import QWidget
 
 QObjectMeta = type(QObject)
 QWidgetMeta = type(QWidget)

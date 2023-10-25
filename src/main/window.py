@@ -11,8 +11,8 @@
 #|																|
 # --------------------------------------------------------------
 
-from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QMainWindow, QWidget
+from PySide.QtCore import Slot
+from PySide.QtWidgets import QMainWindow, QWidget
 
 from ..interface.forms import ComponetUploadDialog
 from ..interface.views import GridView, LocalDetailedView, OnlineDetailedView

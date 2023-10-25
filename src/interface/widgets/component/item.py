@@ -11,7 +11,7 @@
 #|																|
 # --------------------------------------------------------------
 
-from PySide6.QtWidgets import QWidget
+from PySide.QtWidgets import QWidget
 
 from ....data import Component
 from .Ui_item_view import Ui_ComponentItemView

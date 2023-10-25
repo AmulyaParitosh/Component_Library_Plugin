@@ -15,8 +15,8 @@ from functools import cache
 from pathlib import Path
 from typing import Any
 
-from PySide6.QtCore import QEventLoop, Signal, Slot
-from PySide6.QtNetwork import QNetworkRequest
+from PySide.QtCore import QEventLoop, Signal, Slot
+from PySide.QtNetwork import QNetworkRequest
 
 from ...api.cms_api import (CMSApi, CMSReply, ComponentRequest,
                             RepoComponentQuery, construct_multipart)
