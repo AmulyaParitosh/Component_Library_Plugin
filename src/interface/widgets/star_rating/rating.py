@@ -15,9 +15,9 @@ from __future__ import annotations
 
 from enum import Enum
 
-from PySide6.QtCore import QSize
-from PySide6.QtGui import QFont, QPixmap
-from PySide6.QtWidgets import QHBoxLayout, QLabel, QWidget
+from PySide.QtCore import QSize
+from PySide.QtGui import QFont, QPixmap
+from PySide.QtWidgets import QHBoxLayout, QLabel, QWidget
 
 
 class Star(QLabel):

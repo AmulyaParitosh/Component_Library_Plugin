@@ -11,8 +11,8 @@
 #|																|
 # --------------------------------------------------------------
 
-from PySide6.QtCore import QFile, QIODevice, QUrl, QUrlQuery
-from PySide6.QtNetwork import QHttpMultiPart, QHttpPart, QNetworkRequest
+from PySide.QtCore import QFile, QIODevice, QUrl, QUrlQuery
+from PySide.QtNetwork import QHttpMultiPart, QHttpPart, QNetworkRequest
 
 from .query import RepoComponentQuery
 

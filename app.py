@@ -15,7 +15,7 @@
 
 import sys
 
-from PySide6.QtWidgets import QApplication
+from PySide.QtWidgets import QApplication
 
 from src import Window
 

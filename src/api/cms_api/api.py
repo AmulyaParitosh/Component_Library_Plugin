@@ -13,8 +13,8 @@
 
 from typing import Any
 
-from PySide6.QtCore import QUrl
-from PySide6.QtNetwork import QNetworkRequest
+from PySide.QtCore import QUrl
+from PySide.QtNetwork import QNetworkRequest
 
 from src.config.config import Config
 

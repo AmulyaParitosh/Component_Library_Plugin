@@ -13,7 +13,7 @@
 
 from typing import Any
 
-from PySide6.QtCore import Signal
+from PySide.QtCore import Signal
 
 from src.data.factory import DataFactory
 
