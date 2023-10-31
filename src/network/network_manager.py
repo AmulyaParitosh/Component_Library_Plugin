@@ -1,23 +1,28 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from functools import cache
 
 import certifi
 from PySide.QtCore import Slot
-from PySide.QtNetwork import (QNetworkAccessManager, QNetworkReply,
-                               QNetworkRequest, QSsl, QSslCertificate,
-                               QSslConfiguration, QSslSocket)
+from PySide.QtNetwork import (
+    QNetworkAccessManager,
+    QNetworkReply,
+    QNetworkRequest,
+    QSsl,
+    QSslCertificate,
+    QSslConfiguration,
+    QSslSocket,
+)
 
 
 @Slot(QNetworkReply)
@@ -35,7 +40,11 @@ def when_finisned(reply: QNetworkReply) -> None:
     er: QNetworkReply.NetworkError = reply.error()
 
     if er == QNetworkReply.NetworkError.NoError:
-        print(reply.url().toString(), ":", reply.attribute(QNetworkRequest.Attribute.HttpStatusCodeAttribute))
+        print(
+            reply.url().toString(),
+            ":",
+            reply.attribute(QNetworkRequest.Attribute.HttpStatusCodeAttribute),
+        )
 
     elif er == QNetworkReply.NetworkError.ProtocolUnknownError:
         print("Blank URL passed!")
@@ -44,6 +53,7 @@ def when_finisned(reply: QNetworkReply) -> None:
         # If there is any other network error, print the error code and error string along with the URL
         print("Error occurred: ", er)
         print(reply.url().toString(), reply.errorString())
+
 
 #
 @cache

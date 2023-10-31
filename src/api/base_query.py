@@ -1,20 +1,20 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from abc import ABC, abstractproperty
 from typing import Any, Union
 
 QueryParam = Union[Any, str]
+
 
 class ComponentQueryInterface(ABC):
     """
@@ -39,7 +39,6 @@ class ComponentQueryInterface(ABC):
     columns : QueryParam
         Abstract property representing the columns or query parameter for selecting specific columns in the result.
     """
-
 
     @abstractproperty
     def page(self) -> QueryParam:

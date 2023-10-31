@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from typing import Any
@@ -24,6 +23,7 @@ class ComponetUploadDialog(QDialog):
     """
     Dialog for input fields of data for creating a Component.
     """
+
     def __init__(self, parent, manager: OnlineRepoManager) -> None:
         """
         Initialize the ComponentUploadDialog.
@@ -75,7 +75,9 @@ class ComponetUploadDialog(QDialog):
 
         # Set suggestions for tags and licenses using the OnlineRepoManager.
         self.ui.tagsWidget.set_suggestions(self.manager.load_from_db(DTypes.TAG))
-        self.ui.licenseInput.addItems((license.fullname for license in self.manager.load_from_db(DTypes.LICENSE)))
+        self.ui.licenseInput.addItems(
+            (license.fullname for license in self.manager.load_from_db(DTypes.LICENSE))
+        )
 
     def pack_data(self) -> dict[str, Any]:
         """
@@ -95,11 +97,13 @@ class ComponetUploadDialog(QDialog):
         return {
             "author": self.ui.authorInput.text(),
             "description": self.ui.descriptionInput.toPlainText(),
-            "license_id": next((
-                lis.id for
-                lis in self.manager.load_from_db(DTypes.LICENSE)
-                if lis.fullname == self.ui.licenseInput.currentText()
-            )),
+            "license_id": next(
+                (
+                    lis.id
+                    for lis in self.manager.load_from_db(DTypes.LICENSE)
+                    if lis.fullname == self.ui.licenseInput.currentText()
+                )
+            ),
             "maintainer": self.ui.maintainerInput.text(),
             "name": self.ui.componentNameInput.text(),
             "tags": self.ui.tagsWidget.tags,
@@ -109,7 +113,7 @@ class ComponetUploadDialog(QDialog):
             "files": {
                 "component_files": self.ui.componentFiles.filepaths,
                 "thumbnail_image": self.ui.thumbnailFile.filepath,
-            }
+            },
         }
 
     @Slot()

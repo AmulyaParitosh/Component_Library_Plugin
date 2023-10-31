@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from enum import Enum, auto
@@ -31,14 +30,17 @@ class DownloadStates(Enum):
         IN_PROGRESS: The download is in progress.
         FINISHED: The download has finished.
     """
+
     AVAILABLE = auto()
     IN_PROGRESS = auto()
     FINISHED = auto()
+
 
 class OnlineDetailedView(BaseDetailedView):
     """
     Detailed view Widget of an online component.
     """
+
     manager: OnlineRepoManager
 
     def __init__(self, parent: QWidget) -> None:
@@ -71,22 +73,13 @@ class OnlineDetailedView(BaseDetailedView):
         Called in __init__
         """
         self.downloadPushButton.register_state(
-            DownloadStates.AVAILABLE,
-            self.downloadButton_click,
-            "Download",
-            True
+            DownloadStates.AVAILABLE, self.downloadButton_click, "Download", True
         )
         self.downloadPushButton.register_state(
-            DownloadStates.IN_PROGRESS,
-            None,
-            "Downloading...",
-            False
+            DownloadStates.IN_PROGRESS, None, "Downloading...", False
         )
         self.downloadPushButton.register_state(
-            DownloadStates.FINISHED,
-            self.removeButton_click,
-            "Remove",
-            True
+            DownloadStates.FINISHED, self.removeButton_click, "Remove", True
         )
 
         self.ui.filetypeComboBox.currentTextChanged.connect(self.update_download_button_state)
@@ -118,7 +111,6 @@ class OnlineDetailedView(BaseDetailedView):
         super().updateContent(comp_item)
         self.update_download_button_state()
 
-
     @Slot()
     def downloadButton_click(self) -> None:
         """
@@ -143,7 +135,6 @@ class OnlineDetailedView(BaseDetailedView):
         downloader.finished.connect(self.component_downloaded)
         print("Download started...")
 
-
     @Slot(int, int)
     def __update_download_progress(self, bytes_received: bytes, total_bytes: bytes) -> None:
         """
@@ -163,7 +154,6 @@ class OnlineDetailedView(BaseDetailedView):
         # Update the progress bar's maximum and current values based on the download progress
         self.files_on_download[file.id].setMaximum(total_bytes)
         self.files_on_download[file.id].setValue(bytes_received)
-
 
     @Slot(Path)
     def component_downloaded(self, filepath: Path) -> None:
@@ -185,12 +175,13 @@ class OnlineDetailedView(BaseDetailedView):
             return
 
         self.downloadPushButton.setState(DownloadStates.FINISHED)
-        file.exists = True                  # Mark the file as existing (downloaded successfully)
-        self.files_on_download.pop(file.id) # Remove the file id and progress bar from the files_on_download dictionary
+        file.exists = True  # Mark the file as existing (downloaded successfully)
+        self.files_on_download.pop(
+            file.id
+        )  # Remove the file id and progress bar from the files_on_download dictionary
 
         print("Download Successful!")
         print("file at", filepath)
-
 
     def is_file_on_download(self) -> bool:
         """
@@ -203,7 +194,6 @@ class OnlineDetailedView(BaseDetailedView):
         """
         file = self.current_file()
         return (file is not None) and (file.id in self.files_on_download)
-
 
     @Slot(str)
     def update_download_button_state(self) -> None:

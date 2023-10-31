@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 import json
@@ -25,12 +24,13 @@ class _Data(DataFactory, dtype=None):
     This Class is not suposed to be initialized directly, but is a base for the main DataClases.
     """
 
-    dtype: InitVar[DTypes|None] = None
+    dtype: InitVar[DTypes | None] = None
     id: str = None
     created_at: str = None
     updated_at: str = None
 
-    def __post_init__(self, *args, **kwargs):...
+    def __post_init__(self, *args, **kwargs):
+        ...
 
 
 @dataclass(kw_only=True)
@@ -120,7 +120,6 @@ class License(_Data, dtype=DTypes.LICENSE):
     license.osi_approved = True
     """
 
-
     identifier: str = None
     fullname: str = None
     license_page: str = None
@@ -168,7 +167,6 @@ class Metadata(_Data, dtype=DTypes.METADATA):
     metadata.thumbnail = "https://example.com/thumbnail.png"
     metadata.version = "1.0.0"
     """
-
 
     license_id: str = None
     name: str = None
@@ -250,8 +248,8 @@ class Component(DataFactory, dtype=DTypes.COMPONENT):
     component.serialize()
     """
 
-    dtype: InitVar[DTypes|None] = None
-    id: str = ''
+    dtype: InitVar[DTypes | None] = None
+    id: str = ""
     metadata: Metadata = None
     files: dict[FileTypes, File] = field(default_factory=dict)
     license: License = None
@@ -282,11 +280,17 @@ class Component(DataFactory, dtype=DTypes.COMPONENT):
 
         # files object from api is a list and in local it is a dict
         if isinstance(self.files, list):
-            self.files = {file.type: file for file in
-                        DataFactory.load_many(data_list=self.files, dtype=DTypes.FILE)}
+            self.files = {
+                file.type: file
+                for file in DataFactory.load_many(data_list=self.files, dtype=DTypes.FILE)
+            }
         elif isinstance(self.files, dict):
-            self.files = {file.type: file for file in
-                        DataFactory.load_many(data_list=list(self.files.values()), dtype=DTypes.FILE)}
+            self.files = {
+                file.type: file
+                for file in DataFactory.load_many(
+                    data_list=list(self.files.values()), dtype=DTypes.FILE
+                )
+            }
         self.license = DataFactory.create(dtype=DTypes.LICENSE, **self.license)
         self.tags = DataFactory.load_many(data_list=self.tags, dtype=DTypes.TAG)
 
@@ -334,7 +338,9 @@ class DataJsonEncoder(json.JSONEncoder):
         The serialized object.
     """
 
-    def default(self, obj: Any) -> dict[str, Any] | Any | Literal['stl', 'fcstd', 'fcstd1', 'step', 'stp']:
+    def default(
+        self, obj: Any
+    ) -> dict[str, Any] | Any | Literal["stl", "fcstd", "fcstd1", "step", "stp"]:
         """
         Serializes the given object based on its type.
 
@@ -357,4 +363,4 @@ class DataJsonEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-SerialisedDataType = Component|Tag|Metadata|License|File
+SerialisedDataType = Component | Tag | Metadata | License | File

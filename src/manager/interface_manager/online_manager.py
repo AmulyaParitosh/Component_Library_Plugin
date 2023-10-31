@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from functools import cache
@@ -18,12 +17,16 @@ from typing import Any
 from PySide.QtCore import QEventLoop, Signal, Slot
 from PySide.QtNetwork import QNetworkRequest
 
-from ...api.cms_api import (CMSApi, CMSReply, ComponentRequest,
-                            RepoComponentQuery, construct_multipart)
+from ...api.cms_api import (
+    CMSApi,
+    CMSReply,
+    ComponentRequest,
+    RepoComponentQuery,
+    construct_multipart,
+)
 from ...api.local_api import LocalApi
 from ...config import Config
-from ...data import (Component, DataFactory, DTypes, FileTypes,
-                     SerialisedDataType)
+from ...data import Component, DataFactory, DTypes, FileTypes, SerialisedDataType
 from ..download_manager import FileDownloader
 from ..page_manager import PageStates
 from .base import ManagerInterface
@@ -34,6 +37,7 @@ class OnlineRepoManager(ManagerInterface):
     Manager for interaction with the Component Management System API(online repository)
 
     """
+
     component_loaded = Signal()
     api: CMSApi
 
@@ -271,6 +275,7 @@ class DbDataLoader:
     """
     This class is for loading data from Component Management System Database
     """
+
     def __init__(self, dtype: DTypes) -> None:
         """
         Initialize the DbDataLoader to load data.

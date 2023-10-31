@@ -4,7 +4,6 @@
 # https://opensource.org/licenses/MIT
 
 
-
 import FreeCad
 
 FreeCad.__unit_test__ += ["TestComponentLibraryAddon"]

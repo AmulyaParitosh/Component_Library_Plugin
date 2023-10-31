@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 import contextlib
@@ -50,7 +49,6 @@ class LocalApi(ApiInterface):
         self._handle_component_data_creation(component, filetype)
         self._handle_local_data_creation(component, filetype)
 
-
     def _handle_component_data_creation(self, component: Component, filetype: FileTypes) -> None:
         """
         Handle the creation of component data.
@@ -78,10 +76,21 @@ class LocalApi(ApiInterface):
                 existing_data.tags = component.tags
 
             existing_data.files[filetype] = deepcopy(component.files[filetype])
-            existing_data.files[filetype].url = (self.component_path(comp_name)/f"{comp_name}.{filetype.value}").absolute().as_uri()
+            existing_data.files[filetype].url = (
+                (self.component_path(comp_name) / f"{comp_name}.{filetype.value}")
+                .absolute()
+                .as_uri()
+            )
 
             if component.metadata.thumbnail is not None:
-                existing_data.metadata.thumbnail = (self.component_path(comp_name)/f"thumbnail{Path(component.metadata.thumbnail).suffix}").absolute().as_uri()
+                existing_data.metadata.thumbnail = (
+                    (
+                        self.component_path(comp_name)
+                        / f"thumbnail{Path(component.metadata.thumbnail).suffix}"
+                    )
+                    .absolute()
+                    .as_uri()
+                )
 
     def _handle_local_data_creation(self, component: Component, filetype: FileTypes) -> None:
         """
@@ -108,7 +117,6 @@ class LocalApi(ApiInterface):
             for tag in component.tags:
                 local_data["tags"].setdefault(tag.label, LocalDataComp()).add(comp_name)
 
-
     def read(self) -> dict[str, Any]:
         """
         Read the component data from the local storage.
@@ -125,7 +133,7 @@ class LocalApi(ApiInterface):
         print(data)
         """
         data = {
-            "items" : [],
+            "items": [],
             "page": 0,
             "per_page": 18,
             "total": 0,
@@ -133,17 +141,17 @@ class LocalApi(ApiInterface):
         for path in Config.LOCAL_COMPONENT_PATH.iterdir():
             if not path.is_dir():
                 continue
-            with open(path/"metadata.json", 'r', encoding="utf-8") as metadata:
+            with open(path / "metadata.json", "r", encoding="utf-8") as metadata:
                 data["items"].append(json.load(metadata))
             data["total"] += 1
-            data["page"] = data["total"] // data["per_page"] +1
+            data["page"] = data["total"] // data["per_page"] + 1
 
         return data
 
-    def update(self):...
+    def update(self):
+        ...
 
-
-    def delete(self, component: Component, filetypes: Iterable[FileTypes]|FileTypes) -> None:
+    def delete(self, component: Component, filetypes: Iterable[FileTypes] | FileTypes) -> None:
         """
         Delete the component and associated files from the local storage.
 
@@ -163,14 +171,17 @@ class LocalApi(ApiInterface):
         component_path = self.component_path(comp_name)
         remove_component = False
 
-        with ComponentData(self.metadata_path(comp_name)) as comp_data, LocalData(Config.LOCAL_COMPONENT_PATH) as local_data:
-            if isinstance(filetypes, FileTypes): filetypes = [filetypes]
+        with ComponentData(self.metadata_path(comp_name)) as comp_data, LocalData(
+            Config.LOCAL_COMPONENT_PATH
+        ) as local_data:
+            if isinstance(filetypes, FileTypes):
+                filetypes = [filetypes]
             for filetype in filetypes:
                 comp_data.files.pop(filetype)
                 local_data["filetypes"][filetype.value].remove(comp_name)
-                (component_path/f"{comp_name}.{filetype.value}").unlink()
+                (component_path / f"{comp_name}.{filetype.value}").unlink()
 
-            if not any(comp_data.files.values()): #checking if there are no files present
+            if not any(comp_data.files.values()):  # checking if there are no files present
                 remove_component = True
                 local_data["components"].remove(comp_name)
                 for comp_list in local_data["tags"].values():
@@ -179,7 +190,6 @@ class LocalApi(ApiInterface):
 
         if remove_component:
             shutil.rmtree(component_path)
-
 
     @classmethod
     def component_path(cls, component_name: str) -> Path:
@@ -197,8 +207,7 @@ class LocalApi(ApiInterface):
             The path to the component directory.
         """
 
-        return Config.LOCAL_COMPONENT_PATH/component_name
-
+        return Config.LOCAL_COMPONENT_PATH / component_name
 
     @classmethod
     def metadata_path(cls, component_name: str) -> Path:
@@ -215,8 +224,7 @@ class LocalApi(ApiInterface):
         Path
             The path to the metadata file.
         """
-        return cls.component_path(component_name)/"metadata.json"
-
+        return cls.component_path(component_name) / "metadata.json"
 
     def get_tags(self) -> list[dict[str, str]]:
         """
@@ -228,4 +236,4 @@ class LocalApi(ApiInterface):
             A list of dictionaries containing the tags.
         """
         with LocalData(Config.LOCAL_COMPONENT_PATH) as local_data:
-            return [{"label" : tag} for tag in local_data["tags"].keys()]
+            return [{"label": tag} for tag in local_data["tags"].keys()]

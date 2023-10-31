@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from functools import wraps
@@ -30,6 +29,7 @@ class GridView(BaseView):
     """
     This is the GridView for browsing the components.
     """
+
     manager: OnlineRepoManager
 
     def __init__(self, parent: QWidget) -> None:
@@ -57,7 +57,7 @@ class GridView(BaseView):
         self.ui.setupUi(self)
 
         self.loading_overlay = LoadingOverlay(self.ui.scrollArea)
-        self.ui.fileTypeComboBox.make_pre_checked() # initialy all the filetypes are filtred on searches
+        self.ui.fileTypeComboBox.make_pre_checked()  # initialy all the filetypes are filtred on searches
 
     def setupSignals(self) -> None:
         """
@@ -91,7 +91,7 @@ class GridView(BaseView):
         self.manager.page_states.enable_next.connect(self.ui.nextButton.setEnabled)
         self.manager.page_states.enable_prev.connect(self.ui.prevButton.setEnabled)
 
-        self.initial_load() # Perform initial loading of data
+        self.initial_load()  # Perform initial loading of data
 
     def updateContent(self, page: PageStates) -> None:
         """
@@ -110,7 +110,6 @@ class GridView(BaseView):
         self.ui.scrollAreaContentItemsWidget.repopulate(page.data)
         self.ui.pageLable.setText(f"{page.page_no} / {page.total_pages}")
         self.loading_overlay.loading = False
-
 
     @staticmethod
     def loading(func: Callable):
@@ -132,8 +131,11 @@ class GridView(BaseView):
         def wrapper(*args, **kwargs):
             self, *args = args
             self.loading_overlay.loading = True
-            self.ui.scrollArea.verticalScrollBar().setValue(0)  # reset the vertical scrollbar position
+            self.ui.scrollArea.verticalScrollBar().setValue(
+                0
+            )  # reset the vertical scrollbar position
             return func(self, *args, **kwargs)
+
         return wrapper
 
     @Slot()
