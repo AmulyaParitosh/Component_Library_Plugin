@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from typing import Any
@@ -27,6 +26,7 @@ class LocalStorageManager(ManagerInterface):
     """
     Manager for the local Storage and functions. Abstracts the interaction with the LocalAPI.
     """
+
     component_loaded = Signal()
     api: LocalApi
 
@@ -53,7 +53,7 @@ class LocalStorageManager(ManagerInterface):
         """
         return self.request_components()
 
-    def load_from_db(self, dtype: DTypes) -> list[SerialisedDataType]|None:
+    def load_from_db(self, dtype: DTypes) -> list[SerialisedDataType] | None:
         """
         Load data from the Local database
 

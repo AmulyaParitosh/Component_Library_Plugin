@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from PySide.QtCore import Slot
@@ -19,13 +18,14 @@ from ..base_detail_view import BaseDetailedView
 
 
 class LocalDetailedView(BaseDetailedView):
-	"""
+    """
     Detailed view Widget of an localy present component.
     """
-	manager: LocalStorageManager
 
-	def __init__(self, parent: QWidget) -> None:
-		"""
+    manager: LocalStorageManager
+
+    def __init__(self, parent: QWidget) -> None:
+        """
         Initialises the OnlineDetailedView.
 
         Parameters
@@ -33,32 +33,31 @@ class LocalDetailedView(BaseDetailedView):
         parent : QWidget
             parent widget of OnlineDetailedView.
         """
-		super().__init__(parent)
+        super().__init__(parent)
 
-		self.setupUi()
-		self.setupSignals()
+        self.setupUi()
+        self.setupSignals()
 
-	def setupUi(self) -> None:
-		"""
+    def setupUi(self) -> None:
+        """
         Setup all the ui elements.
         Called in __init__
         """
-		super().setupUi()
+        super().setupUi()
 
-		self.removePushButton = QPushButton(self)
-		self.removePushButton.setText("Remove")
-		self.addControlWidget(self.removePushButton)
+        self.removePushButton = QPushButton(self)
+        self.removePushButton.setText("Remove")
+        self.addControlWidget(self.removePushButton)
 
-	def setupSignals(self) -> None:
-		"""
+    def setupSignals(self) -> None:
+        """
         Setup all the signal connections.
         Called in __init__
         """
-		self.removePushButton.clicked.connect(self.remove)
+        self.removePushButton.clicked.connect(self.remove)
 
-
-	def setupManager(self, manager: ManagerInterface) -> None:
-		"""
+    def setupManager(self, manager: ManagerInterface) -> None:
+        """
         Sets up the manager for the OnlineDetailedView.
 
         Parameters
@@ -70,20 +69,19 @@ class LocalDetailedView(BaseDetailedView):
         -------
         None
         """
-		super().setupManager(manager)
+        super().setupManager(manager)
 
-
-	@Slot()
-	def remove(self) -> None:
-		"""
-		Remove the file fromt he locak storage.
+    @Slot()
+    def remove(self) -> None:
+        """
+                Remove the file fromt he locak storage.
 
         Returns
         -------
         None
-		"""
-		self.manager.remove_file(self.component, self.current_file().type)
-		self.ui.filetypeComboBox.removeItem(self.ui.filetypeComboBox.currentIndex())
-		if self.ui.filetypeComboBox.count() == 0:
-			self.backPushButton_click()
-		self.parent().parent().localGridView.components_response_handler()
+        """
+        self.manager.remove_file(self.component, self.current_file().type)
+        self.ui.filetypeComboBox.removeItem(self.ui.filetypeComboBox.currentIndex())
+        if self.ui.filetypeComboBox.count() == 0:
+            self.backPushButton_click()
+        self.parent().parent().localGridView.components_response_handler()

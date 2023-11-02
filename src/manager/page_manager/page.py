@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from dataclasses import dataclass, field
@@ -27,6 +26,7 @@ class PageStates(QObject):
     PageStates This class manages the page states and the data of the page.
     Including pagination and signals for next/prev page buttons.
     """
+
     enable_next = Signal(bool)  # Signal to enable or disable the next page button.
     enable_prev = Signal(bool)  # Signal to enable or disable the previous page button.
 
@@ -63,7 +63,9 @@ class PageStates(QObject):
         json_response : dict[str, Any]
             the response from API
         """
-        self.data: list[Component] = DataFactory.load_many(data_list=json_response.get("items", []), dtype=DTypes.COMPONENT)
+        self.data: list[Component] = DataFactory.load_many(
+            data_list=json_response.get("items", []), dtype=DTypes.COMPONENT
+        )
         self.update_existing_comps(self.data)
 
         self.total_items = json_response.get("total", 0)

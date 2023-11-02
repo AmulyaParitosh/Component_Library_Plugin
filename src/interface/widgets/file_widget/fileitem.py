@@ -1,21 +1,29 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from pathlib import Path
 
-from PySide.QtWidgets import (QFileDialog, QFrame, QHBoxLayout, QLabel,
-                               QListWidget, QListWidgetItem, QPushButton,
-                               QSizePolicy, QVBoxLayout, QWidget)
+from PySide.QtWidgets import (
+    QFileDialog,
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QListWidget,
+    QListWidgetItem,
+    QPushButton,
+    QSizePolicy,
+    QVBoxLayout,
+    QWidget,
+)
 
 
 class FileItem(QFrame):
@@ -104,4 +112,7 @@ class FileList(QWidget):
         """
         Property to get the list of filepaths currently in the list.
         """
-        return [self.list_widget.itemWidget(self.list_widget.item(i)).filepath for i in range(self.list_widget.count())]
+        return [
+            self.list_widget.itemWidget(self.list_widget.item(i)).filepath
+            for i in range(self.list_widget.count())
+        ]

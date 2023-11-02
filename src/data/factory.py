@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from __future__ import annotations
@@ -20,6 +19,7 @@ from .data_types import DTypes
 
 if TYPE_CHECKING:
     from .datadef import SerialisedDataType
+
 
 class DataFactory:
     """
@@ -49,7 +49,6 @@ class DataFactory:
             This method is not implemented.
         """
         raise NotImplementedError
-
 
     @classmethod
     def __init_subclass__(cls, /, dtype: DTypes, **kwargs) -> None:
@@ -121,10 +120,12 @@ class DataFactory:
             True if the attribute should be considered as a field for serialization, False otherwise.
         """
 
-        return not any((
-            attr.startswith("_"),  # Exclude private attributes (starting with '_').
-            isinstance(getattr(self, attr), Callable),  # Exclude callable attributes (methods).
-        ))
+        return not any(
+            (
+                attr.startswith("_"),  # Exclude private attributes (starting with '_').
+                isinstance(getattr(self, attr), Callable),  # Exclude callable attributes (methods).
+            )
+        )
 
     def serialize(self):
         """

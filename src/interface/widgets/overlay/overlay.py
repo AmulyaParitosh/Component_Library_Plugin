@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from PySide.QtCore import Qt
@@ -28,8 +27,8 @@ class Overlay(QWidget):
         Paint event for drawing the overlay on the widget.
         """
         popup_width, popup_height = 300, 120
-        ow = int(self.size().width()/2-popup_width/2)
-        oh = int(self.size().height()/2-popup_height/2)
+        ow = int(self.size().width() / 2 - popup_width / 2)
+        oh = int(self.size().height() / 2 - popup_height / 2)
         tolw, tolh = 80, -5
 
         qp = self.create_painter()

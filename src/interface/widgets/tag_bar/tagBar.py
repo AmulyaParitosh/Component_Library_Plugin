@@ -1,21 +1,28 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from functools import partial
 from typing import Sequence
 from PySide.QtCore import Qt, Signal
-from PySide.QtWidgets import (QCompleter, QFrame, QHBoxLayout, QLabel,
-                               QLineEdit, QPushButton, QSizePolicy, QWidget)
+from PySide.QtWidgets import (
+    QCompleter,
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QSizePolicy,
+    QWidget,
+)
 
 from ....data import Tag
 
@@ -34,7 +41,7 @@ class TagBar(QWidget):
         super(TagBar, self).__init__()
         self.setParent(parent)
 
-        self.setWindowTitle('Tag Bar')
+        self.setWindowTitle("Tag Bar")
 
         self.tags: list[str] = []
 
@@ -69,9 +76,9 @@ class TagBar(QWidget):
         """
         Method to create tags from user input in the line edit.
         """
-        new_tags = [tag for tag in self.line_edit.text().split(', ') if tag]
+        new_tags = [tag for tag in self.line_edit.text().split(", ") if tag]
 
-        self.line_edit.setText('')
+        self.line_edit.setText("")
 
         self.tags.extend(new_tags)
         self.tags = list(set(self.tags))
@@ -102,7 +109,7 @@ class TagBar(QWidget):
             The tag text to be added.
         """
         tag = QFrame()
-        tag.setStyleSheet('border:1px solid rgb(192, 192, 192); border-radius: 4px;')
+        tag.setStyleSheet("border:1px solid rgb(192, 192, 192); border-radius: 4px;")
         tag.setContentsMargins(0, 0, 0, 0)
         tag.setSizePolicy(
             QSizePolicy.Policy.Maximum,
@@ -116,16 +123,16 @@ class TagBar(QWidget):
         tag.setLayout(hbox)
 
         label = QLabel(text)
-        label.setStyleSheet('border:0px')
+        label.setStyleSheet("border:0px")
         label.setSizePolicy(
             QSizePolicy.Policy.Maximum,
             QSizePolicy.Policy.Minimum,
         )
         hbox.addWidget(label)
 
-        x_button = QPushButton('x')
+        x_button = QPushButton("x")
         x_button.setFixedSize(20, 20)
-        x_button.setStyleSheet('border:0px; font-weight:bold')
+        x_button.setStyleSheet("border:0px; font-weight:bold")
         x_button.setSizePolicy(
             QSizePolicy.Policy.Maximum,
             QSizePolicy.Policy.Minimum,

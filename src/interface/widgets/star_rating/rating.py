@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from __future__ import annotations
@@ -29,6 +28,7 @@ class Star(QLabel):
         """
         Enum class to represent star states (filled or empty).
         """
+
         Empty = "src/interface/resources/emptystar.png"
         Filled = "src/interface/resources/filledstar.png"
 
@@ -62,7 +62,9 @@ class StarRating(QWidget):
     Custom QWidget class to represent a star rating system.
     """
 
-    def __init__(self, parent: QWidget | None = None, default_value: float = 0, max_value: int = 5) -> None:
+    def __init__(
+        self, parent: QWidget | None = None, default_value: float = 0, max_value: int = 5
+    ) -> None:
         """
         Constructor to initialize the StarRating.
 
@@ -87,7 +89,7 @@ class StarRating(QWidget):
         self.hbox_layout = QHBoxLayout()
         self.setLayout(self.hbox_layout)
         self.value_label = QLabel()
-        self.value_label.setFont(QFont('Arial', 14))
+        self.value_label.setFont(QFont("Arial", 14))
         self.hbox_layout.addWidget(self.value_label)
         for i in range(1, self.max_value + 1):
             star = Star(self)

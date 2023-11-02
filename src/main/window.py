@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from PySide.QtCore import Slot
@@ -22,7 +21,6 @@ from .Ui_window import Ui_MainWindow
 
 
 class Window(QMainWindow):
-
     def __init__(self, parent=None) -> None:
         """
         Initialize the widget. This is the entry point for the class. You can override this if you want to do something other than setup the GUI and set up some things that are specific to the widget
@@ -44,7 +42,6 @@ class Window(QMainWindow):
         self.setupManagers(self.repo_manager, self.local_manager)
         self.display_grid_view()
 
-
     def setupUi(self):
         """
         Setup the UI to work with the data. Called by __init__.
@@ -64,7 +61,6 @@ class Window(QMainWindow):
         self.onlineGridView.detailView = self.onlineDetailView
         self.localGridView.detailView = self.localDetailView
 
-
     def setupSignals(self):
         """
         Setup the signals that need to be connected to the UI. Called by __init__.
@@ -72,7 +68,6 @@ class Window(QMainWindow):
         self.ui.browseButton.clicked.connect(self.display_grid_view)
         self.ui.uploadButton.clicked.connect(self.uploadButton_clicked)
         self.ui.LocalButton.clicked.connect(self.display_local_components)
-
 
     def setupManagers(self, repo_manager: OnlineRepoManager, local_manager: LocalStorageManager):
         """
@@ -91,7 +86,6 @@ class Window(QMainWindow):
         self.localGridView.setupManager(local_manager)
         self.localDetailView.setupManager(local_manager)
 
-
     def display_detail_view(self, item: ComponentItem, grid_view: GridView):
         """
         Display the detail view.
@@ -106,14 +100,12 @@ class Window(QMainWindow):
         grid_view.detailView.updateContent(item)
         self.ui.stackedWidget.setCurrentWidget(grid_view.detailView)
 
-
     def display_local_components(self):
         """
         Display locally installed components to the user.
         """
         self.local_manager.request_components()
         self.ui.stackedWidget.setCurrentWidget(self.localGridView)
-
 
     @Slot()
     def display_grid_view(self):
@@ -122,14 +114,12 @@ class Window(QMainWindow):
         """
         self.ui.stackedWidget.setCurrentWidget(self.onlineGridView)
 
-
     @Slot()
     def toLastWidget(self):
         """
         Switch to the last widget in the stack. This is useful when you want to switch back to a grid view from any detailed view.
         """
         self.ui.stackedWidget.setCurrentWidget(self.widgetStack.pop())
-
 
     @Slot()
     def uploadButton_clicked(self):
@@ -138,7 +128,6 @@ class Window(QMainWindow):
         """
         data = ComponetUploadDialog.create_component(self, self.repo_manager)
         print(data)
-
 
     def add_notification_widget(self, notification: QWidget):
         """

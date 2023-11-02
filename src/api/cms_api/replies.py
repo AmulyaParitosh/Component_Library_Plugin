@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 
@@ -25,7 +24,9 @@ class CMSReply(QObject):
     Custom QObject class to handle network replies and emit signals with parsed data.
     """
 
-    finished = Signal(dict) # Signal to be emitted when the reply is finished, with the parsed data as an argument
+    finished = Signal(
+        dict
+    )  # Signal to be emitted when the reply is finished, with the parsed data as an argument
 
     def __init__(self, reply: QNetworkReply, parent) -> None:
         super().__init__(parent)

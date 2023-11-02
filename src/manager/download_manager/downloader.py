@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from pathlib import Path
@@ -26,7 +25,9 @@ class FileDownloader(QObject):
     """
 
     finished = Signal(Path)  # Signal emitted when the download is finished.
-    error = Signal(QNetworkReply.NetworkError)  # Signal emitted when there's an error during download.
+    error = Signal(
+        QNetworkReply.NetworkError
+    )  # Signal emitted when there's an error during download.
 
     network_access_manager, sslConfig = get_network_access_manager()
 

@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from PySide.QtCore import QFile, QIODevice, QUrl, QUrlQuery
@@ -21,6 +20,7 @@ class ComponentRequest(QNetworkRequest):
     """
     Extends QNetworkRequest. Special Request for Components
     """
+
     endpoint: str = "component"
 
     def __init__(self, state: RepoComponentQuery | None = None, *args, **kwargs) -> None:
@@ -103,7 +103,7 @@ def construct_multipart(data: dict) -> QHttpMultiPart:
     # Append text parts to the multi-part form data
     for field, value in data.items():
         if isinstance(value, (list, tuple, set)):
-            value = ','.join(value)
+            value = ",".join(value)
         # TODO: Construct a text part for the multi-part form data
         multi_part.append(construct_text_parts(field, value))
 
@@ -135,7 +135,7 @@ def construct_text_parts(field, value) -> QHttpPart:
     post_part = QHttpPart()
     post_part.setHeader(
         QNetworkRequest.KnownHeaders.ContentDispositionHeader,
-        f'form-data; name=\"{field}\"',
+        f'form-data; name="{field}"',
     )
     post_part.setBody(str(value).encode())
     return post_part
@@ -164,7 +164,7 @@ def construct_file_part(field, filepath) -> QHttpPart | None:
     post_part = QHttpPart()
     post_part.setHeader(
         QNetworkRequest.KnownHeaders.ContentDispositionHeader,
-        f'form-data; name=\"{field}\"; filename=\"{file.fileName()}\"',
+        f'form-data; name="{field}"; filename="{file.fileName()}"',
     )
     post_part.setBodyDevice(file)
     return post_part

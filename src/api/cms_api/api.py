@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from typing import Any
@@ -32,7 +31,7 @@ class CMSApi(ApiInterface):
 
     network_access_manager, sslConfig = get_network_access_manager()
 
-    BASEURL: str = Config.API_URL + '/api'
+    BASEURL: str = Config.API_URL + "/api"
 
     def __init__(self) -> None:
         """
@@ -59,7 +58,7 @@ class CMSApi(ApiInterface):
         None
         """
 
-        absolute_path: str = f'{self.BASEURL}/{request.url().toString()}'
+        absolute_path: str = f"{self.BASEURL}/{request.url().toString()}"
         request.setUrl(QUrl.fromUserInput(absolute_path))
         request.setSslConfiguration(self.sslConfig)
 

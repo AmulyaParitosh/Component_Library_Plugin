@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from PySide.QtGui import QFont
@@ -25,6 +24,7 @@ class BaseDetailedView(BaseView):
     """
     Base class for the detailed view of a component
     """
+
     files_on_download = {}
     thumbnail: Thumbnail = None
     component: Component = None
@@ -59,8 +59,8 @@ class BaseDetailedView(BaseView):
         """
         self.ui.setupUi(self)
         self.ui.backPushButton.clicked.connect(self.backPushButton_click)
-        self.ui.contentLabel.setFont(QFont('Arial', 28))
-        font_14 = QFont('Arial', 14)
+        self.ui.contentLabel.setFont(QFont("Arial", 28))
+        font_14 = QFont("Arial", 14)
         self.ui.descriptionTextBrowser.setFont(font_14)
         self.ui.authorValue.setFont(font_14)
         self.ui.licenseValue.setFont(font_14)

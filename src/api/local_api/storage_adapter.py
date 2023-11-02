@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 import json
@@ -21,7 +20,8 @@ from ...data import Component, DataFactory, DTypes
 from ...utils import singleton
 
 
-LocalDataComp = set[str] # Type alias for a set of strings representing components in local data
+LocalDataComp = set[str]  # Type alias for a set of strings representing components in local data
+
 
 class LocalDataDict(TypedDict):
     """
@@ -40,6 +40,7 @@ class LocalDataDict(TypedDict):
     components: LocalDataComp
     tags: dict[str, LocalDataComp]
     filetypes: dict[str, LocalDataComp]
+
 
 class SetJsonEncoder(json.JSONEncoder):
     """
@@ -64,6 +65,7 @@ class SetJsonEncoder(json.JSONEncoder):
         if isinstance(obj, set):
             return list(obj)
         return json.JSONEncoder.default(self, obj)
+
 
 class SetJSONDecoder(json.JSONDecoder):
     """
@@ -93,9 +95,10 @@ class SetJSONDecoder(json.JSONDecoder):
         f = {}
         for key, value in d.items():
             if isinstance(value, list):
-                value = set(value) # Convert lists back to sets for keys that should be sets
+                value = set(value)  # Convert lists back to sets for keys that should be sets
             f[key] = value
         return f
+
 
 @singleton
 class LocalData:
@@ -120,11 +123,10 @@ class LocalData:
         None
         """
 
-        storage_path.mkdir(exist_ok=True) # If the folder does not exixt, create it.
+        storage_path.mkdir(exist_ok=True)  # If the folder does not exixt, create it.
         self.DATA_PATH = storage_path / "data.json"
         if not self.DATA_PATH.exists():
-            self.__reset_data() # If data file does not exist, create it with default values
-
+            self.__reset_data()  # If data file does not exist, create it with default values
 
     def __enter__(self) -> LocalDataDict:
         """
@@ -145,8 +147,8 @@ class LocalData:
         with LocalData(storage_path) as data:
             print(data)
         """
-		# Load data from the JSON file using SetJSONDecoder for loading lists as set
-        with self.DATA_PATH.open('r', encoding="utf-8") as file:
+        # Load data from the JSON file using SetJSONDecoder for loading lists as set
+        with self.DATA_PATH.open("r", encoding="utf-8") as file:
             self.data: LocalDataDict = json.load(file, cls=SetJSONDecoder)
             return self.data
 
@@ -173,8 +175,8 @@ class LocalData:
             data["key"] = "value"
         """
 
-		# Write data back to the JSON file using SetJsonEncoder for loading lists as set
-        with self.DATA_PATH.open('w', encoding="utf-8") as file:
+        # Write data back to the JSON file using SetJsonEncoder for loading lists as set
+        with self.DATA_PATH.open("w", encoding="utf-8") as file:
             json.dump(self.data, file, cls=SetJsonEncoder, indent=4)
 
     def __reset_data(self) -> None:
@@ -199,8 +201,10 @@ class LocalData:
                     "tags": {},
                     "filetypes": {},
                 },
-                file, indent=4,
+                file,
+                indent=4,
             )
+
 
 class ComponentDataDict(TypedDict):
     """
@@ -221,11 +225,12 @@ class ComponentDataDict(TypedDict):
 
     """
 
-    files : dict[str, dict[str, Any]]
-    id : str
-    license : dict[str, Any]
-    metadata : dict[str, Any]
-    tags : list[dict[str, Any]]
+    files: dict[str, dict[str, Any]]
+    id: str
+    license: dict[str, Any]
+    metadata: dict[str, Any]
+    tags: list[dict[str, Any]]
+
 
 class ComponentData:
     """
@@ -270,11 +275,15 @@ class ComponentData:
             print(data)
         """
 
-        with self.data_path.open('r', encoding="utf-8") as file:
+        with self.data_path.open("r", encoding="utf-8") as file:
             try:
-                self.existing_data: Component = DataFactory.create(dtype=DTypes.COMPONENT, **json.load(file))
+                self.existing_data: Component = DataFactory.create(
+                    dtype=DTypes.COMPONENT, **json.load(file)
+                )
             except json.JSONDecodeError:
-                self.existing_data: Component = DataFactory.create(dtype=DTypes.COMPONENT, **self._default_dict())
+                self.existing_data: Component = DataFactory.create(
+                    dtype=DTypes.COMPONENT, **self._default_dict()
+                )
         return self.existing_data
 
     def __exit__(self, exc_type, exc_value, exc_tb):
@@ -295,7 +304,7 @@ class ComponentData:
         None
         """
 
-        with self.data_path.open('w', encoding="utf-8") as file:
+        with self.data_path.open("w", encoding="utf-8") as file:
             json.dump(self.existing_data, file, indent=4, cls=DataJsonEncoder)
 
     def _default_dict(self):
@@ -309,9 +318,9 @@ class ComponentData:
         """
 
         return {
-                "files": {},
-                "id": "",
-                "license": {},
-                "metadata": {},
-                "tags": [],
-            }
+            "files": {},
+            "id": "",
+            "license": {},
+            "metadata": {},
+            "tags": [],
+        }
