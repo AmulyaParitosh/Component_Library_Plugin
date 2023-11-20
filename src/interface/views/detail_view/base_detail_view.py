@@ -10,14 +10,13 @@
 # |																|
 # --------------------------------------------------------------
 
-from PySide.QtGui import QFont
-from PySide.QtWidgets import QWidget
-from PySide.QtCore import Slot
+from PySide6.QtCore import Slot
+from PySide6.QtGui import QFont
+from PySide6.QtWidgets import QWidget
 
 from ....data import Component, File, FileTypes
-from ...widgets import DetailedWidget, Thumbnail
+from ...widgets import ComponentItem, DetailedWidget, Thumbnail
 from ..base_view import BaseView
-from ...widgets import ComponentItem, Thumbnail
 
 
 class BaseDetailedView(BaseView):

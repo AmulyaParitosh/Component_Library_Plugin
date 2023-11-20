@@ -14,9 +14,9 @@ from __future__ import annotations
 
 from enum import Enum
 
-from PySide.QtCore import QSize
-from PySide.QtGui import QFont, QPixmap
-from PySide.QtWidgets import QHBoxLayout, QLabel, QWidget
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QFont, QPixmap
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QWidget
 
 
 class Star(QLabel):
@@ -63,7 +63,10 @@ class StarRating(QWidget):
     """
 
     def __init__(
-        self, parent: QWidget | None = None, default_value: float = 0, max_value: int = 5
+        self,
+        parent: QWidget | None = None,
+        default_value: float = 0,
+        max_value: int = 5,
     ) -> None:
         """
         Constructor to initialize the StarRating.

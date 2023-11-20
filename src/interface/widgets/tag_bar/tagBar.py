@@ -12,8 +12,9 @@
 
 from functools import partial
 from typing import Sequence
-from PySide.QtCore import Qt, Signal
-from PySide.QtWidgets import (
+
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtWidgets import (
     QCompleter,
     QFrame,
     QHBoxLayout,
