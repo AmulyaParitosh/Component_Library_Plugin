@@ -12,7 +12,8 @@
 
 import json
 from dataclasses import InitVar, dataclass, field
-from typing import Any, Literal
+from typing import Any, Literal, TypedDict
+
 from .data_types import DTypes, FileTypes
 from .factory import DataFactory
 
@@ -282,7 +283,9 @@ class Component(DataFactory, dtype=DTypes.COMPONENT):
         if isinstance(self.files, list):
             self.files = {
                 file.type: file
-                for file in DataFactory.load_many(data_list=self.files, dtype=DTypes.FILE)
+                for file in DataFactory.load_many(
+                    data_list=self.files, dtype=DTypes.FILE
+                )
             }
         elif isinstance(self.files, dict):
             self.files = {
@@ -361,6 +364,36 @@ class DataJsonEncoder(json.JSONEncoder):
         if isinstance(obj, FileTypes):
             return obj.value
         return json.JSONEncoder.default(self, obj)
+
+
+class Attribute(TypedDict):
+    key: str
+    value: str
+
+
+class Attributes(list):
+    def __init__(self, iterable):
+        super().__init__(self._validate_attribute(item) for item in iterable)
+
+    def __setitem__(self, index, item):
+        super().__setitem__(index, self._validate_attribute(item))
+
+    def insert(self, index, item):
+        super().insert(index, self._validate_attribute(item))
+
+    def append(self, item):
+        super().append(self._validate_attribute(item))
+
+    def extend(self, other):
+        if isinstance(other, type(self)):
+            super().extend(other)
+        else:
+            super().extend(self._validate_attribute(item) for item in other)
+
+    def _validate_attribute(self, value):
+        if isinstance(value, Attribute):
+            return value
+        raise TypeError(f"Attribute expected, got {type(value).__name__}")
 
 
 SerialisedDataType = Component | Tag | Metadata | License | File
