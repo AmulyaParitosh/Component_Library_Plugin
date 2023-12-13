@@ -10,7 +10,7 @@
 # |																|
 # --------------------------------------------------------------
 
-from PySide.QtCore import Signal
+from PySide6.QtCore import Signal
 
 from ...api import ApiInterface, ComponentQueryInterface
 from ...utils import ABCQObject

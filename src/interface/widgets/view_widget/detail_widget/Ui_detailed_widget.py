@@ -20,7 +20,7 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide.QtCore import (
+from PySide6.QtCore import (
     QCoreApplication,
     QDate,
     QDateTime,
@@ -30,11 +30,11 @@ from PySide.QtCore import (
     QPoint,
     QRect,
     QSize,
+    Qt,
     QTime,
     QUrl,
-    Qt,
 )
-from PySide.QtGui import (
+from PySide6.QtGui import (
     QBrush,
     QColor,
     QConicalGradient,
@@ -52,7 +52,7 @@ from PySide.QtGui import (
     QRadialGradient,
     QTransform,
 )
-from PySide.QtWidgets import (
+from PySide6.QtWidgets import (
     QApplication,
     QComboBox,
     QFrame,
@@ -80,7 +80,9 @@ class Ui_detailedWidget(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.topArea = QWidget(detailedWidget)
         self.topArea.setObjectName("topArea")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
+        sizePolicy = QSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.topArea.sizePolicy().hasHeightForWidth())
@@ -134,30 +136,44 @@ class Ui_detailedWidget(object):
         self.contentLabel = QLabel(self.labelFrame)
         self.contentLabel.setObjectName("contentLabel")
 
-        self.horizontalLayout_2.addWidget(self.contentLabel, 0, Qt.AlignmentFlag.AlignLeft)
+        self.horizontalLayout_2.addWidget(
+            self.contentLabel, 0, Qt.AlignmentFlag.AlignLeft
+        )
 
         self.verticalLayout_2.addWidget(self.labelFrame)
 
         self.thumbnailArea = QWidget(self.mainScrollAreaWidgetContents)
         self.thumbnailArea.setObjectName("thumbnailArea")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Expanding)
+        sizePolicy1 = QSizePolicy(
+            QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Expanding
+        )
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.thumbnailArea.sizePolicy().hasHeightForWidth())
+        sizePolicy1.setHeightForWidth(
+            self.thumbnailArea.sizePolicy().hasHeightForWidth()
+        )
         self.thumbnailArea.setSizePolicy(sizePolicy1)
         self.thumbnailArea.setMinimumSize(QSize(0, 250))
         self.thumbnailArea.setMaximumSize(QSize(700, 350))
         self.thumbnailAreaHorizontalLayout = QHBoxLayout(self.thumbnailArea)
-        self.thumbnailAreaHorizontalLayout.setObjectName("thumbnailAreaHorizontalLayout")
+        self.thumbnailAreaHorizontalLayout.setObjectName(
+            "thumbnailAreaHorizontalLayout"
+        )
 
-        self.verticalLayout_2.addWidget(self.thumbnailArea, 0, Qt.AlignmentFlag.AlignLeft)
+        self.verticalLayout_2.addWidget(
+            self.thumbnailArea, 0, Qt.AlignmentFlag.AlignLeft
+        )
 
         self.metadataFrame = QFrame(self.mainScrollAreaWidgetContents)
         self.metadataFrame.setObjectName("metadataFrame")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+        sizePolicy2 = QSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding
+        )
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.metadataFrame.sizePolicy().hasHeightForWidth())
+        sizePolicy2.setHeightForWidth(
+            self.metadataFrame.sizePolicy().hasHeightForWidth()
+        )
         self.metadataFrame.setSizePolicy(sizePolicy2)
         self.metadataFrame.setFrameShape(QFrame.Shape.StyledPanel)
         self.metadataFrame.setFrameShadow(QFrame.Shadow.Raised)
@@ -169,17 +185,23 @@ class Ui_detailedWidget(object):
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.descriptionLabel = QLabel(self.descriptionWidget)
         self.descriptionLabel.setObjectName("descriptionLabel")
-        sizePolicy.setHeightForWidth(self.descriptionLabel.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.descriptionLabel.sizePolicy().hasHeightForWidth()
+        )
         self.descriptionLabel.setSizePolicy(sizePolicy)
 
         self.verticalLayout_3.addWidget(self.descriptionLabel)
 
         self.descriptionTextBrowser = QTextBrowser(self.descriptionWidget)
         self.descriptionTextBrowser.setObjectName("descriptionTextBrowser")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy3 = QSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
+        )
         sizePolicy3.setHorizontalStretch(0)
         sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.descriptionTextBrowser.sizePolicy().hasHeightForWidth())
+        sizePolicy3.setHeightForWidth(
+            self.descriptionTextBrowser.sizePolicy().hasHeightForWidth()
+        )
         self.descriptionTextBrowser.setSizePolicy(sizePolicy3)
 
         self.verticalLayout_3.addWidget(self.descriptionTextBrowser)
@@ -256,13 +278,19 @@ class Ui_detailedWidget(object):
 
         self.ratingwidget = StarRating(self.metadataWidget)
         self.ratingwidget.setObjectName("ratingwidget")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)
+        sizePolicy4 = QSizePolicy(
+            QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred
+        )
         sizePolicy4.setHorizontalStretch(0)
         sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.ratingwidget.sizePolicy().hasHeightForWidth())
+        sizePolicy4.setHeightForWidth(
+            self.ratingwidget.sizePolicy().hasHeightForWidth()
+        )
         self.ratingwidget.setSizePolicy(sizePolicy4)
 
-        self.gridLayout.addWidget(self.ratingwidget, 5, 1, 1, 1, Qt.AlignmentFlag.AlignLeft)
+        self.gridLayout.addWidget(
+            self.ratingwidget, 5, 1, 1, 1, Qt.AlignmentFlag.AlignLeft
+        )
 
         self.horizontalLayout_5.addWidget(self.metadataWidget)
 
@@ -281,8 +309,12 @@ class Ui_detailedWidget(object):
     # setupUi
 
     def retranslateUi(self, detailedWidget):
-        detailedWidget.setWindowTitle(QCoreApplication.translate("detailedWidget", "Form", None))
-        self.backPushButton.setText(QCoreApplication.translate("detailedWidget", "Back", None))
+        detailedWidget.setWindowTitle(
+            QCoreApplication.translate("detailedWidget", "Form", None)
+        )
+        self.backPushButton.setText(
+            QCoreApplication.translate("detailedWidget", "Back", None)
+        )
         self.filetypeComboBox.setPlaceholderText(
             QCoreApplication.translate("detailedWidget", "filetype", None)
         )

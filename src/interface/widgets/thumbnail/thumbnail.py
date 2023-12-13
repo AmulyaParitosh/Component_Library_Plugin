@@ -12,9 +12,9 @@
 
 from __future__ import annotations
 
-from PySide.QtCore import QUrl
-from PySide.QtGui import QImage, QPixmap
-from PySide.QtWidgets import QLabel, QWidget
+from PySide6.QtCore import QUrl
+from PySide6.QtGui import QImage, QPixmap
+from PySide6.QtWidgets import QLabel, QWidget
 
 from ....manager.download_manager import ImageLoader
 
