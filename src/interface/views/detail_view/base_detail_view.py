@@ -58,11 +58,11 @@ class BaseDetailedView(BaseView):
         """
         self.ui.setupUi(self)
         self.ui.backPushButton.clicked.connect(self.backPushButton_click)
-        self.ui.contentLabel.setFont(QFont("Arial", 28))
+        self.ui.componentLabel.setFont(QFont("Arial", 28))
         font_14 = QFont("Arial", 14)
-        self.ui.descriptionTextBrowser.setFont(font_14)
+        self.ui.descriptionLabel.setFont(font_14)
         self.ui.authorValue.setFont(font_14)
-        self.ui.licenseValue.setFont(font_14)
+        self.ui.licenceValue.setFont(font_14)
         self.ui.maintainerValue.setFont(font_14)
         self.ui.createdValue.setFont(font_14)
         self.ui.updatedValue.setFont(font_14)
@@ -163,14 +163,14 @@ class BaseDetailedView(BaseView):
         self._update_thumbnail(comp_item.ui.thumbnail)
         self._update_filetype_combobox()
 
-        self.ui.contentLabel.setText(self.component.metadata.name)
-        self.ui.descriptionTextBrowser.setText(self.component.metadata.description)
+        self.ui.componentLabel.setText(self.component.metadata.name)
+        self.ui.descriptionLabel.setText(self.component.metadata.description)
         self.ui.authorValue.setText(self.component.metadata.author)
         self.ui.maintainerValue.setText(self.component.metadata.maintainer)
         self.ui.createdValue.setText(self.component.metadata.created_at)
         self.ui.updatedValue.setText(self.component.metadata.updated_at)
-        self.ui.ratingwidget.setRating(self.component.metadata.rating)
-        self.ui.licenseValue.setText(self.component.license.fullname)
+        self.ui.ratingWidget.setRating(self.component.metadata.rating)
+        self.ui.licenceValue.setText(self.component.license.fullname)
 
     def _update_thumbnail(self, thumbnail_widget) -> None:
         """
