@@ -12,6 +12,7 @@
 
 import json
 from dataclasses import InitVar, dataclass, field
+from importlib import metadata
 from typing import Any, Literal, TypedDict
 
 from .data_types import DTypes, FileTypes
@@ -203,6 +204,13 @@ class Tag(_Data, dtype=DTypes.TAG):
 
 
 @dataclass(kw_only=True)
+class Attribute(_Data, dtype=DTypes.ATTRIBUTE):
+    key: str = ""
+    value: str = ""
+    metadata_id: str = ""
+
+
+@dataclass(kw_only=True)
 class Component(DataFactory, dtype=DTypes.COMPONENT):
     """
     Component class represents a component.
@@ -255,6 +263,7 @@ class Component(DataFactory, dtype=DTypes.COMPONENT):
     files: dict[FileTypes, File] = field(default_factory=dict)
     license: License = None
     tags: list[Tag] = field(default_factory=list)
+    attributes: list[Attribute] = field(default_factory=list)
 
     def __post_init__(self, *args, **kwargs):
         """
@@ -296,6 +305,9 @@ class Component(DataFactory, dtype=DTypes.COMPONENT):
             }
         self.license = DataFactory.create(dtype=DTypes.LICENSE, **self.license)
         self.tags = DataFactory.load_many(data_list=self.tags, dtype=DTypes.TAG)
+        self.attributes = DataFactory.load_many(
+            data_list=self.attributes, dtype=DTypes.ATTRIBUTE
+        )
 
     def serialize(self) -> dict[str, Any]:
         """
@@ -364,36 +376,6 @@ class DataJsonEncoder(json.JSONEncoder):
         if isinstance(obj, FileTypes):
             return obj.value
         return json.JSONEncoder.default(self, obj)
-
-
-class Attribute(TypedDict):
-    key: str
-    value: str
-
-
-class Attributes(list):
-    def __init__(self, iterable):
-        super().__init__(self._validate_attribute(item) for item in iterable)
-
-    def __setitem__(self, index, item):
-        super().__setitem__(index, self._validate_attribute(item))
-
-    def insert(self, index, item):
-        super().insert(index, self._validate_attribute(item))
-
-    def append(self, item):
-        super().append(self._validate_attribute(item))
-
-    def extend(self, other):
-        if isinstance(other, type(self)):
-            super().extend(other)
-        else:
-            super().extend(self._validate_attribute(item) for item in other)
-
-    def _validate_attribute(self, value):
-        if isinstance(value, Attribute):
-            return value
-        raise TypeError(f"Attribute expected, got {type(value).__name__}")
 
 
 SerialisedDataType = Component | Tag | Metadata | License | File
