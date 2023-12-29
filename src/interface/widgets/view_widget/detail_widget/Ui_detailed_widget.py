@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QComboBox, QFr
     QScrollArea, QSizePolicy, QSpacerItem, QVBoxLayout,
     QWidget)
 
-from src.interface.widgets import (AttributeList, StarRating)
+from src.interface.widgets import (AttributeList, StarRating, TagBar)
 
 class Ui_detailedWidget(object):
     def setupUi(self, detailedWidget):
@@ -89,7 +89,7 @@ class Ui_detailedWidget(object):
         self.thumbnailArea.setWidgetResizable(True)
         self.thumbnailareaWidget = QWidget()
         self.thumbnailareaWidget.setObjectName(u"thumbnailareaWidget")
-        self.thumbnailareaWidget.setGeometry(QRect(0, 0, 802, 199))
+        self.thumbnailareaWidget.setGeometry(QRect(0, 0, 802, 181))
         sizePolicy.setHeightForWidth(self.thumbnailareaWidget.sizePolicy().hasHeightForWidth())
         self.thumbnailareaWidget.setSizePolicy(sizePolicy)
         self.thumbnailareaWidget.setMinimumSize(QSize(0, 100))
@@ -100,6 +100,11 @@ class Ui_detailedWidget(object):
         self.thumbnailArea.setWidget(self.thumbnailareaWidget)
 
         self.verticalLayout.addWidget(self.thumbnailArea)
+
+        self.tagsWidget = TagBar(detailedWidget)
+        self.tagsWidget.setObjectName(u"tagsWidget")
+
+        self.verticalLayout.addWidget(self.tagsWidget)
 
         self.descriptionWidget = QWidget(detailedWidget)
         self.descriptionWidget.setObjectName(u"descriptionWidget")

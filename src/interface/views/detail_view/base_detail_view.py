@@ -57,6 +57,7 @@ class BaseDetailedView(BaseView):
         """
         self.ui.setupUi(self)
         self.ui.backPushButton.clicked.connect(self.backPushButton_click)
+        self.ui.tagsWidget.set_editable(False)
 
     @Slot()
     def backPushButton_click(self) -> None:
@@ -163,6 +164,9 @@ class BaseDetailedView(BaseView):
         self.ui.ratingWidget.setRating(self.component.metadata.rating)
         self.ui.licenceValue.setText(self.component.license.fullname)
         self.ui.attributeList.update_attributes(self.component.attributes)
+        self.ui.tagsWidget.clear()
+        for tag in self.component.tags:
+            self.ui.tagsWidget.add_tag_to_bar(tag.label)
 
     def _update_thumbnail(self, thumbnail_widget) -> None:
         """

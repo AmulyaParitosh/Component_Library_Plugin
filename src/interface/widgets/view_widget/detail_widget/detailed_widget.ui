@@ -103,7 +103,7 @@
         <x>0</x>
         <y>0</y>
         <width>802</width>
-        <height>199</height>
+        <height>181</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -130,6 +130,9 @@
       <layout class="QHBoxLayout" name="thumbnailAreaHorizontalLayout"/>
      </widget>
     </widget>
+   </item>
+   <item>
+    <widget class="TagBar" name="tagsWidget" native="true"/>
    </item>
    <item>
     <widget class="QWidget" name="descriptionWidget" native="true">
@@ -399,6 +402,12 @@
   </customwidget>
   <customwidget>
    <class>AttributeList</class>
+   <extends>QWidget</extends>
+   <header location="global">src/interface/widgets</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TagBar</class>
    <extends>QWidget</extends>
    <header location="global">src/interface/widgets</header>
    <container>1</container>

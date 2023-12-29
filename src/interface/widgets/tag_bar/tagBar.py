@@ -47,6 +47,7 @@ class TagBar(QWidget):
         self.tags: list[str] = []
 
         self.h_layout = QHBoxLayout()
+        self.h_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.setLayout(self.h_layout)
 
         self.line_edit = QLineEdit()
@@ -172,4 +173,9 @@ class TagBar(QWidget):
         self.line_edit.setCompleter(tagsCompleter)
 
     def set_editable(self, editable: bool):
+        self.line_edit.setVisible(editable)
         self.line_edit.setEnabled(editable)
+
+    def clear(self):
+        self.tags.clear()
+        self.refresh()
