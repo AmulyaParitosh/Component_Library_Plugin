@@ -170,3 +170,6 @@ class TagBar(QWidget):
         tagsCompleter.activated.connect(self.create_tags)
         tagsCompleter.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
         self.line_edit.setCompleter(tagsCompleter)
+
+    def set_editable(self, editable: bool):
+        self.line_edit.setEnabled(editable)
