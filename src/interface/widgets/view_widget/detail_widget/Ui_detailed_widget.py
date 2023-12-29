@@ -20,13 +20,13 @@ from PySide6.QtWidgets import (QAbstractScrollArea, QApplication, QComboBox, QFr
     QScrollArea, QSizePolicy, QSpacerItem, QVBoxLayout,
     QWidget)
 
-from src.interface.widgets import StarRating
+from src.interface.widgets import (AttributeList, StarRating)
 
 class Ui_detailedWidget(object):
     def setupUi(self, detailedWidget):
         if not detailedWidget.objectName():
             detailedWidget.setObjectName(u"detailedWidget")
-        detailedWidget.resize(806, 501)
+        detailedWidget.resize(824, 501)
         self.verticalLayout = QVBoxLayout(detailedWidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.topArea = QWidget(detailedWidget)
@@ -89,7 +89,7 @@ class Ui_detailedWidget(object):
         self.thumbnailArea.setWidgetResizable(True)
         self.thumbnailareaWidget = QWidget()
         self.thumbnailareaWidget.setObjectName(u"thumbnailareaWidget")
-        self.thumbnailareaWidget.setGeometry(QRect(0, 0, 786, 189))
+        self.thumbnailareaWidget.setGeometry(QRect(0, 0, 802, 199))
         sizePolicy.setHeightForWidth(self.thumbnailareaWidget.sizePolicy().hasHeightForWidth())
         self.thumbnailareaWidget.setSizePolicy(sizePolicy)
         self.thumbnailareaWidget.setMinimumSize(QSize(0, 100))
@@ -263,7 +263,16 @@ class Ui_detailedWidget(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 380, 138))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 386, 126))
+        self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.attributeList = AttributeList(self.scrollAreaWidgetContents)
+        self.attributeList.setObjectName(u"attributeList")
+        sizePolicy2.setHeightForWidth(self.attributeList.sizePolicy().hasHeightForWidth())
+        self.attributeList.setSizePolicy(sizePolicy2)
+
+        self.verticalLayout_3.addWidget(self.attributeList)
+
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
         self.horizontalLayout_3.addWidget(self.scrollArea)

@@ -101,13 +101,13 @@ class OnlineRepoManager(ManagerInterface):
         self.query.page = self.page_states.prev_page
         return self.request_components()
 
-    def search(self, search_key: str) -> CMSReply:
+    def search(self, search_str: str) -> CMSReply:
         """
         Search a component in the Component Management System API
 
         Parameters
         ----------
-        search_key : str
+        search_str : str
             name of component to search
 
         Returns
@@ -115,7 +115,7 @@ class OnlineRepoManager(ManagerInterface):
         CMSReply
             network reply from API
         """
-        self.query.search_key = search_key
+        self.query.search_str = search_str
         return self.reload_page()
 
     def sort(self, /, by: str, order: str) -> CMSReply:

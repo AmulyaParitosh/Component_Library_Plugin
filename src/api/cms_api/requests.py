@@ -51,7 +51,7 @@ class ComponentRequest(QNetworkRequest):
         query_list: list[str] = [
             state.page,
             state.page_size,
-            state.search_key,
+            state.search_str,
             state.sort_by,
             state.sort_ord,
             state.file_types,

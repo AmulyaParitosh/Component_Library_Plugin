@@ -11,7 +11,6 @@
 # --------------------------------------------------------------
 
 from PySide6.QtCore import Slot
-from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QWidget
 
 from ....data import Component, File, FileTypes
@@ -58,14 +57,6 @@ class BaseDetailedView(BaseView):
         """
         self.ui.setupUi(self)
         self.ui.backPushButton.clicked.connect(self.backPushButton_click)
-        self.ui.componentLabel.setFont(QFont("Arial", 28))
-        font_14 = QFont("Arial", 14)
-        self.ui.descriptionLabel.setFont(font_14)
-        self.ui.authorValue.setFont(font_14)
-        self.ui.licenceValue.setFont(font_14)
-        self.ui.maintainerValue.setFont(font_14)
-        self.ui.createdValue.setFont(font_14)
-        self.ui.updatedValue.setFont(font_14)
 
     @Slot()
     def backPushButton_click(self) -> None:
@@ -171,6 +162,7 @@ class BaseDetailedView(BaseView):
         self.ui.updatedValue.setText(self.component.metadata.updated_at)
         self.ui.ratingWidget.setRating(self.component.metadata.rating)
         self.ui.licenceValue.setText(self.component.license.fullname)
+        self.ui.attributeList.update_attributes(self.component.attributes)
 
     def _update_thumbnail(self, thumbnail_widget) -> None:
         """
