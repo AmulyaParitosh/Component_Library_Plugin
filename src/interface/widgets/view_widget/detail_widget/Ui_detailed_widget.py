@@ -26,7 +26,7 @@ class Ui_detailedWidget(object):
     def setupUi(self, detailedWidget):
         if not detailedWidget.objectName():
             detailedWidget.setObjectName(u"detailedWidget")
-        detailedWidget.resize(824, 501)
+        detailedWidget.resize(975, 673)
         self.verticalLayout = QVBoxLayout(detailedWidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.topArea = QWidget(detailedWidget)
@@ -78,20 +78,22 @@ class Ui_detailedWidget(object):
 
         self.thumbnailArea = QScrollArea(detailedWidget)
         self.thumbnailArea.setObjectName(u"thumbnailArea")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.thumbnailArea.sizePolicy().hasHeightForWidth())
         self.thumbnailArea.setSizePolicy(sizePolicy1)
+        self.thumbnailArea.setMinimumSize(QSize(0, 200))
+        self.thumbnailArea.setMaximumSize(QSize(16777215, 300))
         self.thumbnailArea.setLayoutDirection(Qt.LeftToRight)
         self.thumbnailArea.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.thumbnailArea.setSizeAdjustPolicy(QAbstractScrollArea.AdjustIgnored)
         self.thumbnailArea.setWidgetResizable(True)
         self.thumbnailareaWidget = QWidget()
         self.thumbnailareaWidget.setObjectName(u"thumbnailareaWidget")
-        self.thumbnailareaWidget.setGeometry(QRect(0, 0, 802, 181))
-        sizePolicy.setHeightForWidth(self.thumbnailareaWidget.sizePolicy().hasHeightForWidth())
-        self.thumbnailareaWidget.setSizePolicy(sizePolicy)
+        self.thumbnailareaWidget.setGeometry(QRect(0, 0, 953, 190))
+        sizePolicy1.setHeightForWidth(self.thumbnailareaWidget.sizePolicy().hasHeightForWidth())
+        self.thumbnailareaWidget.setSizePolicy(sizePolicy1)
         self.thumbnailareaWidget.setMinimumSize(QSize(0, 100))
         self.thumbnailareaWidget.setMaximumSize(QSize(16777215, 500))
         self.thumbnailareaWidget.setLayoutDirection(Qt.LeftToRight)
@@ -103,6 +105,8 @@ class Ui_detailedWidget(object):
 
         self.tagsWidget = TagBar(detailedWidget)
         self.tagsWidget.setObjectName(u"tagsWidget")
+        sizePolicy.setHeightForWidth(self.tagsWidget.sizePolicy().hasHeightForWidth())
+        self.tagsWidget.setSizePolicy(sizePolicy)
 
         self.verticalLayout.addWidget(self.tagsWidget)
 
@@ -260,21 +264,18 @@ class Ui_detailedWidget(object):
 
         self.scrollArea = QScrollArea(self.attributeArea)
         self.scrollArea.setObjectName(u"scrollArea")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
-        self.scrollArea.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
+        self.scrollArea.setSizePolicy(sizePolicy1)
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 386, 126))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 461, 126))
         self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.attributeList = AttributeList(self.scrollAreaWidgetContents)
         self.attributeList.setObjectName(u"attributeList")
-        sizePolicy2.setHeightForWidth(self.attributeList.sizePolicy().hasHeightForWidth())
-        self.attributeList.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.attributeList.sizePolicy().hasHeightForWidth())
+        self.attributeList.setSizePolicy(sizePolicy1)
 
         self.verticalLayout_3.addWidget(self.attributeList)
 
@@ -284,6 +285,10 @@ class Ui_detailedWidget(object):
 
 
         self.verticalLayout.addWidget(self.attributeArea)
+
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Minimum)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
 
 
         self.retranslateUi(detailedWidget)

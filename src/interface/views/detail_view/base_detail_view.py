@@ -69,7 +69,7 @@ class BaseDetailedView(BaseView):
         None
         """
 
-        self.manager.reload_page()
+        # self.manager.reload_page()
         self.topLevelWidget().toLastWidget()
 
     def addControlWidget(self, widget: QWidget) -> None:
@@ -131,7 +131,7 @@ class BaseDetailedView(BaseView):
         """
 
         txt = self.ui.filetypeComboBox.currentText()
-        # TODO Check why txt produces empty string
+        # TODO : Check why txt produces empty string
         if txt and FileTypes(txt):
             return self.component.files.get(FileTypes(txt))
         # ! should not return None. Investigate
