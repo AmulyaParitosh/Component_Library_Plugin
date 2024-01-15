@@ -7,6 +7,10 @@
 import FreeCAD
 import FreeCADGui
 
+from app import module_setup
+
+module_setup()
+
 
 class ComponentLibraryWorkbench(Workbench):
     def __init__(self):

@@ -15,13 +15,26 @@
 
 import sys
 
-from PySide6.QtWidgets import QApplication
 
-from src import Window
+def module_setup():
+    try:
+        import PySide
 
-app = QApplication(sys.argv)
+        sys.modules["PySide6"] = PySide
+    except ImportError:
+        import PySide6
 
-# TODO: Instantiate the Window class from the 'src' module
-plugin = Window()
 
-sys.exit(app.exec())
+if __name__ == "__main__":
+    module_setup()
+
+    from PySide6.QtWidgets import QApplication
+
+    from src import Window
+
+    app = QApplication(sys.argv)
+
+    # TODO: Instantiate the Window class from the 'src' module
+    plugin = Window()
+
+    sys.exit(app.exec())
