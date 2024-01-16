@@ -21,8 +21,9 @@ def module_setup():
         import PySide
 
         sys.modules["PySide6"] = PySide
+        print("changed name, using PySide as PySide6")
     except ImportError:
-        import PySide6
+        print("error in importing PySide, using PySide6")
 
 
 if __name__ == "__main__":
