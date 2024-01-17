@@ -10,9 +10,13 @@
 # |																|
 # --------------------------------------------------------------
 
+import contextlib
+
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QMainWindow, QWidget
 
+from ..api.cms_api import CMSApi
+from ..api.cms_api.exceptions import Connection_Error
 from ..interface.forms import ComponetUploadDialog
 from ..interface.views import GridView, LocalDetailedView, OnlineDetailedView
 from ..interface.widgets import ComponentItem
@@ -39,8 +43,11 @@ class Window(QMainWindow):
         self.ui = Ui_MainWindow()
         self.setupUi()
         self.setupSignals()
-        self.setupManagers(self.repo_manager, self.local_manager)
         self.display_grid_view()
+
+        with contextlib.suppress(Connection_Error):
+            CMSApi().check_server_connection()
+            self.setupManagers(self.repo_manager, self.local_manager)
 
     def setupUi(self):
         """

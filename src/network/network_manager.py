@@ -23,6 +23,7 @@ from PySide6.QtNetwork import (
     QSslConfiguration,
     QSslSocket,
 )
+from PySide6.QtWidgets import QMessageBox
 
 
 @Slot(QNetworkReply)
@@ -48,6 +49,15 @@ def when_finisned(reply: QNetworkReply) -> None:
 
     elif er == QNetworkReply.NetworkError.ProtocolUnknownError:
         print("Blank URL passed!")
+
+    elif er == QNetworkReply.NetworkError.ConnectionRefusedError:
+        msg = QMessageBox()
+        msg.setWindowTitle("ConnectionRefusedError")
+        msg.setText(
+            f"Connection to {reply.url().toString()} was refused!\nSee if the server is running."
+        )
+        msg.setIcon(QMessageBox.Icon.Critical)
+        msg.exec_()
 
     else:
         # If there is any other network error, print the error code and error string along with the URL

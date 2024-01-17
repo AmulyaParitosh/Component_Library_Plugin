@@ -12,14 +12,15 @@
 
 from typing import Any
 
-from PySide6.QtCore import QUrl
-from PySide6.QtNetwork import QNetworkRequest
+from PySide6.QtCore import QEventLoop, QUrl
+from PySide6.QtNetwork import QNetworkReply, QNetworkRequest
 
 from src.config.config import Config
 
 from ...network import get_network_access_manager
 from ...utils import singleton
 from ..base_api import ApiInterface
+from .exceptions import Connection_Error
 from .replies import CMSReply
 
 
@@ -43,6 +44,19 @@ class CMSApi(ApiInterface):
         """
 
         super().__init__()
+
+    @staticmethod
+    def check_server_connection() -> None:
+        request = QNetworkRequest()
+        request.setUrl(QUrl.fromUserInput(CMSApi().BASEURL))
+        reply: QNetworkReply = CMSApi().network_access_manager.get(request)
+
+        loop = QEventLoop()
+        reply.finished.connect(loop.quit)
+        loop.exec_()
+
+        if reply.error() == QNetworkReply.NetworkError.ConnectionRefusedError:
+            raise Connection_Error()
 
     def prepare_api_request(self, request: QNetworkRequest) -> None:
         """
