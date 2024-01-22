@@ -27,8 +27,8 @@ from ...api.cms_api import (
 from ...api.local_api import LocalApi
 from ...config import Config
 from ...data import Component, DataFactory, DTypes, FileTypes, SerialisedDataType
-from ..download_manager import FileDownloader
-from ..page_manager import PageStates
+from ..download import FileDownloader
+from ..page import PageStates
 from .base import ManagerInterface
 
 

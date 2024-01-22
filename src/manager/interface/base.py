@@ -14,7 +14,7 @@ from PySide6.QtCore import Signal
 
 from ...api import ApiInterface, ComponentQueryInterface
 from ...utils import ABCQObject
-from ..page_manager import PageStates
+from ..page import PageStates
 
 
 class ManagerInterface(ABCQObject):

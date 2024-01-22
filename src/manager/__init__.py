@@ -10,4 +10,4 @@
 # |																|
 # --------------------------------------------------------------
 
-from .interface_manager import LocalStorageManager, ManagerInterface, OnlineRepoManager
+from .interface import LocalStorageManager, ManagerInterface, OnlineRepoManager

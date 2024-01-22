@@ -18,7 +18,7 @@ from src.data.factory import DataFactory
 
 from ...api.local_api import LocalApi, LocalComponentQuery
 from ...data import Component, DTypes, FileTypes, SerialisedDataType
-from ..page_manager import PageStates
+from ..page import PageStates
 from .base import ManagerInterface
 
 
