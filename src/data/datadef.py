@@ -12,8 +12,7 @@
 
 import json
 from dataclasses import InitVar, dataclass, field
-from importlib import metadata
-from typing import Any, Literal, TypedDict
+from typing import Any, Literal
 
 from .data_types import DTypes, FileTypes
 from .factory import DataFactory
@@ -379,3 +378,12 @@ class DataJsonEncoder(json.JSONEncoder):
 
 
 SerialisedDataType = Component | Tag | Metadata | License | File
+
+
+@dataclass
+class User:
+    username: str
+    name: str
+    email: str
+    avatar_url: str
+    components: list[str]

@@ -20,7 +20,7 @@ from ..api.cms_api.exceptions import Connection_Error
 from ..interface.forms import ComponetUploadDialog
 from ..interface.views import GridView, LocalDetailedView, OnlineDetailedView
 from ..interface.widgets import ComponentItem
-from ..manager import LocalStorageManager, OnlineRepoManager
+from ..manager import Authentication_Manager, LocalStorageManager, OnlineRepoManager
 from .Ui_window import Ui_MainWindow
 
 
@@ -36,6 +36,8 @@ class Window(QMainWindow):
 
         self.repo_manager = OnlineRepoManager()
         self.local_manager = LocalStorageManager()
+        self.auth_manager = Authentication_Manager()
+
         self.widgetStack = []
 
         self.show()
@@ -75,6 +77,9 @@ class Window(QMainWindow):
         self.ui.browseButton.clicked.connect(self.display_grid_view)
         self.ui.uploadButton.clicked.connect(self.uploadButton_clicked)
         self.ui.LocalButton.clicked.connect(self.display_local_components)
+        self.ui.userPushButton.clicked.connect(self.show_user)
+
+        self.auth_manager.session_update.connect(self.show_user)
 
     def setupManagers(
         self, repo_manager: OnlineRepoManager, local_manager: LocalStorageManager
@@ -149,3 +154,10 @@ class Window(QMainWindow):
             The QWidget to add to the notification area
         """
         self.ui.notificationArea.addWidget(notification)
+
+    def show_user(self):
+        if self.auth_manager.is_authentic():
+            self.ui.userPushButton.setText(self.auth_manager.user.name)
+        else:
+            self.ui.userPushButton.setText("Login")
+            self.auth_manager.login()

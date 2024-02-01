@@ -58,7 +58,8 @@ class CMSApi(ApiInterface):
         if reply.error() == QNetworkReply.NetworkError.ConnectionRefusedError:
             raise Connection_Error()
 
-    def prepare_api_request(self, request: QNetworkRequest) -> None:
+    @staticmethod
+    def prepare_api_request(request: QNetworkRequest) -> None:
         """
         Prepares the API request by setting the absolute path and SSL configuration.
 
@@ -72,9 +73,13 @@ class CMSApi(ApiInterface):
         None
         """
 
-        absolute_path: str = f"{self.BASEURL}/{request.url().toString()}"
+        absolute_path: str = f"{CMSApi().BASEURL}/{request.url().toString()}"
         request.setUrl(QUrl.fromUserInput(absolute_path))
-        request.setSslConfiguration(self.sslConfig)
+        request.setSslConfiguration(CMSApi().sslConfig)
+        request.setRawHeader(
+            "Auth-Token".encode("utf-8"),
+            str(Config.GITHUB_ACCESS_TOKEN).encode("utf-8"),
+        )
 
     def read(self, request: QNetworkRequest) -> CMSReply:
         """

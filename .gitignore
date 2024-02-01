@@ -65,3 +65,4 @@ test
 .dev_utils
 local_storage
 poetry.toml
+.tokens

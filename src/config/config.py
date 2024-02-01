@@ -24,5 +24,7 @@ class Config:
     """
 
     API_URL = "http://127.0.0.1:5000"
-    GITHUB_ACCESS_TOKEN: str = os.getenv("ACCESS_TOKEN", "")
     LOCAL_COMPONENT_PATH = Path("local_storage")
+
+    GITHUB_OAUTH_CLIENT_ID = "a1dd10669e81cfb23a02"
+    GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)

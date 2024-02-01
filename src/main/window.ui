@@ -79,6 +79,13 @@
        <item>
         <layout class="QVBoxLayout" name="notificationArea"/>
        </item>
+       <item>
+        <widget class="QPushButton" name="userPushButton">
+         <property name="text">
+          <string>Login</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
