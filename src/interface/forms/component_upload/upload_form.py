@@ -80,7 +80,8 @@ class ComponetUploadDialog(QDialog):
             (license.fullname for license in self.manager.load_from_db(DTypes.LICENSE))
         )
 
-    def pack_data(self) -> dict[str, Any]:
+    @property
+    def packed_data(self) -> dict[str, Any]:
         """
         Pack the data entered in the form.
 
@@ -129,7 +130,7 @@ class ComponetUploadDialog(QDialog):
         """
 
         # Pack the data and create the component using the OnlineRepoManager.
-        self.manager.create_component(self.pack_data())
+        self.manager.create_component(self.packed_data)
 
     @classmethod
     def create_component(cls, parent, manager: OnlineRepoManager) -> int:

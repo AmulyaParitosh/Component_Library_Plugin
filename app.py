@@ -35,7 +35,6 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
 
-    # TODO: Instantiate the Window class from the 'src' module
     plugin = Window()
 
     sys.exit(app.exec())

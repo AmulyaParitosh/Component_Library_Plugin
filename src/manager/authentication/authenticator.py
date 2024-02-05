@@ -1,6 +1,7 @@
 import json
 from typing import Optional
 
+import dotenv
 from PySide6.QtCore import QObject, QUrl, Signal
 from PySide6.QtNetwork import QNetworkRequest
 
@@ -13,7 +14,6 @@ from ...network import get_network_access_manager
 
 class Authentication_Manager(QObject):
     user: Optional[User] = None
-    access_token: Optional[str] = None
     session_update = Signal()
 
     network_manager, sslConfig = get_network_access_manager()
@@ -25,10 +25,16 @@ class Authentication_Manager(QObject):
 
         self.get_user_data(Config.GITHUB_ACCESS_TOKEN)
 
-    def login(self):
+    def login(self) -> None:
         dialog = Authentication_Dialog()
         dialog.auth_complete.connect(self.get_user_data)
         dialog.exec()
+
+    def logout(self) -> None:
+        self.user = None
+        dotenv.unset_key(".env", "GITHUB_ACCESS_TOKEN")
+        Config.GITHUB_ACCESS_TOKEN = None
+        self.session_update.emit(self.session_update)
 
     def is_authentic(self) -> bool:
         return self.user is not None
@@ -48,6 +54,8 @@ class Authentication_Manager(QObject):
     def handle_user_data_response(self):
         raw_json_str = self.user_data_reply.readAll().data().decode("utf-8")
         user_data = json.loads(raw_json_str)
+
+        print(f"{user_data=}")
 
         self.user = User(
             username=user_data["login"],
