@@ -99,14 +99,14 @@ def construct_multipart(data: dict) -> QHttpMultiPart:
         if not isinstance(val, (list, tuple, set)):
             val = [val]
         for filepath in val:
-            # TODO: Construct a file part for the multi-part form data
+            if not filepath:
+                continue
             multi_part.append(construct_file_part(field, filepath))
 
     # Append text parts to the multi-part form data
     for field, value in data.items():
         if isinstance(value, (list, tuple, set)):
             value = ",".join(value)
-        # TODO: Construct a text part for the multi-part form data
         multi_part.append(construct_text_parts(field, value))
 
     return multi_part
@@ -143,7 +143,7 @@ def construct_text_parts(field, value) -> QHttpPart:
     return post_part
 
 
-def construct_file_part(field, filepath) -> QHttpPart | None:
+def construct_file_part(field, filepath) -> QHttpPart:
     """
     Constructs a file part for the multipart form data.
 
@@ -160,13 +160,16 @@ def construct_file_part(field, filepath) -> QHttpPart | None:
         The constructed file part if the file is successfully opened in read-only mode, None otherwise.
     """
 
+    print(f"File path: {filepath}")
     file = QFile(filepath)
-    if not file.open(QIODevice.OpenModeFlag.ReadOnly):
-        return None
+    # if not file.open(QIODevice.OpenModeFlag.ReadOnly):
+    #     print(f"File not found: {filepath}")
+    file = open(filepath, "rb")
     post_part = QHttpPart()
     post_part.setHeader(
         QNetworkRequest.KnownHeaders.ContentDispositionHeader,
-        f'form-data; name="{field}"; filename="{file.fileName()}"',
+        f'form-data; name="{field}"; filename="{file.name}"',
     )
-    post_part.setBodyDevice(file)
+    # post_part.setBodyDevice(file)
+    post_part.setBody(file.read())
     return post_part

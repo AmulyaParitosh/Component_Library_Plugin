@@ -101,7 +101,7 @@ class ComponetUploadDialog(QDialog):
             "description": self.ui.descriptionInput.toPlainText(),
             "license_id": next(
                 (
-                    lis.id
+                    lis.id.replace("-", "")
                     for lis in self.manager.load_from_db(DTypes.LICENSE)
                     if lis.fullname == self.ui.licenseInput.currentText()
                 )
