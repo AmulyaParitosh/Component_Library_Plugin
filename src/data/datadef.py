@@ -170,6 +170,7 @@ class Metadata(_Data, dtype=DTypes.METADATA):
     """
 
     license_id: str = None
+    user_id: str = None
     name: str = None
     author: str = None
     maintainer: str = None
