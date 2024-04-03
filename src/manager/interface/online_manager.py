@@ -116,6 +116,7 @@ class OnlineRepoManager(ManagerInterface):
             network reply from API
         """
         self.query.search_str = search_str
+        self.query.sort_ord = "descending"
         return self.reload_page()
 
     def sort(self, /, by: str, order: str) -> CMSReply:
@@ -201,7 +202,7 @@ class OnlineRepoManager(ManagerInterface):
 
         return component_downloader
 
-    def create_component(self, data: dict) -> CMSReply | None:
+    def create_component(self, data: dict) -> CMSReply:
         """
         Create a component. This is a POST request.
 
@@ -218,8 +219,8 @@ class OnlineRepoManager(ManagerInterface):
         """
         multi_part = construct_multipart(data)
 
-        if not multi_part:
-            return
+        # if not multi_part:
+        #     return
 
         request = ComponentRequest()
         request.setRawHeader(
