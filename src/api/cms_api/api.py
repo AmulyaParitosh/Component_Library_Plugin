@@ -76,9 +76,13 @@ class CMSApi(ApiInterface):
         absolute_path: str = f"{CMSApi().BASEURL}/{request.url().toString()}"
         request.setUrl(QUrl.fromUserInput(absolute_path))
         request.setSslConfiguration(CMSApi().sslConfig)
+        # request.setRawHeader(
+        #     "Auth-Token".encode("utf-8"),
+        #     str(Config.GITHUB_ACCESS_TOKEN).encode("utf-8"),
+        # )
         request.setRawHeader(
-            "Auth-Token".encode("utf-8"),
-            str(Config.GITHUB_ACCESS_TOKEN).encode("utf-8"),
+            "Token".encode("utf-8"),
+            str(Config.JWT_TOKEN).encode("utf-8"),
         )
 
     def read(self, request: QNetworkRequest) -> CMSReply:

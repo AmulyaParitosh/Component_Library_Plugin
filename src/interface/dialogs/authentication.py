@@ -54,9 +54,10 @@ class Authentication_Dialog(QDialog):
 
         Config.GITHUB_ACCESS_TOKEN = response_data.get("auth_token", "")
         dotenv.set_key(".env", "GITHUB_ACCESS_TOKEN", Config.GITHUB_ACCESS_TOKEN)
-        self.auth_complete.emit(Config.GITHUB_ACCESS_TOKEN)
 
-        print(f"{Config.GITHUB_ACCESS_TOKEN=}")
+        Config.JWT_TOKEN = response_data.get("jwt", "")
+
+        self.auth_complete.emit(Config.GITHUB_ACCESS_TOKEN)
 
         self.web_view.deleteLater()
         self.deleteLater()

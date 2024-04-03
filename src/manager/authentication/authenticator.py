@@ -2,7 +2,7 @@ import json
 from typing import Optional
 
 import dotenv
-from PySide6.QtCore import QObject, QUrl, Signal
+from PySide6.QtCore import QObject, Signal
 from PySide6.QtNetwork import QNetworkRequest
 
 from src.config.config import Config
@@ -23,7 +23,27 @@ class Authentication_Manager(QObject):
         if not Config.GITHUB_ACCESS_TOKEN:
             return
 
+        self.api_login()
+
+    def api_login(self):
+        request: QNetworkRequest = QNetworkRequest(
+            f"{Config.API_URL}/login/app/authorize"
+        )
+        request.setRawHeader(
+            "access_token".encode("utf-8"),
+            str(Config.GITHUB_ACCESS_TOKEN).encode("utf-8"),
+        )
+        self.jwt_auth_reply = self.network_manager.get(request)
+        self.jwt_auth_reply.finished.connect(self.handle_jwt_auth_response)
+
         self.get_user_data(Config.GITHUB_ACCESS_TOKEN)
+
+    def handle_jwt_auth_response(self):
+        raw_json_str = self.jwt_auth_reply.readAll().data().decode("utf-8")
+        jwt_token = json.loads(raw_json_str)["jwt"]
+        Config.JWT_TOKEN = jwt_token
+
+        print(f"{jwt_token=}")
 
     def login(self) -> None:
         dialog = Authentication_Dialog()
@@ -43,8 +63,9 @@ class Authentication_Manager(QObject):
         if not access_token:
             raise ValueError("The request token has to be supplied!")
 
-        url = QUrl("https://api.github.com/user")
-        user_data_request = QNetworkRequest(url)
+        # url = QUrl("https://api.github.com/user")
+        # user_data_request = QNetworkRequest(url)
+        user_data_request = QNetworkRequest("https://api.github.com/user")
         user_data_request.setRawHeader(
             b"Authorization", f"token {access_token}".encode()
         )
@@ -54,8 +75,6 @@ class Authentication_Manager(QObject):
     def handle_user_data_response(self):
         raw_json_str = self.user_data_reply.readAll().data().decode("utf-8")
         user_data = json.loads(raw_json_str)
-
-        print(f"{user_data=}")
 
         self.user = User(
             username=user_data["login"],

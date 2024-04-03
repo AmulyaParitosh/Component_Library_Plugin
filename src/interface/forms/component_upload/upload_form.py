@@ -13,7 +13,8 @@
 from typing import Any
 
 from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QDialog, QPushButton
+from PySide6.QtNetwork import QNetworkReply
+from PySide6.QtWidgets import QDialog, QMessageBox, QPushButton
 
 from ....data import DTypes
 from ....manager import OnlineRepoManager
@@ -130,7 +131,44 @@ class ComponetUploadDialog(QDialog):
         """
 
         # Pack the data and create the component using the OnlineRepoManager.
-        self.manager.create_component(self.packed_data)
+        self.cms_reply = self.manager.create_component(self.packed_data)
+        self.cms_reply.finished.connect(self.handle_cms_reply)
+
+    def handle_cms_reply(self) -> None:
+        """
+        Handle the CMS reply.
+        Slot to handle the CMS reply.
+
+        Args
+        ----
+        cms_reply : tuple
+            The tuple containing the CMS reply.
+
+        Returns
+        -------
+        None
+        """
+
+        if self.cms_reply.reply.error() == QNetworkReply.NetworkError.NoError:
+            self.on_succesful_component_creation()
+        else:
+            self.on_exception_in_component_creation(self.cms_reply.reply)
+
+    def on_exception_in_component_creation(self, reply: QNetworkReply) -> None:
+        err_msg = QMessageBox(self)
+        err_msg.setWindowTitle(reply.error().name)
+        # TODO: proper error message returned from the server is not visible
+        err_msg.setText(reply.error().name + "\n" + reply.errorString())
+        err_msg.setIcon(QMessageBox.Icon.Critical)
+        err_msg.exec_()
+
+    def on_succesful_component_creation(self):
+        success_msg = QMessageBox(self)
+        success_msg.setWindowTitle("Success")
+        success_msg.setText("Component created successfully!")
+        success_msg.setIcon(QMessageBox.Icon.Information)
+        success_msg.exec_()
+        self.close()
 
     @classmethod
     def create_component(cls, parent, manager: OnlineRepoManager) -> int:
