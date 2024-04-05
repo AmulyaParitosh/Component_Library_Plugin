@@ -163,7 +163,7 @@ class BaseDetailedView(BaseView):
         self.ui.updatedValue.setText(self.component.metadata.updated_at)
         self.ui.ratingWidget.setRating(self.component.metadata.rating)
         self.ui.licenceValue.setText(self.component.license.fullname)
-        self.ui.attributeList.update_attributes(self.component.attributes)
+        self.ui.AttributeListView.update_attributes(self.component.attributes)
         self.ui.tagsWidget.clear()
         for tag in self.component.tags:
             self.ui.tagsWidget.add_tag_to_bar(tag.label)

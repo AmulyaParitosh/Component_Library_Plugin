@@ -394,7 +394,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="AttributeList" name="attributeList" native="true">
+           <widget class="AttributeListView" name="AttributeListView" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -436,7 +436,7 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>AttributeList</class>
+   <class>AttributeListView</class>
    <extends>QWidget</extends>
    <header location="global">src/interface/widgets</header>
    <container>1</container>

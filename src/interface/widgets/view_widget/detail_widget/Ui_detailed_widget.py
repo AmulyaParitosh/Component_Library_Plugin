@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'detailed_widget.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.6.0
+## Created by: Qt User Interface Compiler version 6.5.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -56,7 +56,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from src.interface.widgets import AttributeList, StarRating, TagBar
+from src.interface.widgets import AttributeListView, StarRating, TagBar
 
 
 class Ui_detailedWidget(object):
@@ -68,7 +68,9 @@ class Ui_detailedWidget(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.topArea = QWidget(detailedWidget)
         self.topArea.setObjectName("topArea")
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
+        sizePolicy = QSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.topArea.sizePolicy().hasHeightForWidth())
@@ -80,7 +82,9 @@ class Ui_detailedWidget(object):
 
         self.horizontalLayout.addWidget(self.backPushButton)
 
-        self.separator = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.separator = QSpacerItem(
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
+        )
 
         self.horizontalLayout.addItem(self.separator)
 
@@ -117,7 +121,9 @@ class Ui_detailedWidget(object):
 
         self.thumbnailArea = QScrollArea(detailedWidget)
         self.thumbnailArea.setObjectName("thumbnailArea")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy1 = QSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
+        )
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(
@@ -126,9 +132,13 @@ class Ui_detailedWidget(object):
         self.thumbnailArea.setSizePolicy(sizePolicy1)
         self.thumbnailArea.setMinimumSize(QSize(0, 200))
         self.thumbnailArea.setMaximumSize(QSize(16777215, 300))
-        self.thumbnailArea.setLayoutDirection(Qt.LeftToRight)
-        self.thumbnailArea.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.thumbnailArea.setSizeAdjustPolicy(QAbstractScrollArea.AdjustIgnored)
+        self.thumbnailArea.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.thumbnailArea.setVerticalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded
+        )
+        self.thumbnailArea.setSizeAdjustPolicy(
+            QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored
+        )
         self.thumbnailArea.setWidgetResizable(True)
         self.thumbnailareaWidget = QWidget()
         self.thumbnailareaWidget.setObjectName("thumbnailareaWidget")
@@ -139,7 +149,7 @@ class Ui_detailedWidget(object):
         self.thumbnailareaWidget.setSizePolicy(sizePolicy1)
         self.thumbnailareaWidget.setMinimumSize(QSize(0, 100))
         self.thumbnailareaWidget.setMaximumSize(QSize(16777215, 500))
-        self.thumbnailareaWidget.setLayoutDirection(Qt.LeftToRight)
+        self.thumbnailareaWidget.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.thumbnailAreaHorizontalLayout = QHBoxLayout(self.thumbnailareaWidget)
         self.thumbnailAreaHorizontalLayout.setObjectName(
             "thumbnailAreaHorizontalLayout"
@@ -184,19 +194,19 @@ class Ui_detailedWidget(object):
         self.gridLayout.setObjectName("gridLayout")
         self.authorFrame = QFrame(self.metadataWidget)
         self.authorFrame.setObjectName("authorFrame")
-        self.authorFrame.setFrameShape(QFrame.StyledPanel)
-        self.authorFrame.setFrameShadow(QFrame.Raised)
+        self.authorFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.authorFrame.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_4 = QVBoxLayout(self.authorFrame)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.authorLabel = QLabel(self.authorFrame)
         self.authorLabel.setObjectName("authorLabel")
-        self.authorLabel.setAlignment(Qt.AlignCenter)
+        self.authorLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_4.addWidget(self.authorLabel)
 
         self.authorValue = QLabel(self.authorFrame)
         self.authorValue.setObjectName("authorValue")
-        self.authorValue.setAlignment(Qt.AlignCenter)
+        self.authorValue.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_4.addWidget(self.authorValue)
 
@@ -204,19 +214,19 @@ class Ui_detailedWidget(object):
 
         self.licenceFrame = QFrame(self.metadataWidget)
         self.licenceFrame.setObjectName("licenceFrame")
-        self.licenceFrame.setFrameShape(QFrame.StyledPanel)
-        self.licenceFrame.setFrameShadow(QFrame.Raised)
+        self.licenceFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.licenceFrame.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_6 = QVBoxLayout(self.licenceFrame)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.licenceLabel = QLabel(self.licenceFrame)
         self.licenceLabel.setObjectName("licenceLabel")
-        self.licenceLabel.setAlignment(Qt.AlignCenter)
+        self.licenceLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_6.addWidget(self.licenceLabel)
 
         self.licenceValue = QLabel(self.licenceFrame)
         self.licenceValue.setObjectName("licenceValue")
-        self.licenceValue.setAlignment(Qt.AlignCenter)
+        self.licenceValue.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_6.addWidget(self.licenceValue)
 
@@ -224,19 +234,19 @@ class Ui_detailedWidget(object):
 
         self.maintainerFrame = QFrame(self.metadataWidget)
         self.maintainerFrame.setObjectName("maintainerFrame")
-        self.maintainerFrame.setFrameShape(QFrame.StyledPanel)
-        self.maintainerFrame.setFrameShadow(QFrame.Raised)
+        self.maintainerFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.maintainerFrame.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_5 = QVBoxLayout(self.maintainerFrame)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.maintainerLabel = QLabel(self.maintainerFrame)
         self.maintainerLabel.setObjectName("maintainerLabel")
-        self.maintainerLabel.setAlignment(Qt.AlignCenter)
+        self.maintainerLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_5.addWidget(self.maintainerLabel)
 
         self.maintainerValue = QLabel(self.maintainerFrame)
         self.maintainerValue.setObjectName("maintainerValue")
-        self.maintainerValue.setAlignment(Qt.AlignCenter)
+        self.maintainerValue.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_5.addWidget(self.maintainerValue)
 
@@ -244,19 +254,19 @@ class Ui_detailedWidget(object):
 
         self.updatedFrame = QFrame(self.metadataWidget)
         self.updatedFrame.setObjectName("updatedFrame")
-        self.updatedFrame.setFrameShape(QFrame.StyledPanel)
-        self.updatedFrame.setFrameShadow(QFrame.Raised)
+        self.updatedFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.updatedFrame.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_2 = QVBoxLayout(self.updatedFrame)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.updatedLabel = QLabel(self.updatedFrame)
         self.updatedLabel.setObjectName("updatedLabel")
-        self.updatedLabel.setAlignment(Qt.AlignCenter)
+        self.updatedLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_2.addWidget(self.updatedLabel)
 
         self.updatedValue = QLabel(self.updatedFrame)
         self.updatedValue.setObjectName("updatedValue")
-        self.updatedValue.setAlignment(Qt.AlignCenter)
+        self.updatedValue.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_2.addWidget(self.updatedValue)
 
@@ -264,13 +274,13 @@ class Ui_detailedWidget(object):
 
         self.ratingFrame = QFrame(self.metadataWidget)
         self.ratingFrame.setObjectName("ratingFrame")
-        self.ratingFrame.setFrameShape(QFrame.StyledPanel)
-        self.ratingFrame.setFrameShadow(QFrame.Raised)
+        self.ratingFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.ratingFrame.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_8 = QVBoxLayout(self.ratingFrame)
         self.verticalLayout_8.setObjectName("verticalLayout_8")
         self.ratingLabel = QLabel(self.ratingFrame)
         self.ratingLabel.setObjectName("ratingLabel")
-        self.ratingLabel.setAlignment(Qt.AlignCenter)
+        self.ratingLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_8.addWidget(self.ratingLabel)
 
@@ -283,19 +293,19 @@ class Ui_detailedWidget(object):
 
         self.createdFrame = QFrame(self.metadataWidget)
         self.createdFrame.setObjectName("createdFrame")
-        self.createdFrame.setFrameShape(QFrame.StyledPanel)
-        self.createdFrame.setFrameShadow(QFrame.Raised)
+        self.createdFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.createdFrame.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_7 = QVBoxLayout(self.createdFrame)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
         self.createdLabel = QLabel(self.createdFrame)
         self.createdLabel.setObjectName("createdLabel")
-        self.createdLabel.setAlignment(Qt.AlignCenter)
+        self.createdLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_7.addWidget(self.createdLabel)
 
         self.createdValue = QLabel(self.createdFrame)
         self.createdValue.setObjectName("createdValue")
-        self.createdValue.setAlignment(Qt.AlignCenter)
+        self.createdValue.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_7.addWidget(self.createdValue)
 
@@ -313,14 +323,14 @@ class Ui_detailedWidget(object):
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 461, 126))
         self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.attributeList = AttributeList(self.scrollAreaWidgetContents)
-        self.attributeList.setObjectName("attributeList")
+        self.AttributeListView = AttributeListView(self.scrollAreaWidgetContents)
+        self.AttributeListView.setObjectName("AttributeListView")
         sizePolicy1.setHeightForWidth(
-            self.attributeList.sizePolicy().hasHeightForWidth()
+            self.AttributeListView.sizePolicy().hasHeightForWidth()
         )
-        self.attributeList.setSizePolicy(sizePolicy1)
+        self.AttributeListView.setSizePolicy(sizePolicy1)
 
-        self.verticalLayout_3.addWidget(self.attributeList)
+        self.verticalLayout_3.addWidget(self.AttributeListView)
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
@@ -329,7 +339,7 @@ class Ui_detailedWidget(object):
         self.verticalLayout.addWidget(self.attributeArea)
 
         self.verticalSpacer = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Minimum
+            20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum
         )
 
         self.verticalLayout.addItem(self.verticalSpacer)
@@ -337,7 +347,6 @@ class Ui_detailedWidget(object):
         self.retranslateUi(detailedWidget)
 
         QMetaObject.connectSlotsByName(detailedWidget)
-
     # setupUi
 
     def retranslateUi(self, detailedWidget):
@@ -390,5 +399,4 @@ class Ui_detailedWidget(object):
         self.createdValue.setText(
             QCoreApplication.translate("detailedWidget", "TextLabel", None)
         )
-
     # retranslateUi

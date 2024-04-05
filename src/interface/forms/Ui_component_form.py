@@ -1,15 +1,3 @@
-# SPDX-License-Identifier: MIT
-# --------------------------------------------------------------
-# |																|
-# |             Copyright 2023 - 2023, Amulya Paritosh			|
-# |																|
-# |  This file is part of Component Library Plugin for FreeCAD.	|
-# |																|
-# |               This file was created as a part of				|
-# |              Google Summer Of Code Program - 2023			|
-# |																|
-# --------------------------------------------------------------
-
 # -*- coding: utf-8 -*-
 
 ################################################################################
@@ -67,7 +55,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from src.interface.widgets import FileItem, FileList, TagBar
+from src.interface.widgets import AttributeList, FileItem, FileList, TagBar
 
 
 class Ui_ComponentCreationForm(object):
@@ -75,15 +63,19 @@ class Ui_ComponentCreationForm(object):
         if not ComponentCreationForm.objectName():
             ComponentCreationForm.setObjectName("ComponentCreationForm")
         ComponentCreationForm.resize(686, 871)
-        self.verticalLayout = QVBoxLayout(ComponentCreationForm)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.componentNameWidget = QWidget(ComponentCreationForm)
-        self.componentNameWidget.setObjectName("componentNameWidget")
         sizePolicy = QSizePolicy(
             QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum
         )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            ComponentCreationForm.sizePolicy().hasHeightForWidth()
+        )
+        ComponentCreationForm.setSizePolicy(sizePolicy)
+        self.verticalLayout = QVBoxLayout(ComponentCreationForm)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.componentNameWidget = QWidget(ComponentCreationForm)
+        self.componentNameWidget.setObjectName("componentNameWidget")
         sizePolicy.setHeightForWidth(
             self.componentNameWidget.sizePolicy().hasHeightForWidth()
         )
@@ -209,15 +201,10 @@ class Ui_ComponentCreationForm(object):
 
         self.componentFiles = FileList(ComponentCreationForm)
         self.componentFiles.setObjectName("componentFiles")
-        sizePolicy3 = QSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
-        )
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(
+        sizePolicy1.setHeightForWidth(
             self.componentFiles.sizePolicy().hasHeightForWidth()
         )
-        self.componentFiles.setSizePolicy(sizePolicy3)
+        self.componentFiles.setSizePolicy(sizePolicy1)
 
         self.verticalLayout.addWidget(self.componentFiles)
 
@@ -257,6 +244,25 @@ class Ui_ComponentCreationForm(object):
 
         self.verticalLayout.addWidget(self.descriptionInput)
 
+        self.attributesLabel = QLabel(ComponentCreationForm)
+        self.attributesLabel.setObjectName("attributesLabel")
+        sizePolicy.setHeightForWidth(
+            self.attributesLabel.sizePolicy().hasHeightForWidth()
+        )
+        self.attributesLabel.setSizePolicy(sizePolicy)
+        self.attributesLabel.setMaximumSize(QSize(16777213, 16777215))
+
+        self.verticalLayout.addWidget(self.attributesLabel)
+
+        self.attributesList = AttributeList(ComponentCreationForm)
+        self.attributesList.setObjectName("attributesList")
+        sizePolicy.setHeightForWidth(
+            self.attributesList.sizePolicy().hasHeightForWidth()
+        )
+        self.attributesList.setSizePolicy(sizePolicy)
+
+        self.verticalLayout.addWidget(self.attributesList)
+
         self.bottomWidget = QWidget(ComponentCreationForm)
         self.bottomWidget.setObjectName("bottomWidget")
         sizePolicy.setHeightForWidth(self.bottomWidget.sizePolicy().hasHeightForWidth())
@@ -264,7 +270,7 @@ class Ui_ComponentCreationForm(object):
         self.horizontalLayout = QHBoxLayout(self.bottomWidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.horizontalSpacer = QSpacerItem(
-            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Minimum
         )
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
@@ -274,7 +280,6 @@ class Ui_ComponentCreationForm(object):
         self.retranslateUi(ComponentCreationForm)
 
         QMetaObject.connectSlotsByName(ComponentCreationForm)
-
     # setupUi
 
     def retranslateUi(self, ComponentCreationForm):
@@ -358,5 +363,11 @@ class Ui_ComponentCreationForm(object):
                 "ComponentCreationForm", "a short description about the component", None
             )
         )
-
+        self.attributesLabel.setText(
+            QCoreApplication.translate(
+                "ComponentCreationForm",
+                '<html><head/><body><p><span style=" font-size:12pt;">Attributes</span></p></body></html>',
+                None,
+            )
+        )
     # retranslateUi
