@@ -10,9 +10,9 @@
 # |																|
 # --------------------------------------------------------------
 
-from functools import cache
+from functools import lru_cache
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List
 
 from PySide6.QtCore import QEventLoop, Signal, Slot
 from PySide6.QtNetwork import QNetworkRequest
@@ -139,15 +139,15 @@ class OnlineRepoManager(ManagerInterface):
         self.query.sort_ord = order
         return self.reload_page()
 
-    def filter(self, /, filetypes: list[str], tags: list[str]) -> CMSReply:
+    def filter(self, /, filetypes: List[str], tags: List[str]) -> CMSReply:
         """
         Filters the components by filetype and tags
 
         Parameters
         ----------
-        filetypes : list[str]
+        filetypes : List[str]
             filetypes to filter with
-        tags : list[str]
+        tags : List[str]
             tags to filter with
 
         Returns
@@ -230,8 +230,8 @@ class OnlineRepoManager(ManagerInterface):
         multi_part.setParent(reply)
         return reply
 
-    @cache
-    def load_from_db(self, dtype: DTypes) -> list[SerialisedDataType]:
+    @lru_cache
+    def load_from_db(self, dtype: DTypes) -> List[SerialisedDataType]:
         """
         Load data from the database
 
@@ -242,19 +242,19 @@ class OnlineRepoManager(ManagerInterface):
 
         Returns
         -------
-        list[SerialisedDataType]|None
+        List[SerialisedDataType]|None
             serialised data from db
         """
         return DataFactory.load_many(DbDataLoader(dtype).data, dtype)
 
     @Slot(dict)
-    def __component_response_handler(self, json_data: dict[str, Any]) -> None:
+    def __component_response_handler(self, json_data: Dict[str, Any]) -> None:
         """
         Handles what happens when the API responds with data
 
         Parameters
         ----------
-        json_data : dict[str, Any]
+        json_data : Dict[str, Any]
             The response json dict.
         """
         self.page_states.load_page(json_data)
@@ -311,10 +311,9 @@ class DbDataLoader:
         str
             relative route.
         """
-        match dtype:
-            case DTypes.TAG:
-                return "tag"
-            case DTypes.LICENSE:
-                return "license"
-            case _:
-                return ""
+        if dtype == DTypes.TAG:
+            return "tag"
+        elif dtype == DTypes.LICENSE:
+            return "license"
+        else:
+            return ""

@@ -10,7 +10,8 @@
 # |																|
 # --------------------------------------------------------------
 
-from functools import cache
+from functools import lru_cache
+from typing import List, Tuple
 
 import certifi
 from PySide6.QtCore import Slot
@@ -66,8 +67,8 @@ def when_finisned(reply: QNetworkReply) -> None:
 
 
 #
-@cache
-def get_network_access_manager() -> tuple[QNetworkAccessManager, QSslConfiguration]:
+@lru_cache
+def get_network_access_manager() -> Tuple[QNetworkAccessManager, QSslConfiguration]:
     """
     Retrieves the network access manager and SSL configuration for making network requests.
     Function result is cached for subsequent calls with the same arguments for ensuring Singleton
@@ -77,7 +78,7 @@ def get_network_access_manager() -> tuple[QNetworkAccessManager, QSslConfigurati
     tuple[QNetworkAccessManager, QSslConfiguration]
         A tuple containing the network access manager and SSL configuration.
     """
-    qcerts: list[QSslCertificate] = QSslCertificate.fromPath(
+    qcerts: List[QSslCertificate] = QSslCertificate.fromPath(
         certifi.where(),
         QSsl.EncodingFormat.Pem,
         QSslCertificate.PatternSyntax.Wildcard,

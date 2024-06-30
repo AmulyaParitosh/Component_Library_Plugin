@@ -10,7 +10,7 @@
 # |																|
 # --------------------------------------------------------------
 
-from typing import Any
+from typing import Any, List, Union
 
 from PySide6.QtCore import Signal
 
@@ -53,7 +53,7 @@ class LocalStorageManager(ManagerInterface):
         """
         return self.request_components()
 
-    def load_from_db(self, dtype: DTypes) -> list[SerialisedDataType] | None:
+    def load_from_db(self, dtype: DTypes) -> Union[List[SerialisedDataType], None]:
         """
         Load data from the Local database
 
@@ -64,12 +64,12 @@ class LocalStorageManager(ManagerInterface):
 
         Returns
         -------
-        list[SerialisedDataType]|None
+        List[SerialisedDataType]|None
             serialised data from db
         """
-        match dtype:
-            case DTypes.TAG:
-                return DataFactory.load_many(self.api.get_tags(), dtype)
+
+        if dtype == DTypes.TAG:
+            return DataFactory.load_many(self.api.get_tags(), dtype)
 
     def remove_file(self, component: Component, filetype: FileTypes):
         """

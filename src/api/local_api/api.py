@@ -11,17 +11,17 @@
 # --------------------------------------------------------------
 
 import contextlib
-from copy import deepcopy
 import json
-from pathlib import Path
-from typing import Any, Iterable
 import shutil
+from copy import deepcopy
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Union
 
 from ...config import Config
 from ...data import Component, FileTypes
 from ...utils import singleton
 from ..base_api import ApiInterface
-from .storage_adapter import LocalData, LocalDataComp, ComponentData, ComponentDataDict
+from .storage_adapter import ComponentData, ComponentDataDict, LocalData, LocalDataComp
 
 
 @singleton
@@ -112,12 +112,12 @@ class LocalApi(ApiInterface):
 
         with LocalData(Config.LOCAL_COMPONENT_PATH) as local_data:
             local_data["components"].add(comp_name)
-            local_data["filetypes"].setdefault(filetype.value, LocalDataComp()).add(comp_name)
+            local_data["filetypes"].setdefault(filetype.value, set()).add(comp_name)
 
             for tag in component.tags:
-                local_data["tags"].setdefault(tag.label, LocalDataComp()).add(comp_name)
+                local_data["tags"].setdefault(tag.label, set()).add(comp_name)
 
-    def read(self) -> dict[str, Any]:
+    def read(self) -> Dict[str, Any]:
         """
         Read the component data from the local storage.
 
@@ -151,7 +151,9 @@ class LocalApi(ApiInterface):
     def update(self):
         ...
 
-    def delete(self, component: Component, filetypes: Iterable[FileTypes] | FileTypes) -> None:
+    def delete(
+        self, component: Component, filetypes: Union[Iterable[FileTypes], FileTypes]
+    ) -> None:
         """
         Delete the component and associated files from the local storage.
 
@@ -226,13 +228,13 @@ class LocalApi(ApiInterface):
         """
         return cls.component_path(component_name) / "metadata.json"
 
-    def get_tags(self) -> list[dict[str, str]]:
+    def get_tags(self) -> List[Dict[str, str]]:
         """
         Get the tags from the local data.
 
         Returns
         -------
-        list[dict[str, str]]
+        List[Dict[str, str]]
             A list of dictionaries containing the tags.
         """
         with LocalData(Config.LOCAL_COMPONENT_PATH) as local_data:

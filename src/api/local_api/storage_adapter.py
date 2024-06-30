@@ -12,15 +12,16 @@
 
 import json
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import Any, Dict, List, Set, TypedDict
 
 from src.data.datadef import DataJsonEncoder
 
 from ...data import Component, DataFactory, DTypes
 from ...utils import singleton
 
-
-LocalDataComp = set[str]  # Type alias for a set of strings representing components in local data
+LocalDataComp = Set[
+    str
+]  # Type alias for a set of strings representing components in local data
 
 
 class LocalDataDict(TypedDict):
@@ -31,15 +32,15 @@ class LocalDataDict(TypedDict):
     ----------
     components : LocalDataComp
         The components stored locally.
-    tags : dict[str, LocalDataComp]
+    tags : Dict[str, LocalDataComp]
         The tags associated with the components.
-    filetypes : dict[str, LocalDataComp]
+    filetypes : Dict[str, LocalDataComp]
         The file types associated with the components.
     """
 
     components: LocalDataComp
-    tags: dict[str, LocalDataComp]
-    filetypes: dict[str, LocalDataComp]
+    tags: Dict[str, LocalDataComp]
+    filetypes: Dict[str, LocalDataComp]
 
 
 class SetJsonEncoder(json.JSONEncoder):
@@ -75,7 +76,7 @@ class SetJSONDecoder(json.JSONDecoder):
     def __init__(self) -> None:
         json.JSONDecoder.__init__(self, object_hook=self.dict_to_object)
 
-    def dict_to_object(self, d: dict) -> dict[Any, Any]:
+    def dict_to_object(self, d: dict) -> Dict[Any, Any]:
         """
         Converts lists back to sets for specific keys in the input dictionary.
 
@@ -88,7 +89,7 @@ class SetJSONDecoder(json.JSONDecoder):
 
         Returns
         -------
-        dict[Any, Any]
+        Dict[Any, Any]
             The modified dictionary with lists converted to sets for specific keys.
         """
 
@@ -212,24 +213,24 @@ class ComponentDataDict(TypedDict):
 
     Attributes
     ----------
-    files : dict[str, dict[str, Any]]
+    files : Dict[str, Dict[str, Any]]
         The files associated with the component.
     id : str
         The ID of the component.
-    license : dict[str, Any]
+    license : Dict[str, Any]
         The license information of the component.
-    metadata : dict[str, Any]
+    metadata : Dict[str, Any]
         The metadata of the component.
-    tags : list[dict[str, Any]]
+    tags : List[Dict[str, Any]]
         The tags associated with the component.
 
     """
 
-    files: dict[str, dict[str, Any]]
+    files: Dict[str, Dict[str, Any]]
     id: str
-    license: dict[str, Any]
-    metadata: dict[str, Any]
-    tags: list[dict[str, Any]]
+    license: Dict[str, Any]
+    metadata: Dict[str, Any]
+    tags: List[Dict[str, Any]]
 
 
 class ComponentData:

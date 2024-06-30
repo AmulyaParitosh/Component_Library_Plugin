@@ -11,7 +11,7 @@
 # --------------------------------------------------------------
 
 from functools import wraps
-from typing import Callable
+from typing import Callable, List
 
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QWidget
@@ -111,7 +111,6 @@ class GridView(BaseView):
         self.ui.pageLable.setText(f"{page.page_no} / {page.total_pages}")
         self.loading_overlay.loading = False
 
-    @staticmethod
     def loading(func: Callable):
         """
         Decorator that sets the loading overlay to True before executing the decorated function.
@@ -210,7 +209,7 @@ class GridView(BaseView):
 
     @loading
     @Slot(list)
-    def fileTypeComboBox_change(self, checked_items: list[str]) -> None:
+    def fileTypeComboBox_change(self, checked_items: List[str]) -> None:
         """
         Perform filtering based on checked filetypes and tags from tagBar
         """
@@ -221,7 +220,7 @@ class GridView(BaseView):
 
     @loading
     @Slot()
-    def tagBar_tag_edited(self, tags: list[str]) -> None:
+    def tagBar_tag_edited(self, tags: List[str]) -> None:
         """
         Update the manager's query tags and perform filtering based on filetypes and tags
         """

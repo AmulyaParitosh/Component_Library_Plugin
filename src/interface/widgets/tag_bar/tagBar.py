@@ -44,7 +44,7 @@ class TagBar(QWidget):
 
         self.setWindowTitle("Tag Bar")
 
-        self.tags: list[str] = []
+        self.tags: List[str] = []
 
         self.h_layout = QHBoxLayout()
         self.h_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)

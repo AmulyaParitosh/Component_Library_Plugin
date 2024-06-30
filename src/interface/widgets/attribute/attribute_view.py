@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, List
 
 from PySide6.QtWidgets import (
     QHBoxLayout,
@@ -33,7 +33,7 @@ class AttributeView(QWidget):
 
 class AttributeListView(QListWidget):
 
-    attributes: list[Attribute] = []
+    attributes: List[Attribute] = []
 
     def add_attribute_view(self, attribute_view: AttributeView):
         itemN = QListWidgetItem()

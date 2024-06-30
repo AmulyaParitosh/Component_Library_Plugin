@@ -10,6 +10,8 @@
 # |																|
 # --------------------------------------------------------------
 
+from typing import List, Union
+
 from PySide6.QtCore import QFile, QIODevice, QUrl, QUrlQuery
 from PySide6.QtNetwork import QHttpMultiPart, QHttpPart, QNetworkRequest
 
@@ -24,7 +26,7 @@ class ComponentRequest(QNetworkRequest):
     endpoint: str = "component"
 
     def __init__(
-        self, state: RepoComponentQuery | None = None, *args, **kwargs
+        self, state: Union[RepoComponentQuery, None] = None, *args, **kwargs
     ) -> None:
         """
         Initializes the ComponentRequest object.
@@ -48,7 +50,7 @@ class ComponentRequest(QNetworkRequest):
         None
         """
 
-        query_list: list[str] = [
+        query_list: List[str] = [
             state.page,
             state.page_size,
             state.search_str,

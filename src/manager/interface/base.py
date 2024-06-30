@@ -10,6 +10,8 @@
 # |																|
 # --------------------------------------------------------------
 
+from typing import List
+
 from PySide6.QtCore import Signal
 
 from ...api import ApiInterface, ComponentQueryInterface
@@ -64,14 +66,14 @@ class ManagerInterface(ABCQObject):
             sorting order
         """
 
-    def filter(self, /, filetypes: list[str], tags: list[str]):
+    def filter(self, /, filetypes: List[str], tags: List[str]):
         """
         Method to filter components based on filetypes and tags.
 
         Parameters
         ----------
-        filetypes : list[str]
+        filetypes : List[str]
             filetypes to filter
-        tags : list[str]
+        tags : List[str]
             tags to filter
         """

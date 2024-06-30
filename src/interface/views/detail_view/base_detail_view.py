@@ -10,6 +10,8 @@
 # |																|
 # --------------------------------------------------------------
 
+from typing import Union
+
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QWidget
 
@@ -27,7 +29,7 @@ class BaseDetailedView(BaseView):
     thumbnail: Thumbnail = None
     component: Component = None
 
-    def __init__(self, parent: QWidget | None = None) -> None:
+    def __init__(self, parent: Union[QWidget, None] = None) -> None:
         """
         Constructor for the BaseDetailedView class.
 
@@ -120,7 +122,7 @@ class BaseDetailedView(BaseView):
 
         self.ui.processesArea.addWidget(widget)
 
-    def current_file(self) -> File | None:
+    def current_file(self) -> Union[File, None]:
         """
         Get the current file selected in the filetypeComboBox.
 

@@ -11,6 +11,7 @@
 # --------------------------------------------------------------
 
 from pathlib import Path
+from typing import List
 
 from PySide6.QtWidgets import (
     QFileDialog,
@@ -108,7 +109,7 @@ class FileList(QWidget):
         self.list_widget.takeItem(self.list_widget.row(item))
 
     @property
-    def filepaths(self) -> list[str]:
+    def filepaths(self) -> List[str]:
         """
         Property to get the list of filepaths currently in the list.
         """

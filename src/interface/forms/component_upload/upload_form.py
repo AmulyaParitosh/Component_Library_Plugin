@@ -10,7 +10,7 @@
 # |																|
 # --------------------------------------------------------------
 
-from typing import Any
+from typing import Any, Dict
 
 from PySide6.QtCore import Slot
 from PySide6.QtNetwork import QNetworkReply
@@ -82,13 +82,13 @@ class ComponetUploadDialog(QDialog):
         )
 
     @property
-    def packed_data(self) -> dict[str, Any]:
+    def packed_data(self) -> Dict[str, Any]:
         """
         Pack the data entered in the form.
 
         Returns
         -------
-        dict[str, Any]
+        Dict[str, Any]
             A dictionary containing the packed data with the following keys:
 
         Example

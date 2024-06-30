@@ -12,7 +12,7 @@
 
 
 import json
-from typing import Any
+from typing import Any, Dict
 
 from PySide6.QtCore import QObject, Signal, Slot
 from PySide6.QtNetwork import QNetworkReply
@@ -64,7 +64,7 @@ class CMSReply(QObject):
         self.reply.deleteLater()
 
     @staticmethod
-    def parse_json(data: str) -> dict[Any, Any]:
+    def parse_json(data: str) -> Dict[Any, Any]:
         """
         Parses JSON data.
 

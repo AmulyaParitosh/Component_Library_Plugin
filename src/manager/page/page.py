@@ -11,7 +11,7 @@
 # --------------------------------------------------------------
 
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Dict, List, Union
 
 from PySide6.QtCore import QObject, Signal
 
@@ -30,40 +30,40 @@ class PageStates(QObject):
     enable_next = Signal(bool)  # Signal to enable or disable the next page button.
     enable_prev = Signal(bool)  # Signal to enable or disable the previous page button.
 
-    data: list[Component] = field(default_factory=list)
+    data: List[Component] = field(default_factory=list)
     total_items: int = 0
     page_no: int = 0
     total_pages = 0
     size: int = 18
-    next_page: int | None = None
-    prev_page: int | None = None
+    next_page: Union[int, None] = None
+    prev_page: Union[int, None] = None
 
     def __init__(self, *args, **kwargs):
         super(QObject, self).__init__()
         super().__init__(*args, **kwargs)
 
-    def load_page(self, json_response: dict[str, Any]):
+    def load_page(self, json_response: Dict[str, Any]):
         """
         Load page data from JSON response and calculate pagination.
 
         Parameters
         ----------
-        json_response : dict[str, Any]
+        json_response : Dict[str, Any]
             the response forn the API.
         """
         self.load_page_data(json_response)
         self.calculate_pagination()  # TODO: Calculate pagination and emit signals.
 
-    def load_page_data(self, json_response: dict[str, Any]) -> None:
+    def load_page_data(self, json_response: Dict[str, Any]) -> None:
         """
         Loads the page data and states
 
         Parameters
         ----------
-        json_response : dict[str, Any]
+        json_response : Dict[str, Any]
             the response from API
         """
-        self.data: list[Component] = DataFactory.load_many(
+        self.data: List[Component] = DataFactory.load_many(
             data_list=json_response.get("items", []), dtype=DTypes.COMPONENT
         )
         self.update_existing_comps(self.data)
@@ -72,13 +72,13 @@ class PageStates(QObject):
         self.page_no = json_response.get("page", 1)
         self.size = json_response.get("per_page", 18)
 
-    def update_existing_comps(self, components: list[Component]) -> None:
+    def update_existing_comps(self, components: List[Component]) -> None:
         """
         Update the existing components with file existence information.
 
         Parameters
         ----------
-        components : list[Component]
+        components : List[Component]
             list of the serialised components recieved from he API
         """
         with LocalData(Config.LOCAL_COMPONENT_PATH) as local_data:

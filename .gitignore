@@ -2,7 +2,6 @@
 __pycache__/
 *.py[cod]
 .todo
-*.lock
 # C extensions
 *.so
 
@@ -66,3 +65,4 @@ test
 local_storage
 poetry.toml
 .tokens
+.python-version

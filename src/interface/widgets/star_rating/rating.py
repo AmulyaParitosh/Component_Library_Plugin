@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 from enum import Enum
+from typing import Union
 
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QPixmap
@@ -68,7 +69,7 @@ class StarRating(QWidget):
 
     def __init__(
         self,
-        parent: QWidget | None = None,
+        parent: Union[QWidget, None] = None,
         default_value: float = 0,
         max_value: int = 5,
     ) -> None:

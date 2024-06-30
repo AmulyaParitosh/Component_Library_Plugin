@@ -10,6 +10,8 @@
 # |																|
 # --------------------------------------------------------------
 
+from typing import List
+
 from PySide6.QtWidgets import QGridLayout, QWidget
 
 from .....data import Component
@@ -42,7 +44,7 @@ class GridItemWidget(QWidget):
         self.__cur_row = 0
         self.__cur_col = 0
 
-    def repopulate(self, components: list[Component]):
+    def repopulate(self, components: List[Component]):
         """
         Method to repopulate the grid with a new list of components.
 
@@ -54,7 +56,7 @@ class GridItemWidget(QWidget):
         self.reset()
         self.populate(components)
 
-    def populate(self, components: list[Component]):
+    def populate(self, components: List[Component]):
         """
         Method to populate the grid with a list of components.
 

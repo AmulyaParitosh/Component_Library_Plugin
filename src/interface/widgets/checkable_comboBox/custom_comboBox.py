@@ -96,7 +96,7 @@ class CheckableComboBox(QComboBox):
         list of str
             A list of checked item texts.
         """
-        checkedItems: list[str] = []
+        checkedItems: List[str] = []
         for i in range(self.count()):
             item: QStandardItem = self.model().item(i, 0)
             if item.checkState() == Qt.CheckState.Checked:
