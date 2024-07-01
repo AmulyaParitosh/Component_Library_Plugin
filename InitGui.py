@@ -13,12 +13,8 @@ module_setup()
 
 
 class ComponentLibraryWorkbench(Workbench):
-    def __init__(self):
-        FreeCAD.Console.PrintLog("Logging Test here\n")
-        FreeCAD.Console.PrintWarning("Warning Logging Test here\n")
-        FreeCAD.Console.PrintError("Error Logging Test here\n")
 
-        self.__class__.Icon = FreeCAD.getResourceDir() + ""
+    def __init__(self):
         self.__class__.MenuText = "ComponentLibrary"
         self.__class__.ToolTip = "ComponentLibrary workbench"
 
