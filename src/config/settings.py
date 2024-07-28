@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 load_dotenv()  # Load environment variables from a .env file in the current working directory (if present)
 
 
-class Config:
+class Settings:
     """
     Class to store all the configurations.
     """

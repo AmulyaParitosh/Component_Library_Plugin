@@ -10,11 +10,12 @@
 # |																|
 # --------------------------------------------------------------
 
+import sys
 from abc import ABC, ABCMeta
 from typing import Type
 
-from PySide6.QtCore import QObject
-from PySide6.QtWidgets import QWidget
+from PySide2.QtCore import QObject
+from PySide2.QtWidgets import QWidget
 
 QObjectMeta = type(QObject)
 QWidgetMeta = type(QWidget)
@@ -45,3 +46,23 @@ def singleton(cls: Type):
         return instances[cls]
 
     return get_instance
+
+
+def module_setup():
+
+    try:
+        import FreeCAD
+        import PySide
+    except ImportError:
+        try:
+            import PySide6 as PySide
+        except ImportError:
+            import PySide2 as PySide
+
+    sys.modules["PySide2"] = PySide
+
+
+def setup_config(config):
+    from .config import config as global_config
+
+    global_config = config

@@ -15,26 +15,20 @@
 
 import sys
 
-
-def module_setup():
-    try:
-        import PySide
-
-        sys.modules["PySide6"] = PySide
-        print("changed name, using PySide as PySide6")
-    except ImportError:
-        print("error in importing PySide, using PySide6")
-
+from src.config import Settings
+from src.utils import module_setup, setup_config
 
 if __name__ == "__main__":
     module_setup()
+    config = Settings()
+    setup_config(config)
 
-    from PySide6.QtWidgets import QApplication
+    from PySide2.QtWidgets import QApplication
 
-    from src import Window
+    from src.main import Window
 
     app = QApplication(sys.argv)
 
     plugin = Window()
 
-    sys.exit(app.exec())
+    sys.exit(app.exec_())

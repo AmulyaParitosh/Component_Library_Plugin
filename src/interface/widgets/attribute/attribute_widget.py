@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget
+from PySide2.QtWidgets import QWidget
 
 from ....data.datadef import Attribute
 from .attribute_view import AttributeView

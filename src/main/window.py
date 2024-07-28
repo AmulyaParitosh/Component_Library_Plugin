@@ -12,8 +12,8 @@
 
 import contextlib
 
-from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QMainWindow, QWidget
+from PySide2.QtCore import Slot
+from PySide2.QtWidgets import QMainWindow, QWidget
 
 from ..api.cms_api import CMSApi
 from ..api.cms_api.exceptions import Connection_Error
@@ -25,6 +25,7 @@ from .Ui_window import Ui_MainWindow
 
 
 class Window(QMainWindow):
+
     def __init__(self, parent=None) -> None:
         """
         Initialize the widget. This is the entry point for the class. You can override this if you want to do something other than setup the GUI and set up some things that are specific to the widget

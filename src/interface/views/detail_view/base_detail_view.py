@@ -12,8 +12,8 @@
 
 from typing import Union
 
-from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QWidget
+from PySide2.QtCore import Slot
+from PySide2.QtWidgets import QWidget
 
 from ....data import Component, File, FileTypes
 from ...widgets import ComponentItem, DetailedWidget, Thumbnail

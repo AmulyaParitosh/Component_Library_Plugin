@@ -1,6 +1,6 @@
 from typing import Iterable, List
 
-from PySide6.QtWidgets import (
+from PySide2.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QListWidget,

@@ -14,9 +14,9 @@ from __future__ import annotations
 
 from typing import Union
 
-from PySide6.QtCore import Qt, QUrl
-from PySide6.QtGui import QImage, QPixmap
-from PySide6.QtWidgets import QLabel, QSizePolicy, QWidget
+from PySide2.QtCore import Qt, QUrl
+from PySide2.QtGui import QImage, QPixmap
+from PySide2.QtWidgets import QLabel, QSizePolicy, QWidget
 
 from ....manager.download import ImageLoader
 

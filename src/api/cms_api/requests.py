@@ -12,8 +12,8 @@
 
 from typing import List, Union
 
-from PySide6.QtCore import QFile, QIODevice, QUrl, QUrlQuery
-from PySide6.QtNetwork import QHttpMultiPart, QHttpPart, QNetworkRequest
+from PySide2.QtCore import QFile, QIODevice, QUrl, QUrlQuery
+from PySide2.QtNetwork import QHttpMultiPart, QHttpPart, QNetworkRequest
 
 from .query import RepoComponentQuery
 

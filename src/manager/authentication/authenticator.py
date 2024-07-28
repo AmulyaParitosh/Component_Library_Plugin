@@ -2,10 +2,10 @@ import json
 from typing import Optional
 
 import dotenv
-from PySide6.QtCore import QObject, Signal
-from PySide6.QtNetwork import QNetworkRequest
+from PySide2.QtCore import QObject, Signal
+from PySide2.QtNetwork import QNetworkRequest
 
-from src.config.config import Config
+from src.config import config
 
 from ...data import User
 from ...interface.dialogs.authentication import Authentication_Dialog
@@ -20,28 +20,28 @@ class Authentication_Manager(QObject):
 
     def __init__(self) -> None:
         super().__init__()
-        if not Config.GITHUB_ACCESS_TOKEN:
+        if not config.GITHUB_ACCESS_TOKEN:
             return
 
         self.api_login()
 
     def api_login(self):
         request: QNetworkRequest = QNetworkRequest(
-            f"{Config.API_URL}/login/app/authorize"
+            f"{config.API_URL}/login/app/authorize"
         )
         request.setRawHeader(
             "access_token".encode("utf-8"),
-            str(Config.GITHUB_ACCESS_TOKEN).encode("utf-8"),
+            str(config.GITHUB_ACCESS_TOKEN).encode("utf-8"),
         )
         self.jwt_auth_reply = self.network_manager.get(request)
         self.jwt_auth_reply.finished.connect(self.handle_jwt_auth_response)
 
-        self.get_user_data(Config.GITHUB_ACCESS_TOKEN)
+        self.get_user_data(config.GITHUB_ACCESS_TOKEN)
 
     def handle_jwt_auth_response(self):
         raw_json_str = self.jwt_auth_reply.readAll().data().decode("utf-8")
         jwt_token = json.loads(raw_json_str)["jwt"]
-        Config.JWT_TOKEN = jwt_token
+        config.JWT_TOKEN = jwt_token
 
         print(f"{jwt_token=}")
 
@@ -53,7 +53,7 @@ class Authentication_Manager(QObject):
     def logout(self) -> None:
         self.user = None
         dotenv.unset_key(".env", "GITHUB_ACCESS_TOKEN")
-        Config.GITHUB_ACCESS_TOKEN = None
+        config.GITHUB_ACCESS_TOKEN = None
         self.session_update.emit(self.session_update)
 
     def is_authentic(self) -> bool:

@@ -7,10 +7,6 @@
 import FreeCAD
 import FreeCADGui
 
-from app import module_setup
-
-module_setup()
-
 
 class ComponentLibraryWorkbench(Workbench):
 
@@ -19,12 +15,11 @@ class ComponentLibraryWorkbench(Workbench):
         self.__class__.ToolTip = "ComponentLibrary workbench"
 
     def Initialize(self) -> None:
-        from src import Window
+        from src.main import Window
 
-        plugin = Window()
+        self.addon = Window()
 
-    def Activated(self):
-        ...
+    def Activated(self): ...
 
     def GetClassName(self):
         return "Gui::PythonWorkbench"

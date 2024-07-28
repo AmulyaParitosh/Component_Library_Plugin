@@ -14,8 +14,8 @@ from functools import lru_cache
 from typing import List, Tuple
 
 import certifi
-from PySide6.QtCore import Slot
-from PySide6.QtNetwork import (
+from PySide2.QtCore import Slot
+from PySide2.QtNetwork import (
     QNetworkAccessManager,
     QNetworkReply,
     QNetworkRequest,
@@ -24,7 +24,7 @@ from PySide6.QtNetwork import (
     QSslConfiguration,
     QSslSocket,
 )
-from PySide6.QtWidgets import QMessageBox
+from PySide2.QtWidgets import QMessageBox
 
 
 @Slot(QNetworkReply)

@@ -12,9 +12,9 @@
 
 from typing import Any, Dict
 
-from PySide6.QtCore import Slot
-from PySide6.QtNetwork import QNetworkReply
-from PySide6.QtWidgets import QDialog, QMessageBox, QPushButton
+from PySide2.QtCore import Slot
+from PySide2.QtNetwork import QNetworkReply
+from PySide2.QtWidgets import QDialog, QMessageBox, QPushButton
 
 from ....data import DTypes
 from ....manager import OnlineRepoManager

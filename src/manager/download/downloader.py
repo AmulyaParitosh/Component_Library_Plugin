@@ -12,9 +12,9 @@
 
 from pathlib import Path
 
-from PySide6.QtCore import QFile, QIODevice, QObject, QUrl, Signal, Slot
-from PySide6.QtGui import QImage
-from PySide6.QtNetwork import QNetworkReply, QNetworkRequest
+from PySide2.QtCore import QFile, QIODevice, QObject, QUrl, Signal, Slot
+from PySide2.QtGui import QImage
+from PySide2.QtNetwork import QNetworkReply, QNetworkRequest
 
 from ...network.network_manager import get_network_access_manager
 
@@ -59,7 +59,7 @@ class FileDownloader(QObject):
             print(f"Error: {reply.error()}")
             self.error.emit(reply.error())
 
-        file = QFile(self.filepath)
+        file = QFile(str(self.filepath))
 
         if file.open(QIODevice.OpenModeFlag.WriteOnly):
             file.write(reply.readAll())

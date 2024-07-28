@@ -12,7 +12,7 @@
 
 from typing import Any, List, Union
 
-from PySide6.QtCore import Signal
+from PySide2.QtCore import Signal
 
 from src.data.factory import DataFactory
 

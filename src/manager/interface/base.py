@@ -12,7 +12,7 @@
 
 from typing import List
 
-from PySide6.QtCore import Signal
+from PySide2.QtCore import Signal
 
 from ...api import ApiInterface, ComponentQueryInterface
 from ...utils import ABCQObject

@@ -14,8 +14,8 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List
 
-from PySide6.QtCore import QEventLoop, Signal, Slot
-from PySide6.QtNetwork import QNetworkRequest
+from PySide2.QtCore import QEventLoop, Signal, Slot
+from PySide2.QtNetwork import QNetworkRequest
 
 from ...api.cms_api import (
     CMSApi,
@@ -25,7 +25,7 @@ from ...api.cms_api import (
     construct_multipart,
 )
 from ...api.local_api import LocalApi
-from ...config import Config
+from ...config import config
 from ...data import Component, DataFactory, DTypes, FileTypes, SerialisedDataType
 from ..download import FileDownloader
 from ..page import PageStates
@@ -224,7 +224,7 @@ class OnlineRepoManager(ManagerInterface):
 
         request = ComponentRequest()
         request.setRawHeader(
-            "X-Access-Token".encode(), Config.GITHUB_ACCESS_TOKEN.encode()
+            "X-Access-Token".encode(), config.GITHUB_ACCESS_TOKEN.encode()
         )
         reply = self.api.create(request, multi_part)
         multi_part.setParent(reply)
@@ -293,7 +293,7 @@ class DbDataLoader:
         reply: CMSReply = CMSApi().read(QNetworkRequest(self.get_route(dtype)))
         loop = QEventLoop(parent=reply)
         reply.finished.connect(loop.quit)
-        loop.exec()
+        loop.exec_()
         self.data: list = reply.data.get("items", [])
 
     @staticmethod

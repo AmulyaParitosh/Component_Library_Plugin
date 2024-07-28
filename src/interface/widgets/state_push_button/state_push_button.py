@@ -14,8 +14,8 @@ import contextlib
 from enum import Enum
 from typing import Union
 
-from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QPushButton
+from PySide2.QtCore import Slot
+from PySide2.QtWidgets import QPushButton
 
 
 class StatefulPushButton(QPushButton):
