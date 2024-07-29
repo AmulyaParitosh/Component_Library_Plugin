@@ -14,14 +14,15 @@ from typing import Any, Dict
 
 from PySide2.QtCore import Slot
 from PySide2.QtNetwork import QNetworkReply
-from PySide2.QtWidgets import QDialog, QMessageBox, QPushButton
+from PySide2.QtWidgets import QDialog, QMessageBox, QPushButton, QWidget
 
 from ....data import DTypes
 from ....manager import OnlineRepoManager
+from ....config import config
 from ..Ui_component_form import Ui_ComponentCreationForm
 
 
-class ComponetUploadDialog(QDialog):
+class ComponetUploadDialog(QWidget):
     """
     Dialog for input fields of data for creating a Component.
     """
@@ -70,16 +71,34 @@ class ComponetUploadDialog(QDialog):
         self.create_button.clicked.connect(self.on_create_button_clicked)
         self.discard_button = QPushButton("Discard")
         self.discard_button.clicked.connect(self.close)
+        self.back_button = QPushButton("Back")
+        self.back_button.clicked.connect(self.backPushButton_click)
 
         # Add the buttons to the bottom widget layout.
         self.ui.bottomWidget.layout().addWidget(self.create_button)
         self.ui.bottomWidget.layout().addWidget(self.discard_button)
+        self.ui.bottomWidget.layout().addWidget(self.back_button)
 
         # Set suggestions for tags and licenses using the OnlineRepoManager.
         self.ui.tagsWidget.set_suggestions(self.manager.load_from_db(DTypes.TAG))
         self.ui.licenseInput.addItems(
             (license.fullname for license in self.manager.load_from_db(DTypes.LICENSE))
         )
+        self.ui.componentFiles.dir = str(config.LOCAL_COMPONENT_PATH)
+        self.ui.thumbnailFile.dir = str(config.LOCAL_COMPONENT_PATH)
+
+    @Slot()
+    def backPushButton_click(self) -> None:
+        """
+        Handle the click event of the back button.
+
+        Returns
+        -------
+        None
+        """
+
+        # self.manager.reload_page()
+        self.topLevelWidget().toLastWidget()
 
     @property
     def packed_data(self) -> Dict[str, Any]:
@@ -168,7 +187,7 @@ class ComponetUploadDialog(QDialog):
         success_msg.setText("Component created successfully!")
         success_msg.setIcon(QMessageBox.Icon.Information)
         success_msg.exec_()
-        self.close()
+        # self.close()
 
     @classmethod
     def create_component(cls, parent, manager: OnlineRepoManager) -> int:

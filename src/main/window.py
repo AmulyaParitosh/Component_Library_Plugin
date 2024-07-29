@@ -62,11 +62,13 @@ class Window(QMainWindow):
         self.onlineDetailView = OnlineDetailedView(self)
         self.localGridView = GridView(self)
         self.localDetailView = LocalDetailedView(self)
+        self.upload_widget = ComponetUploadDialog(self, self.repo_manager)
 
         self.ui.stackedWidget.insertWidget(0, self.onlineGridView)
         self.ui.stackedWidget.insertWidget(1, self.onlineDetailView)
         self.ui.stackedWidget.insertWidget(2, self.localGridView)
         self.ui.stackedWidget.insertWidget(3, self.localDetailView)
+        self.ui.stackedWidget.insertWidget(4, self.upload_widget)
 
         self.onlineGridView.detailView = self.onlineDetailView
         self.localGridView.detailView = self.localDetailView
@@ -141,8 +143,11 @@ class Window(QMainWindow):
         """
         Create a component using the ComponetUploadDialog and OnlineRepoManager.
         """
-        data = ComponetUploadDialog.create_component(self, self.repo_manager)
-        print(data)
+        # upload_widget = ComponetUploadDialog(self, self.repo_manager)
+        self.widgetStack.append(self.ui.stackedWidget.currentWidget())
+        self.ui.stackedWidget.setCurrentWidget(self.upload_widget)
+
+        # print(data)
 
     def add_notification_widget(self, notification: QWidget):
         """
