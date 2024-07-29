@@ -13,7 +13,7 @@
 from typing import Union
 
 from PySide2.QtCore import Slot
-from PySide2.QtWidgets import QWidget
+from PySide2.QtWidgets import QWidget, QPushButton, QMessageBox
 
 from ....data import Component, File, FileTypes
 from ...widgets import ComponentItem, DetailedWidget, Thumbnail
@@ -60,6 +60,11 @@ class BaseDetailedView(BaseView):
         self.ui.setupUi(self)
         self.ui.backPushButton.clicked.connect(self.backPushButton_click)
         self.ui.tagsWidget.set_editable(False)
+        self.addToDocumentButton = QPushButton("Add to Document", self)
+        self.addToDocumentButton.setDisabled(True)
+        self.addControlWidget(self.addToDocumentButton)
+
+        self.addToDocumentButton.clicked.connect(self.addToDocumentButton_click)
 
     @Slot()
     def backPushButton_click(self) -> None:
@@ -169,6 +174,37 @@ class BaseDetailedView(BaseView):
         self.ui.tagsWidget.clear()
         for tag in self.component.tags:
             self.ui.tagsWidget.add_tag_to_bar(tag.label)
+
+        if self.current_file().exists:
+            self.addToDocumentButton.setDisabled(False)
+
+    @Slot()
+    def addToDocumentButton_click(self):
+        file = self.current_file()
+        if file is None:
+            return
+        try:
+            file_path = self.manager.insert_in_active_freecad_doc(
+                self.component, file.type
+            )
+        except ValueError as e:
+            dlg = QMessageBox(self)
+            dlg.setWindowTitle("No Active Document")
+            dlg.setText(
+                "No Active Document found. Do you want to create a new document and then insert into it?"
+            )
+            dlg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            dlg.setIcon(QMessageBox.Question)
+            button = dlg.exec_()
+
+            if button == QMessageBox.Yes:
+                file_path = self.manager.insert_in_new_freecad_doc(
+                    self.component, file.type
+                )
+            else:
+                return
+
+        print(f"{file_path=}")
 
     def _update_thumbnail(self, thumbnail_widget) -> None:
         """

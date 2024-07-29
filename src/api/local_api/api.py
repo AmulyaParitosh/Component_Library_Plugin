@@ -228,6 +228,12 @@ class LocalApi(ApiInterface):
         """
         return cls.component_path(component_name) / "metadata.json"
 
+    @classmethod
+    def file_path(cls, component_name: str, file_type: FileTypes) -> Path:
+        return (
+            cls.component_path(component_name) / f"{component_name}.{file_type.value}"
+        )
+
     def get_tags(self) -> List[Dict[str, str]]:
         """
         Get the tags from the local data.

@@ -14,7 +14,14 @@ from typing import List
 
 from PySide2.QtCore import Signal
 
-from ...api import ApiInterface, ComponentQueryInterface
+import FreeCAD
+import FreeCADGui
+import Import
+
+from src.data.data_types import FileTypes
+from src.data.datadef import Component
+
+from ...api import ApiInterface, ComponentQueryInterface, local_api
 from ...utils import ABCQObject
 from ..page import PageStates
 
@@ -77,3 +84,16 @@ class ManagerInterface(ABCQObject):
         tags : List[str]
             tags to filter
         """
+
+    def insert_in_active_freecad_doc(self, component: Component, filetype: FileTypes):
+        file_path = local_api.LocalApi().file_path(component.metadata.name, filetype)
+        current_document = FreeCAD.activeDocument()
+        if current_document is None:
+            raise ValueError("No active document found.")
+        FreeCADGui.insert(str(file_path), current_document.Name)
+        return file_path
+
+    def insert_in_new_freecad_doc(self, component: Component, filetype: FileTypes):
+        FreeCAD.newDocument()
+        file_path = self.insert_in_active_freecad_doc(component, filetype)
+        return file_path

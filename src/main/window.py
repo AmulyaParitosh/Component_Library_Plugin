@@ -161,6 +161,20 @@ class Window(QMainWindow):
         """
         self.ui.notificationArea.addWidget(notification)
 
+    def remove_notification_widget(self, notification: QWidget):
+        """
+        Remove a widget from the notification area. This is a convenience method for removing widgets from the notification area.
+        This is mainly used for the download progress bar.
+
+        Parameters
+        ----------
+        notification : QWidget
+            The QWidget to remove from the notification area
+        """
+        print("Removing notification widget:", notification)
+        self.ui.notificationArea.removeWidget(notification)
+        self.ui.notificationArea.update()
+
     def show_user(self):
         if self.auth_manager.is_authentic():
             self.ui.userPushButton.setText(self.auth_manager.user.name)

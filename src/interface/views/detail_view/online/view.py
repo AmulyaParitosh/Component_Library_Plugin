@@ -13,10 +13,13 @@
 from enum import Enum, auto
 from pathlib import Path
 
+import FreeCAD
+import Import
+
 from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QProgressBar, QWidget
 
-from .....manager import ManagerInterface, OnlineRepoManager
+from .....manager import ManagerInterface, OnlineRepoManager, LocalStorageManager
 from ....widgets import ComponentItem, StatefulPushButton
 from ..base_detail_view import BaseDetailedView
 
@@ -180,6 +183,9 @@ class OnlineDetailedView(BaseDetailedView):
 
         self.downloadPushButton.setState(DownloadStates.FINISHED)
         file.exists = True  # Mark the file as existing (downloaded successfully)
+        self.topLevelWidget().remove_notification_widget(
+            self.files_on_download[file.id]
+        )
         self.files_on_download.pop(
             file.id
         )  # Remove the file id and progress bar from the files_on_download dictionary
