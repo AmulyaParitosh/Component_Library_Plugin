@@ -18,8 +18,13 @@ class ComponentLibraryWorkbench(Workbench):
         from src.main import Window
 
         self.addon = Window()
+        self.addon.show()
 
-    def Activated(self): ...
+    def Activated(self):
+        self.addon.show()
+
+    def Deactivated(self):
+        self.addon.hide()
 
     def GetClassName(self):
         return "Gui::PythonWorkbench"
