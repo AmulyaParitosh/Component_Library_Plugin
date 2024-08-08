@@ -17,6 +17,8 @@ from typing import Any, Dict
 from PySide2.QtCore import QObject, Signal, Slot
 from PySide2.QtNetwork import QNetworkReply
 
+from ....logging import logger
+
 
 class CMSReply(QObject):
     """
@@ -50,7 +52,7 @@ class CMSReply(QObject):
 
         # Check if there was an error in the network reply
         if self.reply.error() != QNetworkReply.NetworkError.NoError:
-            print(f"Error: {self.reply.errorString()}")
+            logger.warning(f"{self.reply.url()}: {self.reply.errorString()}")
 
         # Read the raw data from the network reply and decode it as UTF-8 as parse as JSON
         raw_data: str = self.reply.readAll().data().decode("utf-8")

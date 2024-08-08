@@ -12,6 +12,7 @@
 
 import contextlib
 
+from FreeCAD import Console
 from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QMainWindow, QWidget
 
@@ -20,6 +21,7 @@ from ..manager.api_manager.exceptions import Connection_Error
 from ..interface.views import GridView, LocalDetailedView, OnlineDetailedView
 from ..interface.widgets import ComponentItem, ComponentUploadWidget
 from ..manager import Authentication_Manager, LocalStorageManager, OnlineRepoManager
+from ..logging import logger
 from .Ui_window import Ui_MainWindow
 
 
@@ -146,8 +148,6 @@ class AddonWindow(QMainWindow):
         self.widgetStack.append(self.ui.stackedWidget.currentWidget())
         self.ui.stackedWidget.setCurrentWidget(self.upload_widget)
 
-        # print(data)
-
     def add_notification_widget(self, notification: QWidget):
         """
         Add a widget to the notification area. This is a convenience method for adding widgets to the notification area.
@@ -170,7 +170,7 @@ class AddonWindow(QMainWindow):
         notification : QWidget
             The QWidget to remove from the notification area
         """
-        print("Removing notification widget:", notification)
+        logger.debug("Removing notification widget: {notification}")
         self.ui.notificationArea.removeWidget(notification)
         self.ui.notificationArea.update()
 

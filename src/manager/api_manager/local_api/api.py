@@ -17,7 +17,7 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Union
 
-from ....config import config
+from ....config import Config
 from ....data import Component, FileTypes
 from ....utils import singleton
 from ..base_api import ApiInterface
@@ -114,7 +114,7 @@ class LocalApi(ApiInterface):
 
         comp_name: str = component.metadata.name
 
-        with LocalData(config.LOCAL_COMPONENT_PATH) as local_data:
+        with LocalData(Config.LOCAL_COMPONENT_PATH) as local_data:
             local_data["components"].add(comp_name)
             local_data["filetypes"].setdefault(filetype.value, set()).add(comp_name)
 
@@ -134,7 +134,6 @@ class LocalApi(ApiInterface):
         -------
         api = LocalApi()
         data = api.read()
-        print(data)
         """
         data = {
             "items": [],
@@ -142,7 +141,7 @@ class LocalApi(ApiInterface):
             "per_page": 18,
             "total": 0,
         }
-        for path in config.LOCAL_COMPONENT_PATH.iterdir():
+        for path in Config.LOCAL_COMPONENT_PATH.iterdir():
             if not path.is_dir():
                 continue
             with open(path / "metadata.json", "r", encoding="utf-8") as metadata:
@@ -177,7 +176,7 @@ class LocalApi(ApiInterface):
         remove_component = False
 
         with ComponentData(self.metadata_path(comp_name)) as comp_data, LocalData(
-            config.LOCAL_COMPONENT_PATH
+            Config.LOCAL_COMPONENT_PATH
         ) as local_data:
             if isinstance(filetypes, FileTypes):
                 filetypes = [filetypes]
@@ -214,7 +213,7 @@ class LocalApi(ApiInterface):
             The path to the component directory.
         """
 
-        return config.LOCAL_COMPONENT_PATH / component_name
+        return Config.LOCAL_COMPONENT_PATH / component_name
 
     @classmethod
     def metadata_path(cls, component_name: str) -> Path:
@@ -248,5 +247,5 @@ class LocalApi(ApiInterface):
         List[Dict[str, str]]
             A list of dictionaries containing the tags.
         """
-        with LocalData(config.LOCAL_COMPONENT_PATH) as local_data:
+        with LocalData(Config.LOCAL_COMPONENT_PATH) as local_data:
             return [{"label": tag} for tag in local_data["tags"].keys()]

@@ -26,11 +26,13 @@ from PySide2.QtNetwork import (
 )
 from PySide2.QtWidgets import QMessageBox
 
+from ..logging import logger
+
 
 @Slot(QNetworkReply)
-def when_finisned(reply: QNetworkReply) -> None:
+def when_finished(reply: QNetworkReply) -> None:
     """
-    Executes the when_finisned function for a QNetworkReply object finished signal is emited.
+    Executes the when_finished function for a QNetworkReply object finished signal is emitted.
     This function handles different network error scenarios and prints relevant information based on the error code.
 
     Parameters
@@ -42,14 +44,10 @@ def when_finisned(reply: QNetworkReply) -> None:
     er: QNetworkReply.NetworkError = reply.error()
 
     if er == QNetworkReply.NetworkError.NoError:
-        print(
-            reply.url().toString(),
-            ":",
-            reply.attribute(QNetworkRequest.Attribute.HttpStatusCodeAttribute),
-        )
+        logger.debug(f"{reply.url()} : {reply.readAll().data().decode()}")
 
     elif er == QNetworkReply.NetworkError.ProtocolUnknownError:
-        print("Blank URL passed!")
+        logger.debug("Blank URL passed!")
 
     elif er == QNetworkReply.NetworkError.ConnectionRefusedError:
         msg = QMessageBox()
@@ -62,8 +60,7 @@ def when_finisned(reply: QNetworkReply) -> None:
 
     else:
         # If there is any other network error, print the error code and error string along with the URL
-        print("Error occurred: ", er)
-        print(reply.url().toString(), reply.errorString())
+        logger.warning(f"{reply.url()} : {reply.errorString()}")
 
 
 #
@@ -91,6 +88,6 @@ def get_network_access_manager() -> Tuple[QNetworkAccessManager, QSslConfigurati
     sslConfig.setCaCertificates(qcerts)
 
     network_access_manager = QNetworkAccessManager()
-    network_access_manager.finished.connect(when_finisned)
+    network_access_manager.finished.connect(when_finished)
 
     return network_access_manager, sslConfig

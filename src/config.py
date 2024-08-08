@@ -10,12 +10,8 @@
 # |																|
 # --------------------------------------------------------------
 
-import os
 from pathlib import Path
-
-from dotenv import load_dotenv
-
-load_dotenv()  # Load environment variables from a .env file in the current working directory (if present)
+from typing import Optional
 
 
 class Config:
@@ -26,9 +22,6 @@ class Config:
     API_URL: str
     LOCAL_COMPONENT_PATH: Path
 
-    GITHUB_OAUTH_CLIENT_ID: str
-    GITHUB_ACCESS_TOKEN: str
-    JWT_TOKEN: str
-
-
-config = None
+    GITHUB_OAUTH_CLIENT_ID: Optional[str]
+    GITHUB_ACCESS_TOKEN: Optional[str]
+    JWT_TOKEN: Optional[str]

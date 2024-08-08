@@ -20,6 +20,7 @@ from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QProgressBar, QWidget
 
 from .....manager import ManagerInterface, OnlineRepoManager, LocalStorageManager
+from .....logging import logger
 from ....widgets import ComponentItem, StatefulPushButton
 from ..base_detail_view import BaseDetailedView
 
@@ -138,7 +139,7 @@ class OnlineDetailedView(BaseDetailedView):
         )
         downloader.downloadProgress.connect(self.__update_download_progress)
         downloader.finished.connect(self.component_downloaded)
-        print("Download started...")
+        logger.debug("Download started...")
 
     @Slot(int, int)
     def __update_download_progress(
@@ -190,8 +191,8 @@ class OnlineDetailedView(BaseDetailedView):
             file.id
         )  # Remove the file id and progress bar from the files_on_download dictionary
 
-        print("Download Successful!")
-        print("file at", filepath)
+        logger.debug("Download Successful!")
+        logger.debug("file at: {filepath}")
 
     def is_file_on_download(self) -> bool:
         """

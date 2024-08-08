@@ -63,10 +63,10 @@ def module_setup():
     sys.modules["PySide2"] = PySide2
 
 
-def setup_config(new_config):
-    from . import config
+# def setup_config(new_config):
+#     from . import config
 
-    config.config = new_config
+#     config.config = new_config
 
 
 def add_freecad_to_path():

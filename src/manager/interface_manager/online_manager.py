@@ -25,7 +25,7 @@ from ..api_manager.cms_api import (
     construct_multipart,
 )
 from ..api_manager.local_api import LocalApi
-from ...config import config
+from ...config import Config
 from ...data import Component, DataFactory, DTypes, FileTypes, SerialisedDataType
 from ..download_manager import FileDownloader
 from ..page_manager import PageStates
@@ -224,7 +224,7 @@ class OnlineRepoManager(ManagerInterface):
 
         request = ComponentRequest()
         request.setRawHeader(
-            "X-Access-Token".encode(), config.GITHUB_ACCESS_TOKEN.encode()
+            "X-Access-Token".encode(), Config.GITHUB_ACCESS_TOKEN.encode()
         )
         reply = self.api.create(request, multi_part)
         multi_part.setParent(reply)

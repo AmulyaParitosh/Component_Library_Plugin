@@ -18,7 +18,7 @@ from PySide2.QtWidgets import QDialog, QMessageBox, QPushButton, QWidget
 
 from ....data import DTypes
 from ....manager import OnlineRepoManager
-from ....config import config
+from ....config import Config
 from .Ui_component_form import Ui_ComponentCreationForm
 
 
@@ -84,8 +84,8 @@ class ComponentUploadWidget(QWidget):
         self.ui.licenseInput.addItems(
             (license.fullname for license in self.manager.load_from_db(DTypes.LICENSE))
         )
-        self.ui.componentFiles.dir = str(config.LOCAL_COMPONENT_PATH)
-        self.ui.thumbnailFile.dir = str(config.LOCAL_COMPONENT_PATH)
+        self.ui.componentFiles.dir = str(Config.LOCAL_COMPONENT_PATH)
+        self.ui.thumbnailFile.dir = str(Config.LOCAL_COMPONENT_PATH)
 
     @Slot()
     def backPushButton_click(self) -> None:
@@ -114,7 +114,6 @@ class ComponentUploadWidget(QWidget):
         -------
         dialog = ComponentUploadDialog()
         data = dialog.pack_data()
-        print(data)
         """
         return {
             "author": self.ui.authorInput.text(),
@@ -212,7 +211,6 @@ class ComponentUploadWidget(QWidget):
         parent_widget = QWidget()
         manager = OnlineRepoManager()
         result = ComponentUploadDialog.create_component(parent_widget, manager)
-        print(result)
         """
 
         instance = cls(parent, manager)

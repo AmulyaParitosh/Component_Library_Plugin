@@ -16,7 +16,7 @@ from typing import Any, Dict, List, Union
 from PySide2.QtCore import QObject, Signal
 
 from .api_manager.local_api.storage_adapter import LocalData
-from ..config import config
+from ..config import Config
 from ..data import Component, DataFactory, DTypes
 
 
@@ -81,7 +81,7 @@ class PageStates(QObject):
         components : List[Component]
             list of the serialised components recieved from he API
         """
-        with LocalData(config.LOCAL_COMPONENT_PATH) as local_data:
+        with LocalData(Config.LOCAL_COMPONENT_PATH) as local_data:
             for component in components:
                 self.update_existing_files_for_component(component, local_data)
 

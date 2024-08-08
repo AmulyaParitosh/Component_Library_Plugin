@@ -16,6 +16,7 @@ from PySide2.QtCore import QFile, QIODevice, QUrl, QUrlQuery
 from PySide2.QtNetwork import QHttpMultiPart, QHttpPart, QNetworkRequest
 
 from .query import RepoComponentQuery
+from ....logging import logger
 
 
 class ComponentRequest(QNetworkRequest):
@@ -162,7 +163,7 @@ def construct_file_part(field, filepath) -> QHttpPart:
         The constructed file part if the file is successfully opened in read-only mode, None otherwise.
     """
 
-    print(f"File path: {filepath}")
+    logger.debug(f"File path: {filepath}")
     file = QFile(filepath)
     # if not file.open(QIODevice.OpenModeFlag.ReadOnly):
     #     print(f"File not found: {filepath}")

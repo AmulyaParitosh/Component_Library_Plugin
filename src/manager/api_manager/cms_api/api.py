@@ -15,7 +15,7 @@ from typing import Any
 from PySide2.QtCore import QEventLoop, QUrl
 from PySide2.QtNetwork import QNetworkReply, QNetworkRequest
 
-from ....config import config
+from ....config import Config
 from ...network_manager import get_network_access_manager
 from ....utils import singleton
 from ..base_api import ApiInterface
@@ -31,7 +31,7 @@ class CMSApi(ApiInterface):
 
     network_access_manager, sslConfig = get_network_access_manager()
 
-    BASEURL: str = config.API_URL + "/api"
+    BASEURL: str = Config.API_URL + "/api"
 
     def __init__(self) -> None:
         """
@@ -60,7 +60,7 @@ class CMSApi(ApiInterface):
     @staticmethod
     def prepare_api_request(request: QNetworkRequest) -> None:
         """
-        Prepares the API request by setting the absolute path and SSL configuration.
+        Prepares the API request by setting the absolute path and SSL Configuration.
 
         Args
         ----
@@ -77,11 +77,11 @@ class CMSApi(ApiInterface):
         request.setSslConfiguration(CMSApi().sslConfig)
         # request.setRawHeader(
         #     "Auth-Token".encode("utf-8"),
-        #     str(config.GITHUB_ACCESS_TOKEN).encode("utf-8"),
+        #     str(Config.GITHUB_ACCESS_TOKEN).encode("utf-8"),
         # )
         request.setRawHeader(
             "Token".encode("utf-8"),
-            str(config.JWT_TOKEN).encode("utf-8"),
+            str(Config.JWT_TOKEN).encode("utf-8"),
         )
 
     def read(self, request: QNetworkRequest) -> CMSReply:

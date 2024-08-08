@@ -16,6 +16,7 @@ from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QWidget, QPushButton, QMessageBox
 
 from ....data import Component, File, FileTypes
+from ....logging import logger
 from ...widgets import ComponentItem, DetailedWidget, Thumbnail
 from ..base_view import BaseView
 
@@ -204,7 +205,7 @@ class BaseDetailedView(BaseView):
             else:
                 return
 
-        print(f"{file_path=}")
+        logger.debug(f"{file_path=}")
 
     def _update_thumbnail(self, thumbnail_widget) -> None:
         """

@@ -1,6 +1,7 @@
 from PySide2.QtWidgets import QWidget
 
 from ....data.datadef import Attribute
+from ....logging import logger
 from .attribute_view import AttributeView
 from .Ui_attributes_list_widget import Ui_AttributeList
 
@@ -27,9 +28,9 @@ class AttributeList(QWidget):
 
     def remove_attribute(self):
         current_item = self.ui.attributeListView.currentItem()
-        print(f"{current_item=}")
+        logger.debug(f"{current_item=}")
         if current_item is None:
             return
         attribute_view = self.ui.attributeListView.itemWidget(current_item)
-        print(f"{attribute_view.attribute=}")
+        logger.debug(f"{attribute_view.attribute=}")
         self.ui.attributeListView.remove_attribute(attribute_view.attribute)

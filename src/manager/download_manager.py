@@ -17,6 +17,7 @@ from PySide2.QtGui import QImage
 from PySide2.QtNetwork import QNetworkReply, QNetworkRequest
 
 from .network_manager import get_network_access_manager
+from ..logging import logger
 
 
 class FileDownloader(QObject):
@@ -56,7 +57,7 @@ class FileDownloader(QObject):
     def __downloaded(self, reply: QNetworkReply):
         """Slot to handle the download completion and saving the downloaded file."""
         if reply.error() != QNetworkReply.NetworkError.NoError:
-            print(f"Error: {reply.error()}")
+            logger.warning(f"{reply.url()}: {reply.error()}")
             self.error.emit(reply.error())
 
         file = QFile(str(self.filepath))
@@ -107,7 +108,7 @@ class ImageLoader(QObject):
         image = self.load_image_from_reply(reply)
 
         if image.isNull():
-            print("Error: Unable to load image from the reply.")
+            logger.warning("Unable to load image from the reply.")
             return
 
         self.finished.emit(image)

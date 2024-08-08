@@ -16,12 +16,10 @@
 import sys
 
 from PySide2.QtWidgets import QApplication
-from src.main import ComponentLibraryAddon
+from src.main import independent_local_dev_app
 
 if __name__ == "__main__":
 
     app = QApplication(sys.argv)
-
-    addon = ComponentLibraryAddon.independent_local_dev_app()
-
+    addon = independent_local_dev_app()
     sys.exit(app.exec_())

@@ -148,7 +148,6 @@ class LocalData:
         Example
         -------
         with LocalData(storage_path) as data:
-            print(data)
         """
         # Load data from the JSON file using SetJSONDecoder for loading lists as set
         with self.DATA_PATH.open("r", encoding="utf-8") as file:
@@ -275,7 +274,6 @@ class ComponentData:
         Example
         -------
         with ComponentData(component_data_path) as data:
-            print(data)
         """
 
         with self.data_path.open("r", encoding="utf-8") as file:

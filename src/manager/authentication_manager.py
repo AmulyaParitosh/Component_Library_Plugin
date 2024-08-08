@@ -5,9 +5,10 @@ import dotenv
 from PySide2.QtCore import QObject, Signal
 from PySide2.QtNetwork import QNetworkRequest
 
-from src.config import config
 
+from ..config import Config
 from ..data import User
+from ..logging import logger
 from ..interface.dialogs.authentication import Authentication_Dialog
 from .network_manager import get_network_access_manager
 
@@ -20,30 +21,30 @@ class Authentication_Manager(QObject):
 
     def __init__(self) -> None:
         super().__init__()
-        if not config.GITHUB_ACCESS_TOKEN:
+        if not Config.GITHUB_ACCESS_TOKEN:
             return
 
         self.api_login()
 
     def api_login(self):
         request: QNetworkRequest = QNetworkRequest(
-            f"{config.API_URL}/login/app/authorize"
+            f"{Config.API_URL}/login/app/authorize"
         )
         request.setRawHeader(
             "access_token".encode("utf-8"),
-            str(config.GITHUB_ACCESS_TOKEN).encode("utf-8"),
+            str(Config.GITHUB_ACCESS_TOKEN).encode("utf-8"),
         )
         self.jwt_auth_reply = self.network_manager.get(request)
         self.jwt_auth_reply.finished.connect(self.handle_jwt_auth_response)
 
-        self.get_user_data(config.GITHUB_ACCESS_TOKEN)
+        self.get_user_data(Config.GITHUB_ACCESS_TOKEN)
 
     def handle_jwt_auth_response(self):
         raw_json_str = self.jwt_auth_reply.readAll().data().decode("utf-8")
         jwt_token = json.loads(raw_json_str)["jwt"]
-        config.JWT_TOKEN = jwt_token
+        Config.JWT_TOKEN = jwt_token
 
-        print(f"{jwt_token=}")
+        logger.debug(f"{jwt_token=}")
 
     def login(self) -> None:
         dialog = Authentication_Dialog()
@@ -53,7 +54,7 @@ class Authentication_Manager(QObject):
     def logout(self) -> None:
         self.user = None
         dotenv.unset_key(".env", "GITHUB_ACCESS_TOKEN")
-        config.GITHUB_ACCESS_TOKEN = None
+        Config.GITHUB_ACCESS_TOKEN = None
         self.session_update.emit(self.session_update)
 
     def is_authentic(self) -> bool:
@@ -85,4 +86,4 @@ class Authentication_Manager(QObject):
         )
         self.session_update.emit()
 
-        print(f"{self.user=}")
+        logger.debug(f"{self.user=}")
