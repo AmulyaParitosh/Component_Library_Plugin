@@ -17,9 +17,9 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Union
 
-from ...config import config
-from ...data import Component, FileTypes
-from ...utils import singleton
+from ....config import config
+from ....data import Component, FileTypes
+from ....utils import singleton
 from ..base_api import ApiInterface
 from .storage_adapter import ComponentData, ComponentDataDict, LocalData, LocalDataComp
 
@@ -49,7 +49,9 @@ class LocalApi(ApiInterface):
         self._handle_component_data_creation(component, filetype)
         self._handle_local_data_creation(component, filetype)
 
-    def _handle_component_data_creation(self, component: Component, filetype: FileTypes) -> None:
+    def _handle_component_data_creation(
+        self, component: Component, filetype: FileTypes
+    ) -> None:
         """
         Handle the creation of component data.
 
@@ -92,7 +94,9 @@ class LocalApi(ApiInterface):
                     .as_uri()
                 )
 
-    def _handle_local_data_creation(self, component: Component, filetype: FileTypes) -> None:
+    def _handle_local_data_creation(
+        self, component: Component, filetype: FileTypes
+    ) -> None:
         """
         Handle the creation of local data.
 
@@ -148,8 +152,7 @@ class LocalApi(ApiInterface):
 
         return data
 
-    def update(self):
-        ...
+    def update(self): ...
 
     def delete(
         self, component: Component, filetypes: Union[Iterable[FileTypes], FileTypes]
@@ -183,7 +186,9 @@ class LocalApi(ApiInterface):
                 local_data["filetypes"][filetype.value].remove(comp_name)
                 (component_path / f"{comp_name}.{filetype.value}").unlink()
 
-            if not any(comp_data.files.values()):  # checking if there are no files present
+            if not any(
+                comp_data.files.values()
+            ):  # checking if there are no files present
                 remove_component = True
                 local_data["components"].remove(comp_name)
                 for comp_list in local_data["tags"].values():

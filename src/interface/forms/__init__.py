@@ -10,4 +10,4 @@
 # |																|
 # --------------------------------------------------------------
 
-from .component_upload import ComponetUploadDialog
+from .component_upload import ComponentUploadDialog

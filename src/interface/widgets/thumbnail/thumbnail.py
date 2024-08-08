@@ -18,7 +18,7 @@ from PySide2.QtCore import Qt, QUrl
 from PySide2.QtGui import QImage, QPixmap
 from PySide2.QtWidgets import QLabel, QSizePolicy, QWidget
 
-from ....manager.download import ImageLoader
+from ....manager.download_manager import ImageLoader
 
 
 class Thumbnail(QLabel):

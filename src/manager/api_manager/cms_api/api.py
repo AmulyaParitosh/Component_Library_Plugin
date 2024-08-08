@@ -15,11 +15,11 @@ from typing import Any
 from PySide2.QtCore import QEventLoop, QUrl
 from PySide2.QtNetwork import QNetworkReply, QNetworkRequest
 
-from ...config import config
-from ...network import get_network_access_manager
-from ...utils import singleton
+from ....config import config
+from ...network_manager import get_network_access_manager
+from ....utils import singleton
 from ..base_api import ApiInterface
-from .exceptions import Connection_Error
+from ..exceptions import Connection_Error
 from .replies import CMSReply
 
 

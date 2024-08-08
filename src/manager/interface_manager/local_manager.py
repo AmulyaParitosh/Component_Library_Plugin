@@ -16,9 +16,9 @@ from PySide2.QtCore import Signal
 
 from src.data.factory import DataFactory
 
-from ...api.local_api import LocalApi, LocalComponentQuery
+from ..api_manager.local_api import LocalApi, LocalComponentQuery
 from ...data import Component, DTypes, FileTypes, SerialisedDataType
-from ..page import PageStates
+from ..page_manager import PageStates
 from .base import ManagerInterface
 
 

@@ -10,5 +10,5 @@
 # |																|
 # --------------------------------------------------------------
 
-from .authentication import Authentication_Manager
-from .interface import LocalStorageManager, ManagerInterface, OnlineRepoManager
+from .authentication_manager import Authentication_Manager
+from .interface_manager import LocalStorageManager, ManagerInterface, OnlineRepoManager

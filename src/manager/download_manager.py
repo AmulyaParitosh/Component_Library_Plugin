@@ -16,7 +16,7 @@ from PySide2.QtCore import QFile, QIODevice, QObject, QUrl, Signal, Slot
 from PySide2.QtGui import QImage
 from PySide2.QtNetwork import QNetworkReply, QNetworkRequest
 
-from ...network.network_manager import get_network_access_manager
+from .network_manager import get_network_access_manager
 
 
 class FileDownloader(QObject):

@@ -29,3 +29,6 @@ class Settings:
     GITHUB_OAUTH_CLIENT_ID = "a1dd10669e81cfb23a02"
     GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)
     JWT_TOKEN = None
+
+
+config = Settings()

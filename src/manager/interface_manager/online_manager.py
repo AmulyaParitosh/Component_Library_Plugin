@@ -17,18 +17,18 @@ from typing import Any, Dict, List
 from PySide2.QtCore import QEventLoop, Signal, Slot
 from PySide2.QtNetwork import QNetworkRequest
 
-from ...api.cms_api import (
+from ..api_manager.cms_api import (
     CMSApi,
     CMSReply,
     ComponentRequest,
     RepoComponentQuery,
     construct_multipart,
 )
-from ...api.local_api import LocalApi
+from ..api_manager.local_api import LocalApi
 from ...config import config
 from ...data import Component, DataFactory, DTypes, FileTypes, SerialisedDataType
-from ..download import FileDownloader
-from ..page import PageStates
+from ..download_manager import FileDownloader
+from ..page_manager import PageStates
 from .base import ManagerInterface
 
 

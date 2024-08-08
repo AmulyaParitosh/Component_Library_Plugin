@@ -15,9 +15,9 @@ import contextlib
 from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QMainWindow, QWidget
 
-from ..api.cms_api import CMSApi
-from ..api.cms_api.exceptions import Connection_Error
-from ..interface.forms import ComponetUploadDialog
+from ..manager.api_manager.cms_api import CMSApi
+from ..manager.api_manager.exceptions import Connection_Error
+from ..interface.forms import ComponentUploadDialog
 from ..interface.views import GridView, LocalDetailedView, OnlineDetailedView
 from ..interface.widgets import ComponentItem
 from ..manager import Authentication_Manager, LocalStorageManager, OnlineRepoManager
@@ -62,7 +62,7 @@ class Window(QMainWindow):
         self.onlineDetailView = OnlineDetailedView(self)
         self.localGridView = GridView(self)
         self.localDetailView = LocalDetailedView(self)
-        self.upload_widget = ComponetUploadDialog(self, self.repo_manager)
+        self.upload_widget = ComponentUploadDialog(self, self.repo_manager)
 
         self.ui.stackedWidget.insertWidget(0, self.onlineGridView)
         self.ui.stackedWidget.insertWidget(1, self.onlineDetailView)

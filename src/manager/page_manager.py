@@ -15,9 +15,9 @@ from typing import Any, Dict, List, Union
 
 from PySide2.QtCore import QObject, Signal
 
-from ...api.local_api.storage_adapter import LocalData
-from ...config import config
-from ...data import Component, DataFactory, DTypes
+from .api_manager.local_api.storage_adapter import LocalData
+from ..config import config
+from ..data import Component, DataFactory, DTypes
 
 
 @dataclass

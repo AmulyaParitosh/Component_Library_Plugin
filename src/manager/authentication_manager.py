@@ -7,9 +7,9 @@ from PySide2.QtNetwork import QNetworkRequest
 
 from src.config import config
 
-from ...data import User
-from ...interface.dialogs.authentication import Authentication_Dialog
-from ...network import get_network_access_manager
+from ..data import User
+from ..interface.dialogs.authentication import Authentication_Dialog
+from .network_manager import get_network_access_manager
 
 
 class Authentication_Manager(QObject):

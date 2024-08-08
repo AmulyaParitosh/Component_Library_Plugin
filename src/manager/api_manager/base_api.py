@@ -14,7 +14,7 @@ from abc import abstractmethod
 
 from PySide2.QtNetwork import QNetworkReply
 
-from ..utils import ABCQObject
+from ...utils import ABCQObject
 
 
 class ApiInterface(ABCQObject):

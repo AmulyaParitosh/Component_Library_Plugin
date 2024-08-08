@@ -21,9 +21,9 @@ import Import
 from src.data.data_types import FileTypes
 from src.data.datadef import Component
 
-from ...api import ApiInterface, ComponentQueryInterface, local_api
+from ..api_manager import ApiInterface, ComponentQueryInterface, local_api
 from ...utils import ABCQObject
-from ..page import PageStates
+from ..page_manager import PageStates
 
 
 class ManagerInterface(ABCQObject):

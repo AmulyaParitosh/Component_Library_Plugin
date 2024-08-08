@@ -16,8 +16,8 @@ from typing import Any, Dict, List, Set, TypedDict
 
 from src.data.datadef import DataJsonEncoder
 
-from ...data import Component, DataFactory, DTypes
-from ...utils import singleton
+from ....data import Component, DataFactory, DTypes
+from ....utils import singleton
 
 LocalDataComp = Set[
     str
@@ -96,7 +96,9 @@ class SetJSONDecoder(json.JSONDecoder):
         f = {}
         for key, value in d.items():
             if isinstance(value, list):
-                value = set(value)  # Convert lists back to sets for keys that should be sets
+                value = set(
+                    value
+                )  # Convert lists back to sets for keys that should be sets
             f[key] = value
         return f
 

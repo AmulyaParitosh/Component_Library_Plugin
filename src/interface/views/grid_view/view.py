@@ -18,7 +18,7 @@ from PySide2.QtWidgets import QWidget
 
 from ....data import DTypes
 from ....manager import ManagerInterface, OnlineRepoManager
-from ....manager.page import PageStates
+from ....manager.page_manager import PageStates
 from ...widgets.overlay import LoadingOverlay
 from ..base_view import BaseView
 from ..detail_view.base_detail_view import BaseDetailedView
