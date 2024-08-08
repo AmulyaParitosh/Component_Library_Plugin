@@ -15,9 +15,9 @@ class ComponentLibraryWorkbench(Workbench):
         self.__class__.ToolTip = "ComponentLibrary workbench"
 
     def Initialize(self) -> None:
-        from src.main import Window
+        from src.main import ComponentLibraryAddon
 
-        self.addon = Window()
+        self.addon = ComponentLibraryAddon.freecad_local_dev_app()
         self.addon.show()
 
     def Activated(self):

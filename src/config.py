@@ -18,17 +18,17 @@ from dotenv import load_dotenv
 load_dotenv()  # Load environment variables from a .env file in the current working directory (if present)
 
 
-class Settings:
+class Config:
     """
     Class to store all the configurations.
     """
 
-    API_URL = "http://127.0.0.1:5000"
-    LOCAL_COMPONENT_PATH = Path("local_storage")
+    API_URL: str
+    LOCAL_COMPONENT_PATH: Path
 
-    GITHUB_OAUTH_CLIENT_ID = "a1dd10669e81cfb23a02"
-    GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)
-    JWT_TOKEN = None
+    GITHUB_OAUTH_CLIENT_ID: str
+    GITHUB_ACCESS_TOKEN: str
+    JWT_TOKEN: str
 
 
-config = Settings()
+config = None

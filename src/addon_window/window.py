@@ -23,7 +23,7 @@ from ..manager import Authentication_Manager, LocalStorageManager, OnlineRepoMan
 from .Ui_window import Ui_MainWindow
 
 
-class Window(QMainWindow):
+class AddonWindow(QMainWindow):
 
     def __init__(self, parent=None) -> None:
         """

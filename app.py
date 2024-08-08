@@ -15,20 +15,13 @@
 
 import sys
 
-from src.config import Settings
-from src.utils import module_setup, setup_config
+from PySide2.QtWidgets import QApplication
+from src.main import ComponentLibraryAddon
 
 if __name__ == "__main__":
-    module_setup()
-    config = Settings()
-    setup_config(config)
-
-    from PySide2.QtWidgets import QApplication
-
-    from src.main import Window
 
     app = QApplication(sys.argv)
 
-    plugin = Window()
+    addon = ComponentLibraryAddon.independent_local_dev_app()
 
     sys.exit(app.exec_())
