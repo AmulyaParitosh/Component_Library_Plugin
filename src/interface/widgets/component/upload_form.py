@@ -19,10 +19,10 @@ from PySide2.QtWidgets import QDialog, QMessageBox, QPushButton, QWidget
 from ....data import DTypes
 from ....manager import OnlineRepoManager
 from ....config import config
-from ..Ui_component_form import Ui_ComponentCreationForm
+from .Ui_component_form import Ui_ComponentCreationForm
 
 
-class ComponentUploadDialog(QWidget):
+class ComponentUploadWidget(QWidget):
     """
     Dialog for input fields of data for creating a Component.
     """

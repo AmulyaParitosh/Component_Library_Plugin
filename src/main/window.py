@@ -17,9 +17,8 @@ from PySide2.QtWidgets import QMainWindow, QWidget
 
 from ..manager.api_manager.cms_api import CMSApi
 from ..manager.api_manager.exceptions import Connection_Error
-from ..interface.forms import ComponentUploadDialog
 from ..interface.views import GridView, LocalDetailedView, OnlineDetailedView
-from ..interface.widgets import ComponentItem
+from ..interface.widgets import ComponentItem, ComponentUploadWidget
 from ..manager import Authentication_Manager, LocalStorageManager, OnlineRepoManager
 from .Ui_window import Ui_MainWindow
 
@@ -62,7 +61,7 @@ class Window(QMainWindow):
         self.onlineDetailView = OnlineDetailedView(self)
         self.localGridView = GridView(self)
         self.localDetailView = LocalDetailedView(self)
-        self.upload_widget = ComponentUploadDialog(self, self.repo_manager)
+        self.upload_widget = ComponentUploadWidget(self, self.repo_manager)
 
         self.ui.stackedWidget.insertWidget(0, self.onlineGridView)
         self.ui.stackedWidget.insertWidget(1, self.onlineDetailView)
