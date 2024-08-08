@@ -12,7 +12,7 @@ files = [
 ]
 
 [[package]]
-name = "pyside6"
+name = "PySide6"
 version = "6.6.3.1"
 description = "Python bindings for the Qt cross-platform application and UI framework"
 optional = false
@@ -30,7 +30,7 @@ PySide6-Essentials = "6.6.3.1"
 shiboken6 = "6.6.3.1"
 
 [[package]]
-name = "pyside6-addons"
+name = "PySide6-addons"
 version = "6.6.3.1"
 description = "Python bindings for the Qt cross-platform application and UI framework (Addons)"
 optional = false
@@ -47,7 +47,7 @@ PySide6-Essentials = "6.6.3.1"
 shiboken6 = "6.6.3.1"
 
 [[package]]
-name = "pyside6-essentials"
+name = "PySide6-essentials"
 version = "6.6.3.1"
 description = "Python bindings for the Qt cross-platform application and UI framework (Essentials)"
 optional = false

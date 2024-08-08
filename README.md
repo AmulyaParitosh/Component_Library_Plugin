@@ -21,6 +21,6 @@ The Component Library Plugin is a PySide6 application designed to enhance FreeCA
 
 ## Dependencies
 1. python = ">=3.10,<3.12"
-2. pyside6 = "^6.5.1.1"
+2. PySide6 = "^6.5.1.1"
 3. certifi = "^2023.5.7"
 4. python-dotenv = "^1.0.0"

@@ -72,4 +72,3 @@ class Ui_ComponentItemView(object):
         ComponentItemView.setWindowTitle(QCoreApplication.translate("ComponentItemView", u"item_view", None))
         self.componentLabel.setText(QCoreApplication.translate("ComponentItemView", u"Component Label", None))
     # retranslateUi
-

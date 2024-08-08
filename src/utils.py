@@ -52,14 +52,14 @@ def module_setup():
 
     try:
         import FreeCAD
-        import PySide
+        import PySide2
     except ImportError:
         try:
-            import PySide6 as PySide
+            import PySide6 as PySide2
         except ImportError:
-            import PySide2 as PySide
+            import PySide2 as PySide2
 
-    sys.modules["PySide2"] = PySide
+    sys.modules["PySide2"] = PySide2
 
 
 def setup_config(config):
