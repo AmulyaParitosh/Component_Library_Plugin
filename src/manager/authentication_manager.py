@@ -41,7 +41,10 @@ class Authentication_Manager(QObject):
 
     def handle_jwt_auth_response(self):
         raw_json_str = self.jwt_auth_reply.readAll().data().decode("utf-8")
-        jwt_token = json.loads(raw_json_str)["jwt"]
+        if not raw_json_str:
+            jwt_token = None
+        else:
+            jwt_token = json.loads(raw_json_str)["jwt"]
         Config.JWT_TOKEN = jwt_token
 
         logger.debug(f"{jwt_token=}")
@@ -76,6 +79,11 @@ class Authentication_Manager(QObject):
     def handle_user_data_response(self):
         raw_json_str = self.user_data_reply.readAll().data().decode("utf-8")
         user_data = json.loads(raw_json_str)
+
+        logger.debug(f"users: {user_data}")
+        if user_data.get("user_data") in (None, "401"):
+            logger.info(f"user authentication failed: Bad Credentials")
+            return
 
         self.user = User(
             username=user_data["login"],

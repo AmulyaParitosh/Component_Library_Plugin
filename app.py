@@ -16,10 +16,11 @@
 import sys
 
 from PySide2.QtWidgets import QApplication
+from PySide2 import QtCore
 from src.main import independent_local_dev_app
 
 if __name__ == "__main__":
-
+    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_ShareOpenGLContexts)
     app = QApplication(sys.argv)
     addon = independent_local_dev_app()
     sys.exit(app.exec_())
