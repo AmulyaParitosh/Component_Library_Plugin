@@ -13,15 +13,14 @@
 from enum import Enum, auto
 from pathlib import Path
 
-import FreeCAD
-import Import
 
 from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QProgressBar, QWidget
 
-from .....manager import ManagerInterface, OnlineRepoManager, LocalStorageManager
-from .....logging import logger
-from ....widgets import ComponentItem, StatefulPushButton
+from ......manager import ManagerInterface, OnlineRepoManager
+from ......logging import logger
+from ....component import ComponentItem
+from ....state_push_button import StatefulPushButton
 from ..base_detail_view import BaseDetailedView
 
 

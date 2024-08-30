@@ -10,13 +10,12 @@
 # |																|
 # --------------------------------------------------------------
 
-from typing import List
+from typing import List, cast
 
-from PySide2.QtCore import Signal
+from PySide2.QtCore import Signal, SignalInstance
 
 import FreeCAD
 import FreeCADGui
-import Import
 
 from src.data.data_types import FileTypes
 from src.data.datadef import Component
@@ -31,7 +30,7 @@ class ManagerInterface(ABCQObject):
     Abstract class for managenent of APIs. It abstracts the interactions with the API.
     """
 
-    component_loaded: Signal
+    component_loaded: cast(SignalInstance, Signal)
     api: ApiInterface
     page_states: PageStates
     query: ComponentQueryInterface

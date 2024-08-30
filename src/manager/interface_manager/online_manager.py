@@ -12,9 +12,9 @@
 
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, cast
 
-from PySide2.QtCore import QEventLoop, Signal, Slot
+from PySide2.QtCore import QEventLoop, Signal, Slot, SignalInstance
 from PySide2.QtNetwork import QNetworkRequest
 
 from ..api_manager.cms_api import (
@@ -38,7 +38,7 @@ class OnlineRepoManager(ManagerInterface):
 
     """
 
-    component_loaded = Signal()
+    component_loaded = cast(SignalInstance, Signal())
     api: CMSApi
 
     query: RepoComponentQuery = RepoComponentQuery()

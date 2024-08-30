@@ -8,7 +8,7 @@ from .config import Config
 
 
 def independent_local_dev_app():
-    load_dotenv()
+    load_dotenv(override=True)
     module_setup()
 
     from .logging import logger
@@ -25,7 +25,7 @@ def independent_local_dev_app():
 
 
 def freecad_local_dev_app():
-    load_dotenv()
+    load_dotenv(override=True)
 
     import FreeCAD
     from .logging import logger
@@ -45,6 +45,6 @@ def freecad_local_dev_app():
 
 
 def __make_addon_window():
-    from .addon_window import AddonWindow
+    from .interface.main import AddonWindow
 
     return AddonWindow()

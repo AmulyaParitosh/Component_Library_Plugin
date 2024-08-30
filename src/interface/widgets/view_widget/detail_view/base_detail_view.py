@@ -15,9 +15,11 @@ from typing import Union
 from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QWidget, QPushButton, QMessageBox
 
-from ....data import Component, File, FileTypes
-from ....logging import logger
-from ...widgets import ComponentItem, DetailedWidget, Thumbnail
+from .....data import Component, File, FileTypes
+from .....logging import logger
+from ...component import ComponentItem
+from ...thumbnail import Thumbnail
+from .Ui_detailed_widget import Ui_detailedWidget
 from ..base_view import BaseView
 
 
@@ -48,7 +50,7 @@ class BaseDetailedView(BaseView):
         view = BaseDetailedView(parent_widget)
         """
         super().__init__(parent)
-        self.ui = DetailedWidget()
+        self.ui = Ui_detailedWidget()
 
     def setupUi(self) -> None:
         """
@@ -77,7 +79,6 @@ class BaseDetailedView(BaseView):
         None
         """
 
-        # self.manager.reload_page()
         self.topLevelWidget().toLastWidget()
 
     def addControlWidget(self, widget: QWidget) -> None:

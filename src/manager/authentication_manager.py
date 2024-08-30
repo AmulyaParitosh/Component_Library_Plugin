@@ -1,8 +1,8 @@
 import json
-from typing import Optional
+from typing import Optional, cast
 
 import dotenv
-from PySide2.QtCore import QObject, Signal
+from PySide2.QtCore import QObject, Signal, SignalInstance
 from PySide2.QtNetwork import QNetworkRequest
 
 
@@ -15,18 +15,20 @@ from .network_manager import get_network_access_manager
 
 class Authentication_Manager(QObject):
     user: Optional[User] = None
-    session_update = Signal()
+    session_update = cast(SignalInstance, Signal())
 
     network_manager, sslConfig = get_network_access_manager()
 
     def __init__(self) -> None:
         super().__init__()
+
+    def persistent_login(self):
         if not Config.GITHUB_ACCESS_TOKEN:
+            logger.warning(
+                "Persistent login failed. No access token found in the environment."
+            )
             return
 
-        self.api_login()
-
-    def api_login(self):
         request: QNetworkRequest = QNetworkRequest(
             f"{Config.API_URL}/login/app/authorize"
         )
@@ -37,8 +39,6 @@ class Authentication_Manager(QObject):
         self.jwt_auth_reply = self.network_manager.get(request)
         self.jwt_auth_reply.finished.connect(self.handle_jwt_auth_response)
 
-        self.get_user_data(Config.GITHUB_ACCESS_TOKEN)
-
     def handle_jwt_auth_response(self):
         raw_json_str = self.jwt_auth_reply.readAll().data().decode("utf-8")
         if not raw_json_str:
@@ -48,6 +48,7 @@ class Authentication_Manager(QObject):
         Config.JWT_TOKEN = jwt_token
 
         logger.debug(f"{jwt_token=}")
+        self.get_user_data(Config.GITHUB_ACCESS_TOKEN)
 
     def login(self) -> None:
         dialog = Authentication_Dialog()
@@ -56,9 +57,9 @@ class Authentication_Manager(QObject):
 
     def logout(self) -> None:
         self.user = None
-        dotenv.unset_key(".env", "GITHUB_ACCESS_TOKEN")
         Config.GITHUB_ACCESS_TOKEN = None
-        self.session_update.emit(self.session_update)
+        dotenv.set_key(".env", "GITHUB_ACCESS_TOKEN", "")
+        self.session_update.emit()
 
     def is_authentic(self) -> bool:
         return self.user is not None
@@ -67,8 +68,6 @@ class Authentication_Manager(QObject):
         if not access_token:
             raise ValueError("The request token has to be supplied!")
 
-        # url = QUrl("https://api.github.com/user")
-        # user_data_request = QNetworkRequest(url)
         user_data_request = QNetworkRequest("https://api.github.com/user")
         user_data_request.setRawHeader(
             b"Authorization", f"token {access_token}".encode()
@@ -81,7 +80,7 @@ class Authentication_Manager(QObject):
         user_data = json.loads(raw_json_str)
 
         logger.debug(f"users: {user_data}")
-        if user_data.get("user_data") in (None, "401"):
+        if user_data is None or "login" not in user_data:
             logger.info(f"user authentication failed: Bad Credentials")
             return
 

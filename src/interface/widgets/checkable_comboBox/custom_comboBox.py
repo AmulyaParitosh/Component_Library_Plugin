@@ -10,7 +10,8 @@
 # |																|
 # --------------------------------------------------------------
 
-from PySide2.QtCore import Qt, Signal
+from typing import cast, List
+from PySide2.QtCore import Qt, Signal, SignalInstance
 from PySide2.QtGui import QStandardItem
 from PySide2.QtWidgets import QComboBox
 
@@ -20,7 +21,7 @@ class CheckableComboBox(QComboBox):
     Custom QComboBox that supports checkable items.
     """
 
-    selectionUpdated = Signal(list)
+    selectionUpdated = cast(SignalInstance, Signal(list))
 
     def __init__(self, parent=None):
         """

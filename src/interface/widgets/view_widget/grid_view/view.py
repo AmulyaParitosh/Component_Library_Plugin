@@ -16,10 +16,10 @@ from typing import Callable, List
 from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QWidget
 
-from ....data import DTypes
-from ....manager import ManagerInterface, OnlineRepoManager
-from ....manager.page_manager import PageStates
-from ...widgets.overlay import LoadingOverlay
+from .....data import DTypes
+from .....manager import ManagerInterface, OnlineRepoManager
+from .....manager.page_manager import PageStates
+from ...overlay import LoadingOverlay
 from ..base_view import BaseView
 from ..detail_view.base_detail_view import BaseDetailedView
 from .Ui_grid_view import Ui_gridView
@@ -90,8 +90,6 @@ class GridView(BaseView):
         self.manager.component_loaded.connect(self.components_response_handler)
         self.manager.page_states.enable_next.connect(self.ui.nextButton.setEnabled)
         self.manager.page_states.enable_prev.connect(self.ui.prevButton.setEnabled)
-
-        self.initial_load()  # Perform initial loading of data
 
     def updateContent(self, page: PageStates) -> None:
         """

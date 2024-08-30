@@ -10,9 +10,9 @@
 # |																|
 # --------------------------------------------------------------
 
-from typing import Any, List, Union
+from typing import Any, List, Union, cast
 
-from PySide2.QtCore import Signal
+from PySide2.QtCore import Signal, SignalInstance
 
 from src.data.factory import DataFactory
 
@@ -27,7 +27,7 @@ class LocalStorageManager(ManagerInterface):
     Manager for the local Storage and functions. Abstracts the interaction with the LocalAPI.
     """
 
-    component_loaded = Signal()
+    component_loaded = cast(SignalInstance, Signal())
     api: LocalApi
 
     page_states = PageStates()

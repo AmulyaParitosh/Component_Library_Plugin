@@ -11,9 +11,9 @@
 # --------------------------------------------------------------
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Union, cast
 
-from PySide2.QtCore import QObject, Signal
+from PySide2.QtCore import QObject, Signal, SignalInstance
 
 from .api_manager.local_api.storage_adapter import LocalData
 from ..config import Config
@@ -27,8 +27,12 @@ class PageStates(QObject):
     Including pagination and signals for next/prev page buttons.
     """
 
-    enable_next = Signal(bool)  # Signal to enable or disable the next page button.
-    enable_prev = Signal(bool)  # Signal to enable or disable the previous page button.
+    enable_next = cast(
+        SignalInstance, Signal(bool)
+    )  # Signal to enable or disable the next page button.
+    enable_prev = cast(
+        SignalInstance, Signal(bool)
+    )  # Signal to enable or disable the previous page button.
 
     data: List[Component] = field(default_factory=list)
     total_items: int = 0

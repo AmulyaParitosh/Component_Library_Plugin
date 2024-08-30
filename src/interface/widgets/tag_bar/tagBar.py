@@ -11,9 +11,9 @@
 # --------------------------------------------------------------
 
 from functools import partial
-from typing import Sequence
+from typing import Sequence, cast, List
 
-from PySide2.QtCore import Qt, Signal
+from PySide2.QtCore import Qt, Signal, SignalInstance
 from PySide2.QtWidgets import (
     QCompleter,
     QFrame,
@@ -33,7 +33,7 @@ class TagBar(QWidget):
     Custom QWidget class to manage tags using a tag bar.
     """
 
-    tags_edited = Signal(list)
+    tags_edited = cast(SignalInstance, Signal(list))
 
     def __init__(self, parent):
         """

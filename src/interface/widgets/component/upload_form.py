@@ -71,34 +71,26 @@ class ComponentUploadWidget(QWidget):
         self.create_button.clicked.connect(self.on_create_button_clicked)
         self.discard_button = QPushButton("Discard")
         self.discard_button.clicked.connect(self.close)
-        self.back_button = QPushButton("Back")
-        self.back_button.clicked.connect(self.backPushButton_click)
 
         # Add the buttons to the bottom widget layout.
         self.ui.bottomWidget.layout().addWidget(self.create_button)
         self.ui.bottomWidget.layout().addWidget(self.discard_button)
-        self.ui.bottomWidget.layout().addWidget(self.back_button)
 
-        # Set suggestions for tags and licenses using the OnlineRepoManager.
-        self.ui.tagsWidget.set_suggestions(self.manager.load_from_db(DTypes.TAG))
-        self.ui.licenseInput.addItems(
-            (license.fullname for license in self.manager.load_from_db(DTypes.LICENSE))
-        )
         self.ui.componentFiles.dir = str(Config.LOCAL_COMPONENT_PATH)
         self.ui.thumbnailFile.dir = str(Config.LOCAL_COMPONENT_PATH)
 
-    @Slot()
-    def backPushButton_click(self) -> None:
+    def populate_suggestions(self):
         """
-        Handle the click event of the back button.
+        Populate the suggestions for tags and licenses using the OnlineRepoManager.
 
         Returns
         -------
         None
         """
-
-        # self.manager.reload_page()
-        self.topLevelWidget().toLastWidget()
+        self.ui.tagsWidget.set_suggestions(self.manager.load_from_db(DTypes.TAG))
+        self.ui.licenseInput.addItems(
+            (license.fullname for license in self.manager.load_from_db(DTypes.LICENSE))
+        )
 
     @property
     def packed_data(self) -> Dict[str, Any]:

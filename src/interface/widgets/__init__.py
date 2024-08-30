@@ -19,5 +19,6 @@ from .overlay import LoadingOverlay
 from .star_rating import StarRating
 from .state_push_button import StatefulPushButton
 from .tag_bar import TagBar
-from .view_widget import DetailedWidget, GridItemWidget
 from .component import ComponentItem, ComponentUploadWidget
+from .user import UserWidget
+from .view_widget.grid_view.grided_item import GridItemWidget

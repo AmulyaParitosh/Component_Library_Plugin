@@ -13,7 +13,7 @@
 from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QPushButton, QWidget
 
-from .....manager import LocalStorageManager, ManagerInterface
+from ......manager import LocalStorageManager, ManagerInterface
 from ..base_detail_view import BaseDetailedView
 
 

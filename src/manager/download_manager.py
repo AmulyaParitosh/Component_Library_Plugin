@@ -11,8 +11,9 @@
 # --------------------------------------------------------------
 
 from pathlib import Path
+from typing import cast
 
-from PySide2.QtCore import QFile, QIODevice, QObject, QUrl, Signal, Slot
+from PySide2.QtCore import QFile, QIODevice, QObject, QUrl, Signal, Slot, SignalInstance
 from PySide2.QtGui import QImage
 from PySide2.QtNetwork import QNetworkReply, QNetworkRequest
 
@@ -25,9 +26,11 @@ class FileDownloader(QObject):
     FileDownloader Handles downloading of files/components (any resource) ans saves it locally.
     """
 
-    finished = Signal(Path)  # Signal emitted when the download is finished.
-    error = Signal(
-        QNetworkReply.NetworkError
+    finished = cast(
+        SignalInstance, Signal(Path)
+    )  # Signal emitted when the download is finished.
+    error = cast(
+        SignalInstance, Signal(QNetworkReply.NetworkError)
     )  # Signal emitted when there's an error during download.
 
     network_access_manager, sslConfig = get_network_access_manager()
@@ -81,7 +84,9 @@ class ImageLoader(QObject):
     LOADING_THUMBNAIL_PATH = "src/interface/resources/loading.jpeg"
     DEFAULT_THUMBNAIL_PATH = "src/interface/resources/default.png"
 
-    finished = Signal(QImage)  # Signal emitted when the image is loaded.
+    finished = cast(
+        SignalInstance, Signal(QImage)
+    )  # Signal emitted when the image is loaded.
 
     network_access_manager, sslConfig = get_network_access_manager()
 

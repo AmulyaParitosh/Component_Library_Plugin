@@ -44,7 +44,8 @@ def when_finished(reply: QNetworkReply) -> None:
     er: QNetworkReply.NetworkError = reply.error()
 
     if er == QNetworkReply.NetworkError.NoError:
-        logger.debug(f"{reply.url()} : {reply.readAll().data().decode()}")
+        pass
+    # logger.debug(f"{reply.url()} : {reply.readAll().data().decode()}")
 
     elif er == QNetworkReply.NetworkError.ProtocolUnknownError:
         logger.debug("Blank URL passed!")

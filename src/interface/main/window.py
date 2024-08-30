@@ -12,16 +12,16 @@
 
 import contextlib
 
-from FreeCAD import Console
-from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QMainWindow, QWidget
 
-from ..manager.api_manager.cms_api import CMSApi
-from ..manager.api_manager.exceptions import Connection_Error
-from ..interface.views import GridView, LocalDetailedView, OnlineDetailedView
-from ..interface.widgets import ComponentItem, ComponentUploadWidget
-from ..manager import Authentication_Manager, LocalStorageManager, OnlineRepoManager
-from ..logging import logger
+from ... import manager
+from ...manager.api_manager.cms_api import CMSApi
+from ...manager.api_manager.exceptions import Connection_Error
+from ...logging import logger
+
+from ..widgets import ComponentUploadWidget, UserWidget
+from ..widgets.view_widget import LocalDetailedView, OnlineDetailedView
+from ..widgets.view_widget.grid_view.view import GridView
 from .Ui_window import Ui_MainWindow
 
 
@@ -36,9 +36,9 @@ class AddonWindow(QMainWindow):
         """
         super().__init__(parent=parent)
 
-        self.repo_manager = OnlineRepoManager()
-        self.local_manager = LocalStorageManager()
-        self.auth_manager = Authentication_Manager()
+        self.repo_manager = manager.OnlineRepoManager()
+        self.local_manager = manager.LocalStorageManager()
+        self.auth_manager = manager.Authentication_Manager()
 
         self.widgetStack = []
 
@@ -47,11 +47,24 @@ class AddonWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.setupUi()
         self.setupSignals()
-        self.display_grid_view()
+        self.setupManagers(self.repo_manager, self.local_manager)
 
-        with contextlib.suppress(Connection_Error):
+        self.ui.stackedWidget.setCurrentWidget(self.onlineGridView)
+
+        try:
             CMSApi().check_server_connection()
-            self.setupManagers(self.repo_manager, self.local_manager)
+            self.upload_widget.populate_suggestions()
+            self.onlineGridView.initial_load()
+        except Connection_Error:
+            logger.error(
+                "API Connection failed. Please check your internet connection."
+            )
+            self.upload_widget.setDisabled(True)
+
+        self.localGridView.initial_load()
+
+        with contextlib.suppress(ValueError):
+            self.auth_manager.persistent_login()
 
     def setupUi(self):
         """
@@ -64,6 +77,7 @@ class AddonWindow(QMainWindow):
         self.localGridView = GridView(self)
         self.localDetailView = LocalDetailedView(self)
         self.upload_widget = ComponentUploadWidget(self, self.repo_manager)
+        self.user_widget = None
 
         self.ui.stackedWidget.insertWidget(0, self.onlineGridView)
         self.ui.stackedWidget.insertWidget(1, self.onlineDetailView)
@@ -78,15 +92,21 @@ class AddonWindow(QMainWindow):
         """
         Setup the signals that need to be connected to the UI. Called by __init__.
         """
-        self.ui.browseButton.clicked.connect(self.display_grid_view)
-        self.ui.uploadButton.clicked.connect(self.uploadButton_clicked)
+        self.ui.browseButton.clicked.connect(
+            lambda: self.ui.stackedWidget.setCurrentWidget(self.onlineGridView)
+        )
+        self.ui.uploadButton.clicked.connect(
+            lambda: self.ui.stackedWidget.setCurrentWidget(self.upload_widget)
+        )
         self.ui.LocalButton.clicked.connect(self.display_local_components)
         self.ui.userPushButton.clicked.connect(self.show_user)
 
-        self.auth_manager.session_update.connect(self.show_user)
+        self.auth_manager.session_update.connect(self.user_updated)
 
     def setupManagers(
-        self, repo_manager: OnlineRepoManager, local_manager: LocalStorageManager
+        self,
+        repo_manager: manager.OnlineRepoManager,
+        local_manager: manager.LocalStorageManager,
     ):
         """
         Sets up the managers for the online and offline views.
@@ -104,20 +124,6 @@ class AddonWindow(QMainWindow):
         self.localGridView.setupManager(local_manager)
         self.localDetailView.setupManager(local_manager)
 
-    def display_detail_view(self, item: ComponentItem, grid_view: GridView):
-        """
-        Display the detail view.
-
-        Parameters
-        ----------
-        item : ComponentItem
-            The ComponentItem that has to be displayed
-        grid_view : GridView
-            The GridView that contains the component
-        """
-        grid_view.detailView.updateContent(item)
-        self.ui.stackedWidget.setCurrentWidget(grid_view.detailView)
-
     def display_local_components(self):
         """
         Display locally installed components to the user.
@@ -125,27 +131,16 @@ class AddonWindow(QMainWindow):
         self.local_manager.request_components()
         self.ui.stackedWidget.setCurrentWidget(self.localGridView)
 
-    @Slot()
-    def display_grid_view(self):
-        """
-        Display the grid view in the stacked widget. This is called when the user clicks on the back button from any detailed view.
-        """
-        self.ui.stackedWidget.setCurrentWidget(self.onlineGridView)
-
-    @Slot()
     def toLastWidget(self):
         """
         Switch to the last widget in the stack. This is useful when you want to switch back to a grid view from any detailed view.
         """
         self.ui.stackedWidget.setCurrentWidget(self.widgetStack.pop())
 
-    @Slot()
     def uploadButton_clicked(self):
         """
-        Create a component using the ComponetUploadDialog and OnlineRepoManager.
+        Create a component using the ComponentUploadDialog and OnlineRepoManager.
         """
-        # upload_widget = ComponetUploadDialog(self, self.repo_manager)
-        self.widgetStack.append(self.ui.stackedWidget.currentWidget())
         self.ui.stackedWidget.setCurrentWidget(self.upload_widget)
 
     def add_notification_widget(self, notification: QWidget):
@@ -174,9 +169,24 @@ class AddonWindow(QMainWindow):
         self.ui.notificationArea.removeWidget(notification)
         self.ui.notificationArea.update()
 
-    def show_user(self):
-        if self.auth_manager.is_authentic():
-            self.ui.userPushButton.setText(self.auth_manager.user.name)
+    def user_updated(self):
+        if self.auth_manager.user is not None:
+            self.ui.userPushButton.setText(self.auth_manager.user.username)
         else:
             self.ui.userPushButton.setText("Login")
+
+    def show_user(self):
+        """
+        Show the user widget to the user.
+        """
+        if self.auth_manager.user is not None:
+            if self.user_widget is None:
+                self.user_widget = UserWidget(self, self.auth_manager.user)
+                self.ui.stackedWidget.insertWidget(5, self.user_widget)
+
+            self.ui.stackedWidget.setCurrentWidget(self.user_widget)
+        else:
             self.auth_manager.login()
+            if self.auth_manager.user is not None:
+                self.user_updated()
+                self.show_user()

@@ -12,9 +12,9 @@
 
 
 import json
-from typing import Any, Dict
+from typing import Any, Dict, cast
 
-from PySide2.QtCore import QObject, Signal, Slot
+from PySide2.QtCore import QObject, Signal, Slot, SignalInstance
 from PySide2.QtNetwork import QNetworkReply
 
 from ....logging import logger
@@ -26,8 +26,8 @@ class CMSReply(QObject):
     Custom QObject class to handle network replies and emit signals with parsed data.
     """
 
-    finished = Signal(
-        dict
+    finished = cast(
+        SignalInstance, Signal(dict)
     )  # Signal to be emitted when the reply is finished, with the parsed data as an argument
 
     def __init__(self, reply: QNetworkReply, parent) -> None:
@@ -35,7 +35,7 @@ class CMSReply(QObject):
         self.reply: QNetworkReply = reply
         self.reply.finished.connect(self.response_serializer)
 
-    @Slot()
+    # @Slot()
     def response_serializer(self) -> None:
         """
         Slot method to handle the network reply and parse the JSON data.

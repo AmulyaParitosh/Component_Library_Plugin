@@ -1,17 +1,18 @@
 import json
+from typing import cast
 from urllib.parse import parse_qs, urlparse
 
 import dotenv
-from PySide2.QtCore import QUrl, Signal
+from PySide2.QtCore import QUrl, Signal, SignalInstance
 from PySide2.QtWebEngineWidgets import QWebEngineView
 from PySide2.QtWidgets import QDialog, QVBoxLayout
 
 from ...config import Config
-
+from ...logging import logger
 
 class Authentication_Dialog(QDialog):
-    auth_complete = Signal(str)
-    auth_scope: str = "public_repo"
+    auth_complete = cast(SignalInstance, Signal(str))
+    auth_scope: str = "user:email"
 
     def __init__(self):
         super().__init__()
@@ -32,7 +33,7 @@ class Authentication_Dialog(QDialog):
     def start_github_oauth(self):
         self.web_view.setUrl(
             QUrl(
-                f"https://github.com/login/oauth/authorize?client_id={Config.GITHUB_OAUTH_CLIENT_ID}&scope={self.auth_scope}"
+                f"https://github.com/login/oauth/authorize?client_id={Config.GITHUB_OAUTH_CLIENT_ID}&scope={self.auth_scope}&prompt=consent"
             )
         )
 
@@ -46,13 +47,13 @@ class Authentication_Dialog(QDialog):
             )
 
     def handleHtml(self, html: str):
-        json_str = html.removeprefix(
-            '<html><head><meta name="color-scheme" content="light dark"></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">'
-        ).removesuffix("</pre></body></html>")
+        logger.debug(html)
+        json_str = "{" + html.split("{", 1)[1].rsplit("}", 1)[0] + "}"
+        logger.debug(json_str)
 
         response_data: dict = json.loads(json_str)
 
-        Config.GITHUB_ACCESS_TOKEN = response_data.get("auth_token", "")
+        Config.GITHUB_ACCESS_TOKEN = response_data.get("github_auth_token", "")
         dotenv.set_key(".env", "GITHUB_ACCESS_TOKEN", Config.GITHUB_ACCESS_TOKEN)
 
         Config.JWT_TOKEN = response_data.get("jwt", "")
