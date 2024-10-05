@@ -166,9 +166,9 @@ class ComponentUploadWidget(QWidget):
 
     def on_exception_in_component_creation(self, reply: QNetworkReply) -> None:
         err_msg = QMessageBox(self)
-        err_msg.setWindowTitle(reply.error().name)
+        err_msg.setWindowTitle(str(reply.error()))
         # TODO: proper error message returned from the server is not visible
-        err_msg.setText(reply.error().name + "\n" + reply.errorString())
+        err_msg.setText(str(reply.error()))
         err_msg.setIcon(QMessageBox.Icon.Critical)
         err_msg.exec_()
 

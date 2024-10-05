@@ -29,11 +29,9 @@ class Authentication_Manager(QObject):
             )
             return
 
-        request: QNetworkRequest = QNetworkRequest(
-            f"{Config.API_URL}/login/app/authorize"
-        )
+        request: QNetworkRequest = QNetworkRequest(f"{Config.API_URL}/auth/github")
         request.setRawHeader(
-            "access_token".encode("utf-8"),
+            "X-Access-Token".encode("utf-8"),
             str(Config.GITHUB_ACCESS_TOKEN).encode("utf-8"),
         )
         self.jwt_auth_reply = self.network_manager.get(request)
@@ -41,6 +39,7 @@ class Authentication_Manager(QObject):
 
     def handle_jwt_auth_response(self):
         raw_json_str = self.jwt_auth_reply.readAll().data().decode("utf-8")
+        logger.debug(f"{raw_json_str=}")
         if not raw_json_str:
             jwt_token = None
         else:

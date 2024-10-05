@@ -30,7 +30,7 @@ from ...data import Component, DataFactory, DTypes, FileTypes, SerialisedDataTyp
 from ..download_manager import FileDownloader
 from ..page_manager import PageStates
 from .base import ManagerInterface
-
+from ...logging import logging
 
 class OnlineRepoManager(ManagerInterface):
     """
@@ -223,6 +223,8 @@ class OnlineRepoManager(ManagerInterface):
         #     return
 
         request = ComponentRequest()
+        logging.debug(f"{Config.JWT_TOKEN}")
+        request.setRawHeader("Token".encode(), Config.JWT_TOKEN.encode())
         request.setRawHeader(
             "X-Access-Token".encode(), Config.GITHUB_ACCESS_TOKEN.encode()
         )

@@ -12,7 +12,7 @@ from ...logging import logger
 
 class Authentication_Dialog(QDialog):
     auth_complete = cast(SignalInstance, Signal(str))
-    auth_scope: str = "user:email"
+    auth_scope: str = "repo"
 
     def __init__(self):
         super().__init__()
@@ -39,12 +39,13 @@ class Authentication_Dialog(QDialog):
 
     def handleLoadFinished(self, ok):
         curr_url = self.web_view.page().url()
+        logger.debug(f"{curr_url=}")
         query = parse_qs(urlparse(curr_url.toString()).query)
 
-        if ok and (curr_url.hasQuery()) and ("code" in query):
-            self.web_view.page().runJavaScript(
-                "document.documentElement.outerHTML", 0, self.handleHtml
-            )
+        # if ok and (curr_url.hasQuery()) and ("code" in query):
+        #     self.web_view.page().runJavaScript(
+        #         "document.documentElement.outerHTML", 0, self.handleHtml
+        #     )
 
     def handleHtml(self, html: str):
         logger.debug(html)
