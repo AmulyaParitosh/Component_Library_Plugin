@@ -37,7 +37,7 @@ class AttributeListView(QListWidget):
 
     def add_attribute_view(self, attribute_view: AttributeView):
         itemN = QListWidgetItem()
-        itemN.setSizeHint(attribute_view.sizeHint())
+        # itemN.setSizeHint(attribute_view.sizeHint())
 
         self.addItem(itemN)
         self.setItemWidget(itemN, attribute_view)

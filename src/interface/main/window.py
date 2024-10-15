@@ -14,6 +14,9 @@ import contextlib
 
 from PySide2.QtWidgets import QMainWindow, QWidget
 
+from src.data.datadef import Component
+from src.interface.widgets.component.item import ComponentItem
+
 from ... import manager
 from ...manager.api_manager.cms_api import CMSApi
 from ...manager.api_manager.exceptions import Connection_Error
@@ -77,13 +80,14 @@ class AddonWindow(QMainWindow):
         self.localGridView = GridView(self)
         self.localDetailView = LocalDetailedView(self)
         self.upload_widget = ComponentUploadWidget(self, self.repo_manager)
-        self.user_widget = None
+        self.user_widget = UserWidget(self, self.auth_manager.user)
 
         self.ui.stackedWidget.insertWidget(0, self.onlineGridView)
         self.ui.stackedWidget.insertWidget(1, self.onlineDetailView)
         self.ui.stackedWidget.insertWidget(2, self.localGridView)
         self.ui.stackedWidget.insertWidget(3, self.localDetailView)
         self.ui.stackedWidget.insertWidget(4, self.upload_widget)
+        self.ui.stackedWidget.insertWidget(5, self.user_widget)
 
         self.onlineGridView.detailView = self.onlineDetailView
         self.localGridView.detailView = self.localDetailView
@@ -172,6 +176,7 @@ class AddonWindow(QMainWindow):
     def user_updated(self):
         if self.auth_manager.user is not None:
             self.ui.userPushButton.setText(self.auth_manager.user.username)
+            self.user_widget.update_user(self.auth_manager.user)
         else:
             self.ui.userPushButton.setText("Login")
 
@@ -180,9 +185,9 @@ class AddonWindow(QMainWindow):
         Show the user widget to the user.
         """
         if self.auth_manager.user is not None:
-            if self.user_widget is None:
-                self.user_widget = UserWidget(self, self.auth_manager.user)
-                self.ui.stackedWidget.insertWidget(5, self.user_widget)
+            # if self.user_widget is None:
+            #     self.user_widget = UserWidget(self, self.auth_manager.user)
+            #     self.ui.stackedWidget.insertWidget(5, self.user_widget)
 
             self.ui.stackedWidget.setCurrentWidget(self.user_widget)
         else:
@@ -190,3 +195,17 @@ class AddonWindow(QMainWindow):
             if self.auth_manager.user is not None:
                 self.user_updated()
                 self.show_user()
+
+    # def show_user_component(self, component: Component):
+    #     """
+    #     Show the detailed view of a component to the user.
+
+    #     Parameters
+    #     ----------
+    #     component : Component
+    #         The component to show the details of
+    #     """
+    #     component_item = ComponentItem(self.onlineDetailView, component)
+    #     self.onlineDetailView.updateContent(component_item)
+    #     self.widgetStack.append(self.onlineGridView)
+    #     self.ui.stackedWidget.setCurrentWidget(self.onlineDetailView)

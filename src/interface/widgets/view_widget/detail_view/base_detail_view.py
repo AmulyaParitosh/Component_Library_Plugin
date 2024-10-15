@@ -141,9 +141,39 @@ class BaseDetailedView(BaseView):
 
         txt = self.ui.filetypeComboBox.currentText()
         # TODO : Check why txt produces empty string
+        logger.debug(f"{txt=}")
+        logger.debug(f"{FileTypes(txt)=}")
+        logger.debug(f"{self.component.files=}")
         if txt and FileTypes(txt):
             return self.component.files.get(FileTypes(txt))
         # ! should not return None. Investigate
+
+    def _update_component(self, component: Component) -> None:
+        self.component = component
+
+        # self._update_thumbnail(comp_item.ui.thumbnail)
+        if self.thumbnail is not None:
+            self.ui.thumbnailAreaHorizontalLayout.removeWidget(self.thumbnail)
+
+        self.thumbnail = Thumbnail(self, component.metadata.thumbnail)
+        self.ui.thumbnailAreaHorizontalLayout.addWidget(self.thumbnail)
+        self._update_filetype_combobox()
+
+        self.ui.componentLabel.setText(self.component.metadata.name)
+        self.ui.descriptionLabel.setText(self.component.metadata.description)
+        self.ui.authorValue.setText(self.component.metadata.author)
+        self.ui.maintainerValue.setText(self.component.metadata.maintainer)
+        self.ui.createdValue.setText(self.component.metadata.created_at)
+        self.ui.updatedValue.setText(self.component.metadata.updated_at)
+        self.ui.ratingWidget.setRating(self.component.metadata.rating)
+        self.ui.licenceValue.setText(self.component.license.fullname)
+        self.ui.AttributeListView.update_attributes(self.component.attributes)
+        self.ui.tagsWidget.clear()
+        for tag in self.component.tags:
+            self.ui.tagsWidget.add_tag_to_bar(tag.label)
+
+        if self.current_file().exists:
+            self.addToDocumentButton.setDisabled(False)
 
     def updateContent(self, comp_item: ComponentItem) -> None:
         """

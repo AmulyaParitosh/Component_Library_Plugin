@@ -80,7 +80,7 @@ class CMSApi(ApiInterface):
         #     str(Config.GITHUB_ACCESS_TOKEN).encode("utf-8"),
         # )
         request.setRawHeader(
-            "Token".encode("utf-8"),
+            "JWT".encode("utf-8"),
             str(Config.JWT_TOKEN).encode("utf-8"),
         )
 

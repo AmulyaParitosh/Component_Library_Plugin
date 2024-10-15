@@ -1,9 +1,13 @@
 import json
-from typing import Optional, cast
+from typing import Any, Dict, List, Optional, cast
 
 import dotenv
 from PySide2.QtCore import QObject, Signal, SignalInstance
 from PySide2.QtNetwork import QNetworkRequest
+
+from src.data.data_types import DTypes
+from src.data.factory import DataFactory
+from src.manager.api_manager.cms_api.api import CMSApi
 
 
 from ..config import Config
@@ -29,7 +33,7 @@ class Authentication_Manager(QObject):
             )
             return
 
-        request: QNetworkRequest = QNetworkRequest(f"{Config.API_URL}/auth/github")
+        request: QNetworkRequest = QNetworkRequest(f"{Config.API_URL}/api/auth/github")
         request.setRawHeader(
             "X-Access-Token".encode("utf-8"),
             str(Config.GITHUB_ACCESS_TOKEN).encode("utf-8"),
@@ -93,3 +97,15 @@ class Authentication_Manager(QObject):
         self.session_update.emit()
 
         logger.debug(f"{self.user=}")
+        self.get_user_components()
+
+    def get_user_components(self):
+        request = QNetworkRequest("component/user")
+
+        user_component_reply = CMSApi().read(request)
+        user_component_reply.finished.connect(self.get_user_components_callback)
+
+    def get_user_components_callback(self, json_data: Dict[str, Any]):
+        components = DataFactory.load_many(list(json_data.values()), DTypes.COMPONENT)
+        self.user.components = components
+        self.session_update.emit()

@@ -404,4 +404,8 @@ class User:
     name: str
     email: str
     avatar_url: str
-    components: List[str]
+    components: List[Component]
+
+    @classmethod
+    def empty_user(cls):
+        return cls(username="", name="", email="", avatar_url="", components=[])
