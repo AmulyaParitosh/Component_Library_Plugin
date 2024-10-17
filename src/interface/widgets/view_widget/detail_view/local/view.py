@@ -84,4 +84,4 @@ class LocalDetailedView(BaseDetailedView):
         self.ui.filetypeComboBox.removeItem(self.ui.filetypeComboBox.currentIndex())
         if self.ui.filetypeComboBox.count() == 0:
             self.backPushButton_click()
-        self.parent().parent().localGridView.components_response_handler()
+        self.parent().parent().parent().localGridView.components_response_handler()
