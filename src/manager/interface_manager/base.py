@@ -15,7 +15,8 @@ from typing import List, cast
 from PySide2.QtCore import Signal, SignalInstance
 
 import FreeCAD
-import FreeCADGui
+import Import
+import Mesh
 
 from src.data.data_types import FileTypes
 from src.data.datadef import Component
@@ -89,7 +90,13 @@ class ManagerInterface(ABCQObject):
         current_document = FreeCAD.activeDocument()
         if current_document is None:
             raise ValueError("No active document found.")
-        FreeCADGui.insert(str(file_path), current_document.Name)
+        if filetype == FileTypes.STEP:
+            Import.insert(str(file_path), current_document.Name)
+        elif filetype == FileTypes.STL:
+            Mesh.insert(str(file_path), current_document.Name)
+        elif filetype == FileTypes.FCSTD:
+            FreeCAD.open(str(file_path))
+
         return file_path
 
     def insert_in_new_freecad_doc(self, component: Component, filetype: FileTypes):
